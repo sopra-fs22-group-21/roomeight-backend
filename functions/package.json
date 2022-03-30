@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "functions/node_modules/.bin/tsc",
+    "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
@@ -11,7 +11,7 @@
   "engines": {
     "node": "16"
   },
-  "main": "functions/lib/index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "firebase-admin": "^10.0.2",
     "firebase-functions": "^3.18.0"
