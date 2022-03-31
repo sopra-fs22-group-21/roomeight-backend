@@ -10,7 +10,7 @@ export class Tag implements Profile {
     }
 
     test(): void {
-        functions.logger.info("Hello from tag!", {structuredData: true});
+        functions.logger.info("Hello!", {structuredData: true});
     }
 
 }
