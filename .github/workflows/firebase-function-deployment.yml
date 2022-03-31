@@ -17,7 +17,7 @@ jobs:
           npm ci
           npm run build
       - name: Deployment
-        uses: w9jds/firebase-action@v0
+        uses: w9jds/firebase-action@master
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ROOMEIGHT_9CD94 }}'
