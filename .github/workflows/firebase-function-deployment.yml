@@ -19,8 +19,6 @@ jobs:
       - name: Deployment
         uses: w9jds/firebase-action@master
         with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_ROOMEIGHT_9CD94 }}'
-          channelId: live
-          projectId: roomeight-9cd94
           args: deploy --only functions
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
