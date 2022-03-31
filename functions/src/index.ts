@@ -1,10 +1,12 @@
 import * as functions from "firebase-functions";
+import {Tag} from "./data-model/Tag";
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
 export const test = functions.https.onRequest((request, response) => {
-  functions.logger.info("Hello logs!", {structuredData: true});
-  response.send("Hello from test!");
+  let tag = new Tag("test", "test");
+  tag.test();
+  response.send("Hello");
 });
 
