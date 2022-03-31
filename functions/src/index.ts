@@ -7,6 +7,6 @@ import {Tag} from "./data-model/Tag";
 export const test1 = functions.https.onRequest((request, response) => {
   let tag = new Tag("test", "test");
   tag.test();
-  response.send("Hello 2");
+  response.send("Hello2");
 });
 
