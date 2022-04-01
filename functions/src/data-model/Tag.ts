@@ -1,16 +1,12 @@
-import * as functions from "firebase-functions";
-
-export class Tag implements Profile {
-    description: string;
-    name: string;
-
-    constructor(name: string, description: string) {
-        this.description = description;
-        this.name = name;
-    }
-
-    test(): void {
-        functions.logger.info("Hello!", {structuredData: true});
-    }
-
+export enum Tag {
+    Cooking = "COOKING",
+    Sports = "SPORTS",
+    Instruments = "INSTRUMENTS",
+    Cleanliness = "CLEANLINESS",
+    Student = "STUDENT",
+    Working = "WORKING",
+    Pets = "PETS",
+    Party = "PARTY",
+    Coffee = "COFFEE",
+    Wine = "WINE"
 }
