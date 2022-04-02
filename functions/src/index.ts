@@ -1,27 +1,73 @@
 import * as functions from "firebase-functions";
-// import * as express from "express"
+import * as express from "express"
 
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
-// const app = express();
+const userprofile_app = express();
+const flatprofile_app = express();
+const profile_app = express();
 
-export const userprofiles = functions.https.onRequest((request, response) => {
-  console.log(request)
-  response.send(mock_user_profile);
+userprofile_app.get('/', async (req, res) => {
+  res.status(200).send(mock_user_profile);
 });
 
-export const flatprofiles = functions.https.onRequest((request, response) => {
-  response.send(mock_flat_profile);
+userprofile_app.post('/', async (req, res) => {
+  res.status(404).send();
 });
 
-export const profiles = functions.https.onRequest((request, response) => {
-  response.send(mock_user_profile);
+userprofile_app.put('/', async (req, res) => {
+  res.status(404).send();
 });
+
+userprofile_app.delete('/', async (req, res) => {
+  res.status(404).send();
+});
+
+exports.userprofiles = functions.https.onRequest(userprofile_app);
+
+flatprofile_app.get('/', async (req, res) => {
+  res.status(200).send(mock_flat_profile);
+});
+
+flatprofile_app.post('/', async (req, res) => {
+  res.status(404).send();
+});
+
+flatprofile_app.put('/', async (req, res) => {
+  res.status(404).send();
+});
+
+flatprofile_app.delete('/', async (req, res) => {
+  res.status(404).send();
+});
+
+exports.flatprofiles = functions.https.onRequest(userprofile_app);
+
+
+profile_app.get('/', async (req, res) => {
+  res.status(200).send(mock_user_profile);
+});
+
+profile_app.post('/', async (req, res) => {
+  res.status(404).send();
+});
+
+profile_app.put('/', async (req, res) => {
+  res.status(404).send();
+});
+
+profile_app.delete('/', async (req, res) => {
+  res.status(404).send();
+});
+
+exports.profiles = functions.https.onRequest(profile_app);
+
 
 const mock_user_profile = {
-  Name: "test",
+  FirstName: "test",
+  LastName: "test",
   Description: "test",
   Biography: "test",
   Tags: "test",
