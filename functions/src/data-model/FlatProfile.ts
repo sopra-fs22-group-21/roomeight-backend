@@ -44,7 +44,7 @@ export class FlatProfile implements Profile {
         this.roomMates = roomMates;
     }
 
-    toJsonString(): string {
+    toJson(): { FirstName: string; LastName: string } {
         throw new Error("Method not implemented.");
     }
     getMatches(): UserProfile[] {

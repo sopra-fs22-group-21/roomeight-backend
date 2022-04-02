@@ -1,11 +1,12 @@
-import { Gender } from "./Gender";
-import { Match } from "./Match";
-import { Profile } from "./Profile";
-import { Status } from "./Status";
-import { Tag } from "./Tag";
+import {Gender} from "./Gender";
+import {Match} from "./Match";
+import {Profile} from "./Profile";
+import {Status} from "./Status";
+import {Tag} from "./Tag";
 
 export class UserProfile implements Profile{
-    name: string;
+    first_name: string;
+    last_name: string;
     description: string;
     biography: string;
     tags: Tag[];
@@ -22,8 +23,12 @@ export class UserProfile implements Profile{
     isSearchingRoom: boolean;
     isAdvertisingRoom: boolean;
 
-    constructor(name: string, description: string, biography: string, tags: Array<Tag>, pictureReference: string, matches: Array<Match>, creationDate: string, onlineStatus: Status, moveInDate: string, moveOutDate: string, birthday: string, emailAddress: string, phoneNumber: string, gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean) {
-        this.name = name;
+    constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
+                pictureReference: string, matches: Array<Match>, creationDate: string, onlineStatus: Status,
+                moveInDate: string, moveOutDate: string, birthday: string, emailAddress: string, phoneNumber: string,
+                gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean) {
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.description = description;
         this.biography = biography;
         this.tags = tags;
@@ -40,9 +45,28 @@ export class UserProfile implements Profile{
         this.isSearchingRoom = isSearchingRoom;
         this.isAdvertisingRoom = isAdvertisingRoom;
     }
-    
-    toJsonString(): string {
-        throw new Error("Method not implemented.");
+
+    toJson(): any {
+        return {
+            ProfileType: "User",
+            FirstName: this.first_name,
+            LastName: this.last_name,
+            Description: this.description,
+            Biography: this.biography,
+            Tags: this.tags,
+            PictureReference: this.pictureReference,
+            Matches: this.matches,
+            CreationDate: this.creationDate,
+            OnlineStatus: this.onlineStatus,
+            Birthday: this.birthday,
+            EmailAddress: this.emailAddress,
+            PhoneNumber: this.phoneNumber,
+            Gender: this.gender,
+            IsSearchingRoom: this.isSearchingRoom,
+            IsAdvertisingRoom: this.isAdvertisingRoom,
+            MoveInDate: this.moveInDate,
+            MoveOutDate: this.moveOutDate
+        };
     }
     getMatches(): UserProfile[] {
         throw new Error("Method not implemented.");

@@ -4,7 +4,6 @@ import { Tag } from "./Tag";
 import { UserProfile } from "./UserProfile";
 
 export interface Profile {
-    name: string,
     description: string,
     biography: string,
     tags: Array<Tag>,
@@ -15,7 +14,7 @@ export interface Profile {
     moveInDate: string,
     moveOutDate: string
 
-    toJsonString(): string,
+    toJson(): { FirstName: string; LastName: string },
     getMatches(): Array<UserProfile>,
     getMisMatches(): Array<UserProfile>,
     match(user: UserProfile): void
