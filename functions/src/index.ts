@@ -10,7 +10,7 @@ const flatprofile_app = express();
 const profile_app = express();
 
 userprofile_app.get('/', async (req, res) => {
-  res.status(200).send(mock_user_profile);
+  res.status(200).send(mock_user_profile_list);
 });
 
 userprofile_app.post('/', async (req, res) => {
@@ -47,7 +47,7 @@ exports.flatprofiles = functions.https.onRequest(userprofile_app);
 
 
 profile_app.get('/', async (req, res) => {
-  res.status(200).send(mock_user_profile);
+  res.status(200).send(mock_user_profile_list);
 });
 
 profile_app.post('/', async (req, res) => {
@@ -65,25 +65,46 @@ profile_app.delete('/', async (req, res) => {
 exports.profiles = functions.https.onRequest(profile_app);
 
 
-const mock_user_profile = {
-  FirstName: "test",
-  LastName: "test",
-  Description: "test",
-  Biography: "test",
-  Tags: "test",
-  PictureReference: "test",
-  Matches: "test",
-  CreationDate: new Date().getDate().toString(),
-  OnlineStatus: "Online",
-  Birthday: new Date().getDate().toString(),
-  EmailAddress: "test@test.ch",
-  PhoneNumber: "123",
-  Gender: "Male",
-  isSearchingRoom: "true",
-  isAdvertisingRoom: "false",
-  MoveInDate: new Date().getDate().toString(),
-  MoveOutDate: new Date().getDate().toString()
-}
+const mock_user_profile_list = [
+    {
+        FirstName: "test",
+        LastName: "test",
+        Description: "test",
+        Biography: "test",
+        Tags: "test",
+        PictureReference: "test",
+        Matches: "test",
+        CreationDate: new Date().getDate().toString(),
+        OnlineStatus: "Online",
+        Birthday: new Date().getDate().toString(),
+        EmailAddress: "test@test.ch",
+        PhoneNumber: "123",
+        Gender: "Male",
+        isSearchingRoom: "true",
+        isAdvertisingRoom: "false",
+        MoveInDate: new Date().getDate().toString(),
+        MoveOutDate: new Date().getDate().toString()
+    },
+    {
+        FirstName: "test",
+        LastName: "test",
+        Description: "test",
+        Biography: "test",
+        Tags: "test",
+        PictureReference: "test",
+        Matches: "test",
+        CreationDate: new Date().getDate().toString(),
+        OnlineStatus: "Online",
+        Birthday: new Date().getDate().toString(),
+        EmailAddress: "test@test.ch",
+        PhoneNumber: "123",
+        Gender: "Male",
+        isSearchingRoom: "true",
+        isAdvertisingRoom: "false",
+        MoveInDate: new Date().getDate().toString(),
+        MoveOutDate: new Date().getDate().toString()
+    }
+]
 
 const mock_flat_profile = {
   Name: "test",
