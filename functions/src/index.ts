@@ -20,13 +20,15 @@ userprofile_app.get('/', async (req, res) => {
 
 // Create User
 userprofile_app.post('/', async (req, res) => {
-    try {
-        const response = UserProfileDataService.addUserProfile(req.body);
-        res.status(200).send(response);
-    } catch (e) {
-        // If validation fails return status 400 and list of errors
-        res.status(400).send(e);
-    }
+    return UserProfileDataService.addUserProfile(req.body)
+        .then((response) => {
+            res.status(200).send(response);
+        }
+    )
+        .catch ((e) => {
+            // If validation fails return status 400 and list of errors
+            res.status(400).send(e.message);
+        });
 
 });
 

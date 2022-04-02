@@ -1,53 +1,56 @@
 import { ValidationReport } from "./ValidationReport";
 
 export class Validator {
-    static validateUser(user: string) {
-        let json_body;
-        try {
-            json_body = JSON.parse(user)
-        } catch (e) {
-            throw new Error("Body does not have json structure")
-        }
+    static validateUser(user_json_body: any) {
         let report = new ValidationReport();
 
         let mandatoryFields = ["FirstName", "LastName", "Birthday", "EmailAddress", "PhoneNumber", "Password"];
-        for (let field in mandatoryFields) {
-            if(!user.hasOwnProperty(field)) {
-                report.setErrors("JSON object does not contain required field: " + field);
+        let optionalFields = ["Description", "Biography", "Tags", "PictureReference", "Matches", "OnlineStatus",
+                              "Gender", "IsSearchingRoom", "IsAdvertisingRoom", "MoveInDate", "MoveOutDate"]
+        for (let i in mandatoryFields) {
+            if(!user_json_body.hasOwnProperty(mandatoryFields[i])) {
+                report.setErrors("JSON object does not contain required field: " + mandatoryFields[i]);
             }
         }
 
-        for (let key in json_body) {
+        console.log(user_json_body)
+        for (let key in user_json_body) {
             switch (key) {
                 case "Password":
-                    if (!Validator.validatePassword(json_body[key])) {
+                    if (!this.validatePassword(user_json_body[key])) {
                         report.setErrors("invalid Password");
                     }
+                    break;
                 case "FirstName":
-                    if (!Validator.validateName(json_body[key])) {
+                    if (!this.validateName(user_json_body[key])) {
                         report.setErrors("invalid FirstName");
                     }
                     break;
                 case "LastName":
-                    if (!Validator.validateName(json_body[key])) {
+                    if (!this.validateName(user_json_body[key])) {
                         report.setErrors("invalid LastName");
                     }
                     break;
                 case "Birthday":
-                    if (!Validator.validateBirthday(json_body[key])) {
+                    if (!this.validateBirthday(user_json_body[key])) {
                         report.setErrors("invalid Birthday");
                     }
                     break;
                 case "EmailAddress":
-                    if (!Validator.validateEmail(json_body[key])) {
+                    if (!this.validateEmail(user_json_body[key])) {
                         report.setErrors("invalid EmailAddress");
                     }
                     break;
                 case "PhoneNumber":
-                    if (!Validator.validatePhone(json_body[key])) {
-                        report.setErrors("invalid PhoneNumebr");
+                    if (!this.validatePhone(user_json_body[key])) {
+                        report.setErrors("invalid PhoneNumber");
                     }
                     break;
+                default:
+                    // Todo validate optional fields
+                    if (optionalFields.indexOf(key) == -1) {
+                        report.setErrors("Unknown Field: " + key);
+                    }
             }
         }
         return report;

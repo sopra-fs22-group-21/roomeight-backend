@@ -2,18 +2,21 @@ import {Repository} from "../repository/Repository";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import {UserProfile} from "../data-model/UserProfile";
 import {Validator} from "../validation/Validator";
+import {FirestoreError} from "../exceptions/FirestoreError";
+import {AuthError} from "../exceptions/AuthError";
 
 export class UserProfileDataService {
 
-    static addUserProfile(body: any): Promise<string> {
+    static async addUserProfile(body: any): Promise<string> {
         // Initialize services and vars
         const repository = new Repository();
         const auth = getAuth();
         const creation_date = new Date().getDate().toString();
 
         // Validate user which should be added
-        const validation_results = Validator.validateUser(body.toString());
+        const validation_results = Validator.validateUser(body);
 
+        // Todo improve error handling
         if (!validation_results.hasErrors) {
             // Precede if validation found no errors
             let user_to_add = new UserProfile(body.FirstName, body.LastName, body.Description, body.Biography, body.Tags,
@@ -26,7 +29,7 @@ export class UserProfileDataService {
                 // As soon as the user object is posted into the database precede with auth user profile creation
                 return createUserWithEmailAndPassword(auth, body.EmailAddress, body.Password)
                     .then((userCredential) => {
-                        return user_to_add.toJson().toString();
+                        return user_to_add.toJson();
                     })
                     .catch((error) => {
                         const errorCode = error.code;
@@ -41,7 +44,7 @@ export class UserProfileDataService {
                         );
                         throw new FirestoreError(errorMessage);
                     });
-            })
+                })
                 .catch((error) => {
                     const errorCode = error.code;
                     const errorMessage = error.message;
@@ -51,7 +54,7 @@ export class UserProfileDataService {
                 });
         } else {
             // Throw value error with list of errors which were found if validation failed
-            throw new ValueError(validation_results.errors.toString());
+            throw new Error(validation_results.errors.toString());
         }
     }
 
