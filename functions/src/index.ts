@@ -10,42 +10,57 @@ const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
 
+
+// User Operations
+
+// Get Users
 userprofile_app.get('/', async (req, res) => {
     res.status(200).send(mock_user_profile_list);
 });
 
+// Create User
 userprofile_app.post('/', async (req, res) => {
     try {
-        UserProfileDataService.addUserProfile(req.body);
-        res.status(200).send();
+        const response = UserProfileDataService.addUserProfile(req.body);
+        res.status(200).send(response);
     } catch (e) {
+        // If validation fails return status 400 and list of errors
         res.status(400).send(e);
     }
 
 });
 
+// Update User
 userprofile_app.put('/', async (req, res) => {
     res.status(404).send();
 });
 
+// Delete User
 userprofile_app.delete('/', async (req, res) => {
     res.status(404).send();
 });
 
 exports.userprofiles = functions.https.onRequest(userprofile_app);
 
+
+// Flat Operation
+
+// Get Flats
 flatprofile_app.get('/', async (req, res) => {
     res.status(200).send(mock_flat_profile);
 });
 
+// Create Flat
 flatprofile_app.post('/', async (req, res) => {
     res.status(404).send();
 });
 
+// Update Flat
 flatprofile_app.put('/', async (req, res) => {
     res.status(404).send();
 });
 
+// Delete Flat
 flatprofile_app.delete('/', async (req, res) => {
     res.status(404).send();
 });
@@ -53,10 +68,14 @@ flatprofile_app.delete('/', async (req, res) => {
 exports.flatprofiles = functions.https.onRequest(userprofile_app);
 
 
+// General Profile Operations
+
+// Get specific Profile
 profile_app.get('/', async (req, res) => {
     res.status(200).send(mock_user_profile_list);
 });
 
+//Todo: Complete rest spec
 profile_app.post('/', async (req, res) => {
     res.status(404).send();
 });
