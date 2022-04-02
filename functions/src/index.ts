@@ -1,9 +1,14 @@
 import * as functions from "firebase-functions";
+// import * as express from "express"
+
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
+// const app = express();
+
 export const userprofiles = functions.https.onRequest((request, response) => {
+  console.log(request)
   response.send(mock_user_profile);
 });
 
@@ -12,7 +17,6 @@ export const flatprofiles = functions.https.onRequest((request, response) => {
 });
 
 export const profiles = functions.https.onRequest((request, response) => {
-
   response.send(mock_user_profile);
 });
 
