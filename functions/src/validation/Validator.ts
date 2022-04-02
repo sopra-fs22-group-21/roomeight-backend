@@ -1,36 +1,43 @@
+
 export class Validator {
-    static validateUser(user: JSON) {
+    static validateUser(user: string) {
+        let json_body;
+        try {
+            json_body = JSON.parse(user)
+        } catch (e) {
+            throw new Error("Body does not have json structure")
+        }
         let mandatoryFields = ["FirstName", "LastName", "Birthday", "EmailAddress", "PhoneNumber"];
-        for (var field in mandatoryFields) {
+        for (let field in mandatoryFields) {
             if(!user.hasOwnProperty(field)) {
                 return false;
             }
         }
 
-        for (var key in user) {
+        for (let key in json_body) {
             switch (key) {
                 case "FirstName":
-                    if (!Validator.validateName(user[key])) {
+                    if (!Validator.validateName(json_body[key])) {
                         return false;
                     }
                     break;
                 case "LastName":
-                    if (!Validator.validateName(user[key])) {
+                    if (!Validator.validateName(json_body[key])) {
                         return false;
                     }
                     break;
                 case "Birthday":
-                    if (!Validator.validateBirthday(user[key])) {
+                    if (!Validator.validateBirthday(json_body[key])) {
                         return false;
                     }
                     break;
                 case "EmailAddress":
-                    if (!Validator.validateEmail(user[key])) {
+                    if (!Validator.validateEmail(json_body[key])) {
                         return false;
                     }
                     break;
                 case "PhoneNumber":
-                    if (!Validator.validatePhone(user[key])) {
+                    if (!Validator.validatePhone(json_body[key])) {
                         return false;
                     }
                     break;
@@ -47,7 +54,7 @@ export class Validator {
         return regex.test(mail);
     }
     static validateBirthday(birthday: string): boolean {
-        return (Date.parse(birthday) !== NaN);
+        return (!isNaN(Date.parse(birthday)));
     }
     static validateName(name: string): boolean {
         return (name === "");

@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions";
 import * as express from "express"
+import {UserProfileDataService} from "./data-services/UserProfileDataService";
 
 
 // Start writing Firebase Functions
@@ -10,56 +11,62 @@ const flatprofile_app = express();
 const profile_app = express();
 
 userprofile_app.get('/', async (req, res) => {
-  res.status(200).send(mock_user_profile);
+    res.status(200).send(mock_user_profile);
 });
 
 userprofile_app.post('/', async (req, res) => {
-  res.status(404).send();
+    try {
+        UserProfileDataService.addUserProfile(req.body);
+        res.status(200).send();
+    } catch (e) {
+        res.status(400).send(e);
+    }
+
 });
 
 userprofile_app.put('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 userprofile_app.delete('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 exports.userprofiles = functions.https.onRequest(userprofile_app);
 
 flatprofile_app.get('/', async (req, res) => {
-  res.status(200).send(mock_flat_profile);
+    res.status(200).send(mock_flat_profile);
 });
 
 flatprofile_app.post('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 flatprofile_app.put('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 flatprofile_app.delete('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 exports.flatprofiles = functions.https.onRequest(userprofile_app);
 
 
 profile_app.get('/', async (req, res) => {
-  res.status(200).send(mock_user_profile);
+    res.status(200).send(mock_user_profile);
 });
 
 profile_app.post('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 profile_app.put('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 profile_app.delete('/', async (req, res) => {
-  res.status(404).send();
+    res.status(404).send();
 });
 
 exports.profiles = functions.https.onRequest(profile_app);
