@@ -38,7 +38,10 @@ export class Repository {
                 MoveInDate: move_in_date,
                 MoveOutDate: move_out_date
             }).then(
-                r => console.log("User profile document written")
+                r => {
+                    console.log(r)
+                    return r;
+                }
             );
         } catch (e) {
             console.error("Error during adding user profile document to firestore: ", e);
