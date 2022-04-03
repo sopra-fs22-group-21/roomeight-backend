@@ -38,7 +38,7 @@ export class Validator {
                     break;
                 case "EmailAddress":
                     if (!this.validateEmail(user_json_body[key])) {
-                        report.setErrors("invalid EmailAddress");
+                        report.setErrors("invalid EmailAddress, Expected Format: 1999-06-22");
                     }
                     break;
                 case "PhoneNumber":
