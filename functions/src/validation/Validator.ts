@@ -139,6 +139,7 @@ export class Validator {
     private static validatePassword(password: string) {
         return (password.length > 5 && password.length < 50);
     }
+    // Todo: validate allowed tags
     private static validateTags(name: string): boolean {
         return (name.length > 0 && name.length < 100000);
     }
