@@ -34,7 +34,7 @@ export class Validator {
                     }
                     break;
                 case "Birthday":
-                    if (!this.validateDate(user_json_body[key])) {
+                    if (!this.validateBirthday(user_json_body[key])) {
                         report.setErrors("invalid Birthday, Expected Format: 1999-06-22");
                     }
                     break;
@@ -112,11 +112,14 @@ export class Validator {
         }
         return report;
     }
+    private static validateBirthday(birthday: string): boolean {
+        return (!isNaN(Date.parse(birthday)));
+    }
     private static validateGender(gender: string, allowedGenders: string[]): boolean {
-        return (allowedGenders.includes(gender));
+        return (allowedGenders.includes(gender) || gender === "");
     }
     private static validateBoolean(bool: string): boolean {
-        return (bool === "true" || bool === "false");
+        return (bool === "true" || bool === "false" || bool === "");
     }
     private static validatePhone(phone: string): boolean {
         const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');
@@ -128,10 +131,10 @@ export class Validator {
         return regex.test(mail);
     }
     private static validateDate(date: string): boolean {
-        return (!isNaN(Date.parse(date)));
+        return (!isNaN(Date.parse(date)) || date === "");
     }
     private static validateString(name: string): boolean {
-        return (name.length > 0 && name.length < 300);
+        return (name.length >= 0 && name.length < 300);
     }
     private static validateName(name: string): boolean {
         return (name.length > 0 && name.length < 50);
@@ -140,13 +143,13 @@ export class Validator {
         return (password.length > 5 && password.length < 50);
     }
     private static validateTags(name: string): boolean {
-        return (name.length > 0 && name.length < 100000);
+        return (name.length >= 0 && name.length < 100000);
     }
     private static validateMatches(name: string): boolean {
-        return (name.length > 0 && name.length < 100000);
+        return (name.length >= 0 && name.length < 100000);
     }
     private static validateMismatches(name: string): boolean {
-        return (name.length > 0 && name.length < 100000);
+        return (name.length >= 0 && name.length < 100000);
     }
 }
 
