@@ -2,6 +2,9 @@ import {getFirestore} from "firebase/firestore";
 import { collection, addDoc } from "firebase/firestore";
 import {initializeApp} from "firebase/app"
 import {config} from "../../firebase_config";
+import {firestore} from "firebase-admin";
+import DocumentData = firestore.DocumentData;
+import QuerySnapshot = firestore.QuerySnapshot;
 
 export class Repository {
     database: any;
@@ -13,39 +16,30 @@ export class Repository {
         this.collection_name = "profiles"
     }
 
-    addUserProfile(first_name: string, last_name: string, description: string, biography: string, tags: string, picture_reference: string,
-                   matches: string, creation_date: string, online_status: string, birthday: string, email_address: string,
-                   phoneNumber: string, gender: string, is_searching_room: string, is_advertising_room: string,
-                   move_in_date: string, move_out_date: string) {
-        try {
-            addDoc(collection(this.database, this.collection_name), {
-                ProfileType: "User",
-                FirstName: first_name,
-                LastName: last_name,
-                Description: description,
-                Biography: biography,
-                Tags: tags,
-                PictureReference: picture_reference,
-                Matches: matches,
-                CreationDate: creation_date,
-                OnlineStatus: online_status,
-                Birthday: birthday,
-                EmailAddress: email_address,
-                PhoneNumber: phoneNumber,
-                Gender: gender,
-                IsSearchingRoom: is_searching_room,
-                IsAdvertisingRoom: is_advertising_room,
-                MoveInDate: move_in_date,
-                MoveOutDate: move_out_date
-            }).then(
+    // Firestore User Operations
+
+    addUserProfile(user_to_add: any): Promise<string>  {
+        return addDoc(collection(this.database, this.collection_name), user_to_add)
+            .then(
                 r => {
-                    console.log(r)
-                    return r;
+                    return r.id;
                 }
-            );
-        } catch (e) {
-            console.error("Error during adding user profile document to firestore: ", e);
-        }
+            )
     }
+
+    deleteUserProfile(email_address: string): Promise<string> {
+        let query = this.database.collection(this.collection_name).where('EmailAddress','==', email_address);
+        return query.get()
+            .then( (query_result: QuerySnapshot<DocumentData>) => {
+                query_result.forEach((doc) => {
+                    doc.ref.delete().then(() => {
+                            return "Successfully deleted User with email: " + email_address;
+                        }
+                    );
+                });
+            }
+        );
+    }
+
 }
 
