@@ -1,9 +1,8 @@
 import {Repository} from "../repository/Repository";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
 import {UserProfile} from "../data-model/UserProfile";
 import {Validator} from "../validation/Validator";
-import {FirestoreError} from "../exceptions/FirestoreError";
-import {AuthError} from "../exceptions/AuthError";
+import {Status} from "../data-model/Status";
 
 export class UserProfileDataService {
 
@@ -16,42 +15,32 @@ export class UserProfileDataService {
         // Validate user which should be added
         const validation_results = Validator.validateUser(body);
 
-        // Todo improve error handling
         if (!validation_results.hasErrors) {
             // Precede if validation found no errors
             let user_to_add = new UserProfile(body.FirstName, body.LastName, body.Description, body.Biography, body.Tags,
-                body.PictureReference, body.Matches, creation_date, body.OnlineStatus,
+                body.PictureReference, body.Matches, creation_date, Status.online,
                 body.MoveInDate, body.MoveOutDate, body.Birthday, body.EmailAddress,
                 body.PhoneNumber, body.Gender, body.IsSearchingRoom, body.IsAdvertisingRoom)
 
 
-            return repository.addUserProfile(user_to_add.toJson()).then((response) => {
-                // As soon as the user object is posted into the database precede with auth user profile creation
-                return createUserWithEmailAndPassword(auth, body.EmailAddress, body.Password)
-                    .then((userCredential) => {
-                        return user_to_add.toJson();
-                    })
-                    .catch((error) => {
-                        const errorCode = error.code;
-                        const errorMessage = error.message;
-                        console.log(errorCode);
-                        console.log(errorMessage);
-
-                        repository.deleteUserProfile(user_to_add.emailAddress).then(
-                            (response) => {
-                                console.log("Response from DB cleanup due to auth user creation failure: " + response);
-                            }
-                        );
-                        throw new FirestoreError(errorMessage);
-                    });
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.log(errorCode);
-                    console.log(errorMessage)
-                    throw new AuthError(errorMessage);
+            // As soon as the user object is posted into the database precede with auth user profile creation
+            return createUserWithEmailAndPassword(auth, body.EmailAddress, body.Password)
+                .then((userCredential) => {
+                    return repository.addUserProfile(user_to_add.toJson())
+                        .then((response) => {
+                            return user_to_add.toJson();
+                        })
+                        .catch((e) => {
+                            deleteUser(userCredential.user)
+                                .then(() => {
+                                        throw new Error("Could not post user object to firestore " +
+                                                        "but could also not delete already signed up auth user");
+                                    }
+                                );
+                            throw new Error("Error: Could not post user due to: " + e.message)
+                        });
                 });
+
         } else {
             // Throw value error with list of errors which were found if validation failed
             throw new Error(validation_results.errors.toString());
