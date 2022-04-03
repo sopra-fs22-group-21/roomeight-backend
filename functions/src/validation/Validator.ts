@@ -119,7 +119,7 @@ export class Validator {
         return (bool === "true" || bool === "false");
     }
     private static validatePhone(phone: string): boolean {
-        const regex = new RegExp('/(\b(0041|0)|\B\+41)(\s?\(0\))?(\s)?[1-9]{2}(\s)?[0-9]{3}(\s)?[0-9]{2}(\s)?[0-9]{2}\b/', "g");
+        const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');
         console.log(regex.test(phone))
         return regex.test(phone);
     }
