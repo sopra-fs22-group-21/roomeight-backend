@@ -5,7 +5,7 @@ export class Validator {
         let report = new ValidationReport();
 
         let mandatoryFields = ["FirstName", "LastName", "Birthday", "EmailAddress", "PhoneNumber", "Password"];
-        let optionalFields = ["Description", "Biography", "Tags", "PictureReference", "Matches",
+        let optionalFields = ["Description", "Biography", "Tags", "PictureReference", "Matches", "Mismatches",
                               "Gender", "IsSearchingRoom", "IsAdvertisingRoom", "MoveInDate", "MoveOutDate"];
         
         let allowedGenders = ["MALE", "FEMALE", "OTHERS"];
@@ -73,6 +73,11 @@ export class Validator {
                         report.setErrors("invalid Matches");
                     }
                     break;
+                case "Mismatches":
+                    if (!this.validateMismatches(user_json_body[key])) {
+                        report.setErrors("invalid Mismatches");
+                    }
+                    break;
                 case "Gender":
                     if (!this.validateGender(user_json_body[key], allowedGenders)) {
                         report.setErrors("invalid Gender, must be MALE/FEMALE or OTHERS");
@@ -88,6 +93,7 @@ export class Validator {
                         report.setErrors("invalid IsAdvertisingRoom, has to be true or false (string)");
                     }
                     break;
+                // TODO: Extended date testing
                 case "MoveInDate":
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid MoveInDate, Expected Format: 1999-06-22");
@@ -113,7 +119,8 @@ export class Validator {
         return (bool === "true" || bool === "false");
     }
     private static validatePhone(phone: string): boolean {
-        const regex = new RegExp('/(\b(0041|0)|\B\+41)(\s?\(0\))?(\s)?[1-9]{2}(\s)?[0-9]{3}(\s)?[0-9]{2}(\s)?[0-9]{2}\b/');
+        const regex = new RegExp('/(\b(0041|0)|\B\+41)(\s?\(0\))?(\s)?[1-9]{2}(\s)?[0-9]{3}(\s)?[0-9]{2}(\s)?[0-9]{2}\b/', "g");
+        console.log(regex.test(phone))
         return regex.test(phone);
     }
     private static validateEmail(mail: string): boolean {
@@ -136,6 +143,9 @@ export class Validator {
         return (name.length > 0 && name.length < 100000);
     }
     private static validateMatches(name: string): boolean {
+        return (name.length > 0 && name.length < 100000);
+    }
+    private static validateMismatches(name: string): boolean {
         return (name.length > 0 && name.length < 100000);
     }
 }

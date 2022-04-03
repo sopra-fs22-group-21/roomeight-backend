@@ -12,6 +12,7 @@ export class UserProfile implements Profile{
     tags: Tag[];
     pictureReference: string;
     matches: Match[];
+    mismatches: string[];
     creationDate: string;
     onlineStatus: Status;
     moveInDate: string;
@@ -26,7 +27,7 @@ export class UserProfile implements Profile{
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
                 pictureReference: string, matches: Array<Match>, creationDate: string, onlineStatus: Status,
                 moveInDate: string, moveOutDate: string, birthday: string, emailAddress: string, phoneNumber: string,
-                gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean) {
+                gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, mismatch: string[]) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.description = description;
@@ -44,6 +45,7 @@ export class UserProfile implements Profile{
         this.gender = gender;
         this.isSearchingRoom = isSearchingRoom;
         this.isAdvertisingRoom = isAdvertisingRoom;
+        this.mismatches = mismatch;
     }
 
     toJson(): any {
@@ -56,6 +58,7 @@ export class UserProfile implements Profile{
             Tags: this.tags,
             PictureReference: this.pictureReference,
             Matches: this.matches,
+            Mismatches: this.mismatches,
             CreationDate: this.creationDate,
             OnlineStatus: this.onlineStatus,
             Birthday: this.birthday,

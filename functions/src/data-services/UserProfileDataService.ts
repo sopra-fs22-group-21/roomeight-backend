@@ -20,7 +20,7 @@ export class UserProfileDataService {
             let user_to_add = new UserProfile(body.FirstName, body.LastName, body.Description, body.Biography, body.Tags,
                 body.PictureReference, body.Matches, creation_date, Status.online,
                 body.MoveInDate, body.MoveOutDate, body.Birthday, body.EmailAddress,
-                body.PhoneNumber, body.Gender, body.IsSearchingRoom, body.IsAdvertisingRoom)
+                body.PhoneNumber, body.Gender, body.IsSearchingRoom, body.IsAdvertisingRoom, body.Mismatches)
 
 
             // As soon as the user object is posted into the database precede with auth user profile creation
