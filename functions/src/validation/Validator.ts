@@ -15,7 +15,6 @@ export class Validator {
             }
         }
 
-        console.log(user_json_body)
         for (let key in user_json_body) {
             switch (key) {
                 case "Password":
@@ -123,7 +122,6 @@ export class Validator {
     }
     private static validatePhone(phone: string): boolean {
         const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');
-        console.log(regex.test(phone))
         return regex.test(phone);
     }
     private static validateEmail(mail: string): boolean {

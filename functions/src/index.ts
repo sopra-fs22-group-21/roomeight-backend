@@ -9,7 +9,8 @@ import {UserProfileDataService} from "./data-services/UserProfileDataService";
 const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
-const cors = require('cors')({origin: true});
+const cors = require('cors');
+userprofile_app.use(cors({ origin: true }));
 
 
 // User Operations
@@ -25,6 +26,7 @@ userprofile_app.post('/', async (req, res) => {
         return UserProfileDataService.addUserProfile(req.body)
             .then((response) => {
                     res.status(200).send(response);
+                    res.set('Access-Control-Allow-Origin', '*')
                 }
             )
             .catch ((e) => {

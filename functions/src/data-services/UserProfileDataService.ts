@@ -17,6 +17,7 @@ export class UserProfileDataService {
 
         if (!validation_results.hasErrors) {
             // Precede if validation found no errors
+            // Todo: logic for empty optional keys
             let user_to_add = new UserProfile(body.FirstName, body.LastName, body.Description, body.Biography, body.Tags,
                 body.PictureReference, body.Matches, creation_date, Status.online,
                 body.MoveInDate, body.MoveOutDate, body.Birthday, body.EmailAddress,
