@@ -12,7 +12,7 @@ describe('Validator test', () => {
         "PictureReference": "test",
         "Matches": "test",
         "Mismatches": "test",
-        "Birthday": "1999-06-22",
+        "Birthday": "2019-06-22",
         "EmailAddress": "test@test.ch",
         "PhoneNumber": "+41795233087",
         "Gender": "MALE",

@@ -16,6 +16,10 @@ export class Validator {
         }
 
         for (let key in user_json_body) {
+            if (user_json_body[key] === null) {
+                report.setErrors("" + key + "is null");
+                continue;
+            }
             switch (key) {
                 case "Password":
                     if (!this.validatePassword(user_json_body[key])) {
@@ -35,6 +39,13 @@ export class Validator {
                 case "Birthday":
                     if (!this.validateBirthday(user_json_body[key])) {
                         report.setErrors("invalid Birthday, Expected Format: 1999-06-22");
+                    } else {
+                        let today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        let birthday = new Date(user_json_body[key]);
+                        if (birthday > today) {
+                            report.setErrors("invalid birthday: selected date is after today");
+                        }
                     }
                     break;
                 case "EmailAddress":
@@ -54,7 +65,7 @@ export class Validator {
                     break;
                 case "Biography":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid Description");
+                        report.setErrors("invalid Biography");
                     }
                     break;
                 case "Tags":
@@ -101,6 +112,14 @@ export class Validator {
                 case "MoveOutDate":
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid MoveOutDate, Expected Format: 1999-06-22");
+                    } else {
+                        if (this.validateDate(user_json_body["MoveOutDate"])) {
+                            let moveOutDate = new Date(user_json_body["MoveOutDate"]);
+                            let moveInDate = new Date(user_json_body["MoveInDate"]);
+                            if (moveInDate > moveOutDate) {
+                                report.setErrors("MoveInDate must be before MoveOutDate");
+                            }
+                        }
                     }
                     break;
                 default:
