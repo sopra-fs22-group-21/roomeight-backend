@@ -3,10 +3,13 @@ import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth
 import {UserProfile} from "../data-model/UserProfile";
 import {Validator} from "../validation/Validator";
 import {Status} from "../data-model/Status";
+import * as functions from "firebase-functions";
 
 export class UserProfileDataService {
 
     static async addUserProfile(body: any): Promise<string> {
+        functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
+
         // Initialize services and vars
         const repository = new Repository();
         const auth = getAuth();
@@ -16,6 +19,7 @@ export class UserProfileDataService {
         const validation_results = Validator.validateUser(body);
 
         if (!validation_results.hasErrors) {
+            functions.logger.debug("Passed validation", {structuredData: true});
             // Precede if validation found no errors
             // Todo: logic for empty optional keys
             let user_to_add = new UserProfile(body.FirstName, body.LastName, body.Description, body.Biography, body.Tags,

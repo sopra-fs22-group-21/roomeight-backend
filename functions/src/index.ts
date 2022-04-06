@@ -23,6 +23,7 @@ userprofile_app.get('/', async (req, res) => {
 // Create User
 userprofile_app.post('/', async (req, res) => {
     cors(req, res, () => {
+        functions.logger.debug("Entered index", {structuredData: true});
         return UserProfileDataService.addUserProfile(req.body)
             .then((response) => {
                     res.status(200).send(response);
