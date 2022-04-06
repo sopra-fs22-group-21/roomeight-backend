@@ -10,7 +10,6 @@ const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
 const cors = require('cors');
-userprofile_app.use(cors({ origin: "*" }));
 
 // User Operations
 
@@ -48,6 +47,7 @@ userprofile_app.delete('/', async (req, res) => {
 });
 
 exports.userprofiles = functions.https.onRequest(userprofile_app);
+userprofile_app.use(cors({ origin: "*" }));
 
 
 // Flat Operation
