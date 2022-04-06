@@ -17,7 +17,7 @@ export class Validator {
 
         for (let key in user_json_body) {
             if (user_json_body[key] === null) {
-                report.setErrors("" + key + "is null");
+                report.setErrors("" + key + " is null");
                 continue;
             }
             switch (key) {
