@@ -10,7 +10,7 @@ const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
 const cors = require('cors');
-
+userprofile_app.use(cors({ origin: true }));
 
 // User Operations
 
@@ -21,22 +21,20 @@ userprofile_app.get('/', async (req, res) => {
 
 // Create User
 userprofile_app.post('/', async (req, res) => {
-    cors(req, res, () => {
-        functions.logger.debug("Entered index", {structuredData: true});
-        return UserProfileDataService.addUserProfile(req.body)
-            .then((response) => {
-                    res.set('Access-Control-Allow-Origin', '*')
-                    res.status(200).send(response);
-                }
-            )
-            .catch ((e) => {
-                // If validation fails return status 400 and list of errors
-                if (e.message == "Firebase: Error (auth/email-already-in-use).") {
-                    res.status(409).send("User already exists!");
-                }
-                res.status(400).send(e.message);
-            });
-    });
+    functions.logger.debug("Entered index", {structuredData: true});
+    return UserProfileDataService.addUserProfile(req.body)
+        .then((response) => {
+                res.set('Access-Control-Allow-Origin', '*')
+                res.status(200).send(response);
+            }
+        )
+        .catch ((e) => {
+            // If validation fails return status 400 and list of errors
+            if (e.message == "Firebase: Error (auth/email-already-in-use).") {
+                res.status(409).send("User already exists!");
+            }
+            res.status(400).send(e.message);
+        });
 });
 
 // Update User
