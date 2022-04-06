@@ -23,7 +23,8 @@ userprofile_app.post('/', async (req, res) => {
     functions.logger.debug("Entered index", {structuredData: true});
     return UserProfileDataService.addUserProfile(req.body)
         .then((response) => {
-                res.status(200).send(response);
+            res.set('Access-Control-Allow-Origin', '*')
+            res.status(200).send(response);
             }
         )
         .catch ((e) => {
