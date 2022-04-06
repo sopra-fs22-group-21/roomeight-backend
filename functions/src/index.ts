@@ -29,6 +29,9 @@ userprofile_app.post('/', async (req, res) => {
         )
         .catch ((e) => {
             // If validation fails return status 400 and list of errors
+            if (e.message == "Firebase: Error (auth/email-already-in-use).") {
+                res.status(409).send("User already exists!");
+            }
             res.status(400).send(e.message);
         });
 });
