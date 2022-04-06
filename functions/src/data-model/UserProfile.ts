@@ -47,6 +47,11 @@ export class UserProfile implements Profile{
         this.isAdvertisingRoom = isAdvertisingRoom;
         this.mismatches = mismatch;
     }
+    // constructor(json_data: any) {
+        // if("FirstName" in json_data) {
+        //
+        // }
+    // }
 
     toJson(): any {
         return {

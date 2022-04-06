@@ -10,7 +10,6 @@ const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
 const cors = require('cors');
-userprofile_app.use(cors({ origin: true }));
 
 
 // User Operations
