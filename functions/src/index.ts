@@ -9,7 +9,6 @@ import {UserProfileDataService} from "./data-services/UserProfileDataService";
 const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
-// const cors = require('cors');
 
 
 // User Operations
@@ -21,19 +20,16 @@ userprofile_app.get('/', async (req, res) => {
 
 // Create User
 userprofile_app.post('/', async (req, res) => {
-    // cors(req, res, () => {
-        functions.logger.debug("Entered index", {structuredData: true});
-        return UserProfileDataService.addUserProfile(req.body)
-            .then((response) => {
-                    res.status(200).send(response);
-                    res.set('Access-Control-Allow-Origin', '*')
-                }
-            )
-            .catch ((e) => {
-                // If validation fails return status 400 and list of errors
-                res.status(400).send(e.message);
-            });
-    // });
+    functions.logger.debug("Entered index", {structuredData: true});
+    return UserProfileDataService.addUserProfile(req.body)
+        .then((response) => {
+                res.status(200).send(response);
+            }
+        )
+        .catch ((e) => {
+            // If validation fails return status 400 and list of errors
+            res.status(400).send(e.message);
+        });
 });
 
 // Update User
