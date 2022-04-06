@@ -6,10 +6,20 @@ import {UserProfileDataService} from "./data-services/UserProfileDataService";
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
+// Required instances
 const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
 const cors = require('cors');
+
+// Export functions and set allowed origins
+exports.userprofiles = functions.https.onRequest(userprofile_app);
+userprofile_app.use(cors({ origin: "*" }));
+exports.flatprofiles = functions.https.onRequest(userprofile_app);
+flatprofile_app.use(cors({ origin: "*" }));
+exports.profiles = functions.https.onRequest(profile_app);
+profile_app.use(cors({ origin: "*" }));
+
 
 // User Operations
 
@@ -46,9 +56,6 @@ userprofile_app.delete('/', async (req, res) => {
     res.status(404).send();
 });
 
-exports.userprofiles = functions.https.onRequest(userprofile_app);
-userprofile_app.use(cors({ origin: "*" }));
-
 
 // Flat Operation
 
@@ -72,8 +79,6 @@ flatprofile_app.delete('/', async (req, res) => {
     res.status(404).send();
 });
 
-exports.flatprofiles = functions.https.onRequest(userprofile_app);
-
 
 // General Profile Operations
 
@@ -95,7 +100,6 @@ profile_app.delete('/', async (req, res) => {
     res.status(404).send();
 });
 
-exports.profiles = functions.https.onRequest(profile_app);
 
 
 const mock_user_profile_list = [
