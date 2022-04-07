@@ -10,7 +10,7 @@ export class Validator {
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 
-    static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
+    private static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
         let report = new ValidationReport();
         let allowedGenders = ["MALE", "FEMALE", "OTHERS", "NOT SET"];
 

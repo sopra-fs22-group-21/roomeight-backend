@@ -14,7 +14,7 @@ export class UserProfileDataService {
         const auth = getAuth();
 
         // Validate user which should be added
-        const validation_results = Validator.validateUser(body);
+        const validation_results = Validator.validatePostUser(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Passed validation", {structuredData: true});
