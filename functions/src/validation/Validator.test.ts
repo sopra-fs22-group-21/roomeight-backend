@@ -21,6 +21,6 @@ describe('Validator test', () => {
       }
     test('should succeeded with valid input', () => {
         let res = Validator.validatePostUser(validTestData);
-        expect(res.hasErrors).toBe(false);
+        expect(res.validationFoundErrors()).toBe(false);
     })
 })
