@@ -1,11 +1,11 @@
 import { UserProfile } from "./UserProfile";
 
-export class Match {
+export class Like {
     likes: Array<UserProfile>;
-    matchedUser: UserProfile;
+    likedUser: UserProfile;
 
     constructor(likes: Array<UserProfile>, matchedUser: UserProfile) {
         this.likes = likes;
-        this.matchedUser = matchedUser;
+        this.likedUser = matchedUser;
     }
 }

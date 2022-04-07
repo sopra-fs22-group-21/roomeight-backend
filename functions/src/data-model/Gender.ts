@@ -1,5 +1,6 @@
 export enum Gender {
     male = "MALE",
     female = "FEMALE",
-    others = "OTHERS"
+    others = "OTHERS",
+    notSet = "NOT SET"
 }

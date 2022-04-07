@@ -1,33 +1,37 @@
 import {Gender} from "./Gender";
-import {Match} from "./Match";
 import {Profile} from "./Profile";
 import {Status} from "./Status";
 import {Tag} from "./Tag";
 
+
 export class UserProfile implements Profile{
+    profileId: string;
     first_name: string;
     last_name: string;
     description: string;
     biography: string;
     tags: Tag[];
     pictureReference: string;
-    matches: Match[];
-    mismatches: string[];
-    creationDate: string;
+    matches: string[];
+    viewed: string[];
+    likes: string[];
+    creationDate: Date;
     onlineStatus: Status;
-    moveInDate: string;
-    moveOutDate: string;
-    birthday: string;
+    moveInDate: Date;
+    moveOutDate: Date;
+    birthday: Date;
     emailAddress: string;
     phoneNumber: string;
     gender: Gender;
     isSearchingRoom: boolean;
     isAdvertisingRoom: boolean;
+    flatId: string;
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
-                pictureReference: string, matches: Array<Match>, creationDate: string, onlineStatus: Status,
-                moveInDate: string, moveOutDate: string, birthday: string, emailAddress: string, phoneNumber: string,
-                gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, mismatch: string[]) {
+                pictureReference: string, matches: string[], creationDate: Date, onlineStatus: Status,
+                moveInDate: Date, moveOutDate: Date, birthday: Date, emailAddress: string, phoneNumber: string,
+                gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
+                likes: string[], profile_id: string) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.description = description;
@@ -45,12 +49,16 @@ export class UserProfile implements Profile{
         this.gender = gender;
         this.isSearchingRoom = isSearchingRoom;
         this.isAdvertisingRoom = isAdvertisingRoom;
-        this.mismatches = mismatch;
+        this.viewed = viewed;
+        this.flatId = flatId;
+        this.likes = likes;
+        this.profileId = profile_id;
     }
 
     toJson(): any {
         return {
             ProfileType: "User",
+            ProfileId: this.profileId,
             FirstName: this.first_name,
             LastName: this.last_name,
             Description: this.description,
@@ -58,7 +66,8 @@ export class UserProfile implements Profile{
             Tags: this.tags,
             PictureReference: this.pictureReference,
             Matches: this.matches,
-            Mismatches: this.mismatches,
+            Viewed: this.viewed,
+            Likes: this.likes,
             CreationDate: this.creationDate,
             OnlineStatus: this.onlineStatus,
             Birthday: this.birthday,

@@ -1,9 +1,8 @@
 import {Repository} from "../repository/Repository";
 import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
-import {UserProfile} from "../data-model/UserProfile";
 import {Validator} from "../validation/Validator";
-import {Status} from "../data-model/Status";
 import * as functions from "firebase-functions";
+import {UserProfileConverter} from "../converters/UserProfileConverter";
 
 export class UserProfileDataService {
 
@@ -13,23 +12,20 @@ export class UserProfileDataService {
         // Initialize services and vars
         const repository = new Repository();
         const auth = getAuth();
-        const creation_date = new Date().getDate().toString();
 
         // Validate user which should be added
         const validation_results = Validator.validateUser(body);
 
-        if (!validation_results.hasErrors) {
+        if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Passed validation", {structuredData: true});
-            // Precede if validation found no errors
-            let user_to_add = new UserProfile(body.FirstName, body.LastName, body.Description, body.Biography, body.Tags,
-                body.PictureReference, body.Matches, creation_date, Status.online,
-                body.MoveInDate, body.MoveOutDate, body.Birthday, body.EmailAddress,
-                body.PhoneNumber, body.Gender, body.IsSearchingRoom, body.IsAdvertisingRoom, body.Mismatches)
 
+            // Precede if validation found no errors
+            let user_to_add = UserProfileConverter.convertPostDto(body);
 
             // As soon as the user object is posted into the database precede with auth user profile creation
             return createUserWithEmailAndPassword(auth, body.EmailAddress, body.Password)
                 .then((userCredential) => {
+                    user_to_add.profileId = userCredential.user.uid;
                     return repository.addUserProfile(user_to_add.toJson())
                         .then((response) => {
                             return user_to_add.toJson();
@@ -47,7 +43,7 @@ export class UserProfileDataService {
 
         } else {
             // Throw value error with list of errors which were found if validation failed
-            throw new Error(validation_results.errors.toString());
+            throw new Error(validation_results.toJson());
         }
     }
 

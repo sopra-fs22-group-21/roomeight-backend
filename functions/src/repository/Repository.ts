@@ -1,5 +1,4 @@
 import {getFirestore} from "firebase/firestore";
-import { collection, addDoc } from "firebase/firestore";
 import {initializeApp} from "firebase/app"
 import {config} from "../../firebase_config";
 import {firestore} from "firebase-admin";
@@ -19,12 +18,12 @@ export class Repository {
     // Firestore User Operations
 
     addUserProfile(user_to_add: any): Promise<string>  {
-        return addDoc(collection(this.database, this.collection_name), user_to_add)
-            .then(
-                r => {
-                    return r.id;
-                }
-            )
+        return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add)
+                .then(
+                    (r: any) => {
+                        return r.id;
+                    }
+                )
     }
 
     deleteUserProfile(email_address: string): Promise<string> {

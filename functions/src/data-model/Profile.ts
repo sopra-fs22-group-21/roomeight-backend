@@ -1,21 +1,21 @@
-import { Match } from "./Match";
 import { Status } from "./Status";
 import { Tag } from "./Tag";
 import { UserProfile } from "./UserProfile";
 
+// Todo: add id
 export interface Profile {
+    profileId: string
     description: string,
     biography: string,
-    tags: Array<Tag>,
+    tags: Tag[],
     pictureReference: string,
-    matches: Array<Match>,
-    creationDate: string,
+    creationDate: Date,
     onlineStatus: Status,
-    moveInDate: string,
-    moveOutDate: string
+    moveInDate: Date,
+    moveOutDate: Date,
+    matches: string[]
 
-    toJson(): { FirstName: string; LastName: string },
+    toJson(): any,
     getMatches(): Array<UserProfile>,
-    getMisMatches(): Array<UserProfile>,
     match(user: UserProfile): void
 }
