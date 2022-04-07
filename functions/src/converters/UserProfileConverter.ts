@@ -4,13 +4,16 @@ import {Gender} from "../data-model/Gender";
 
 export class UserProfileConverter {
 
+    // Dynamically converts a json body of a post user request to a userprofile object
     static convertPostDto(json_body: any): UserProfile {
+        // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.FirstName, json_body.LastName, "", "", [],
                       "", [], new Date(0), Status.online, new Date(0),
                                     new Date(0), json_body.Birthday, json_body.EmailAddress, json_body.PhoneNumber,
                                     Gender.notSet, true, false, [], "", [],
                             "")
 
+        // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("Description")) {
             user.description = json_body.Description;
         }

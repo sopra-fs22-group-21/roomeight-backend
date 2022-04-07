@@ -18,6 +18,7 @@ export class Repository {
     // Firestore User Operations
 
     addUserProfile(user_to_add: any): Promise<string>  {
+        // Add user to database with set unique profile id
         return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add)
                 .then(
                     (r: any) => {

@@ -30,7 +30,7 @@ userprofile_app.get('/', async (req, res) => {
 
 // Create User
 userprofile_app.post('/', async (req, res) => {
-    functions.logger.debug("Entered index", {structuredData: true});
+    functions.logger.debug("Started Post Request", {structuredData: true});
     return UserProfileDataService.addUserProfile(req.body)
         .then((response) => {
                 res.set('Access-Control-Allow-Origin', '*')
@@ -46,13 +46,22 @@ userprofile_app.post('/', async (req, res) => {
         });
 });
 
+
 // Update User
-userprofile_app.put('/', async (req, res) => {
+userprofile_app.patch('/', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // const idToken = req.headers.authorization.split('Bearer ')[1]
+        // userprofile data service call
+    }
     res.status(404).send();
 });
 
 // Delete User
 userprofile_app.delete('/', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        //const idToken = req.headers.authorization.split('Bearer ')[1]
+        // userprofile data service call
+    }
     res.status(404).send();
 });
 
@@ -70,7 +79,7 @@ flatprofile_app.post('/', async (req, res) => {
 });
 
 // Update Flat
-flatprofile_app.put('/', async (req, res) => {
+flatprofile_app.patch('/', async (req, res) => {
     res.status(404).send();
 });
 
@@ -92,7 +101,7 @@ profile_app.post('/', async (req, res) => {
     res.status(404).send();
 });
 
-profile_app.put('/', async (req, res) => {
+profile_app.patch('/', async (req, res) => {
     res.status(404).send();
 });
 

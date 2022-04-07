@@ -17,7 +17,7 @@ export class UserProfileDataService {
         const validation_results = Validator.validatePostUser(body);
 
         if (!validation_results.validationFoundErrors()) {
-            functions.logger.debug("Passed validation", {structuredData: true});
+            functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
             let user_to_add = UserProfileConverter.convertPostDto(body);
@@ -46,5 +46,24 @@ export class UserProfileDataService {
             throw new Error(validation_results.toJson());
         }
     }
+
+    //static async updateUser(body: any): Promise<string> {
+        // Todo: first validate body, then convert dto to instance, then check if token uid == profileId (if not return 403)
+        // Todo: finally make db call
+
+        //getAuth()
+        //    .verifyIdToken(idToken)
+        //    .then((decodedToken) => {
+        //        const uid = decodedToken.uid;
+        //        if (uid == user_to_update.profileId) {
+        //            // Continue with request processing
+        //        } else {
+        //            // return 403
+        //        }
+        //    })
+        //    .catch((error) => {
+        //        // Handle error
+        //    });
+    //}
 
 }
