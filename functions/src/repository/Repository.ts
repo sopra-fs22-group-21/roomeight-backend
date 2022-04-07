@@ -1,9 +1,11 @@
-import {getFirestore} from "firebase/firestore";
+import {getFirestore, doc, setDoc} from "firebase/firestore";
 import {initializeApp} from "firebase/app"
 import {config} from "../../firebase_config";
 import {firestore} from "firebase-admin";
 import DocumentData = firestore.DocumentData;
 import QuerySnapshot = firestore.QuerySnapshot;
+import * as functions from "firebase-functions";
+import {UserProfile} from "../data-model/UserProfile";
 
 export class Repository {
     database: any;
@@ -17,12 +19,13 @@ export class Repository {
 
     // Firestore User Operations
 
-    addUserProfile(user_to_add: any): Promise<string>  {
+    addUserProfile(user_to_add: UserProfile): Promise<string>  {
         // Add user to database with set unique profile id
-        return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add)
+        functions.logger.debug(user_to_add.toJson(), {structuredData: true})
+        return setDoc(doc(this.database, this.collection_name, user_to_add.profileId), user_to_add.toJson())
                 .then(
                     (r: any) => {
-                        return r.id;
+                        return r;
                     }
                 )
     }

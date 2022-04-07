@@ -26,18 +26,21 @@ export class UserProfileDataService {
             return createUserWithEmailAndPassword(auth, body.EmailAddress, body.Password)
                 .then((userCredential) => {
                     user_to_add.profileId = userCredential.user.uid;
-                    return repository.addUserProfile(user_to_add.toJson())
+                    return repository.addUserProfile(user_to_add)
                         .then((response) => {
                             return user_to_add.toJson();
                         })
                         .catch((e) => {
+                            functions.logger.debug(e, {structuredData: true})
                             deleteUser(userCredential.user)
                                 .then(() => {
-                                        throw new Error("Could not post user object to firestore " +
-                                                        "but could also not delete already signed up auth user");
+                                        throw new Error("Error: Could not post user due to: " + e.message)
                                     }
-                                );
-                            throw new Error("Error: Could not post user due to: " + e.message)
+                                )
+                                .catch(((delete_error) => {
+                                    throw new Error("Could not post user object to firestore " +
+                                        "but could also not delete already signed up auth user: " + e.message)
+                                }));
                         });
                 });
 
