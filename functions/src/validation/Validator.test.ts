@@ -2,7 +2,7 @@ import { Validator } from './Validator'
 
 describe('Validator test', () => {
 
-     let testData = {
+     let validTestData = {
         "Password": "test12",
         "FirstName": "test",
         "LastName": "test",
@@ -10,8 +10,6 @@ describe('Validator test', () => {
         "Biography": "test",
         "Tags": "test",
         "PictureReference": "test",
-        "Matches": "test",
-        "Mismatches": "test",
         "Birthday": "2019-06-22",
         "EmailAddress": "test@test.ch",
         "PhoneNumber": "+41795233087",
@@ -21,8 +19,8 @@ describe('Validator test', () => {
         "MoveInDate": "1999-06-22",
         "MoveOutDate": "1999-06-22"
       }
-    test('shoul succeeded with valid input', () => {
-        let res = Validator.validateUser(testData);
+    test('should succeeded with valid input', () => {
+        let res = Validator.validatePostUser(validTestData);
         expect(res.hasErrors).toBe(false);
     })
 })

@@ -1,14 +1,19 @@
 import { ValidationReport } from "./ValidationReport";
 
 export class Validator {
-    static validateUser(user_json_body: any) {
-        let report = new ValidationReport();
+    static validatePostUser(user_json_body: any) {
 
         let mandatoryFields = ["FirstName", "LastName", "Birthday", "EmailAddress", "PhoneNumber", "Password"];
-        let optionalFields = ["Description", "Biography", "Tags", "PictureReference", "Matches", "Mismatches",
-                              "Gender", "IsSearchingRoom", "IsAdvertisingRoom", "MoveInDate", "MoveOutDate"];
+        let optionalFields = ["Description", "Biography", "Tags", "PictureReference", "Gender", "IsSearchingRoom",
+                             "IsAdvertisingRoom", "MoveInDate", "MoveOutDate"];
         
-        let allowedGenders = ["MALE", "FEMALE", "OTHERS"];
+        return this.validateFields(user_json_body, mandatoryFields, optionalFields);
+    }
+
+    static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
+        let report = new ValidationReport();
+        let allowedGenders = ["MALE", "FEMALE", "OTHERS", "NOT SET"];
+
         for (let i in mandatoryFields) {
             if(!user_json_body.hasOwnProperty(mandatoryFields[i])) {
                 report.setErrors("JSON object does not contain required field: " + mandatoryFields[i]);
@@ -103,7 +108,6 @@ export class Validator {
                         report.setErrors("invalid IsAdvertisingRoom, has to be true or false (string)");
                     }
                     break;
-                // TODO: Extended date testing
                 case "MoveInDate":
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid MoveInDate, Expected Format: 1999-06-22");
