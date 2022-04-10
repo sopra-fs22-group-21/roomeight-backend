@@ -30,13 +30,13 @@ export class Repository {
                 )
     }
 
-    deleteUserProfile(email_address: string): Promise<string> {
-        let query = this.database.collection(this.collection_name).where('EmailAddress','==', email_address);
+    deleteUserProfile(email: string): Promise<string> {
+        let query = this.database.collection(this.collection_name).where('email','==', email);
         return query.get()
             .then( (query_result: QuerySnapshot<DocumentData>) => {
                 query_result.forEach((doc) => {
                     doc.ref.delete().then(() => {
-                            return "Successfully deleted User with email: " + email_address;
+                            return "Successfully deleted User with email: " + email;
                         }
                     );
                 });
