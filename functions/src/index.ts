@@ -1,13 +1,16 @@
 import * as functions from "firebase-functions";
-import * as express from "express"
+import * as express from "express";
 import {UserProfileDataService} from "./data-services/UserProfileDataService";
-import {getAuth} from "firebase-admin/lib/auth";
+import {getAuth} from "firebase-admin/auth";
+import {initializeApp} from "firebase/app";
+import {config} from "../firebase_config";
 
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
 // Required instances
+const app = initializeApp(config);
 const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
@@ -41,6 +44,7 @@ userprofile_app.post('/', async (req, res) => {
         .catch ((e) => {
             // If validation fails return status 400 and list of errors
             if (e.message == "Firebase: Error (auth/email-already-in-use).") {
+                // Return HTTP Code 409 if user already exists on Firebase Auth
                 res.status(409).send("User already exists!");
             }
             functions.logger.debug(e, {structuredData: true})
@@ -51,17 +55,20 @@ userprofile_app.post('/', async (req, res) => {
 
 // Update User
 userprofile_app.patch('/:profileId', async (req, res) => {
+    functions.logger.debug("Started Patch Request", {structuredData: true});
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        // Get token from header
+        // Get Profile Id and Token from request
         const idToken = req.headers.authorization.split('Bearer ')[1]
-        // Verify token
-        getAuth()
+        const profile_id = req.params.profileId;
+
+        getAuth(app)
             .verifyIdToken(idToken)
             .then((decodedToken) => {
+                functions.logger.debug(decodedToken, {structuredData: true});
                 const uid = decodedToken.uid;
-                if (uid == req.params.profileId) {
+                if (uid == profile_id) {
                     // If uid of token matches the profileId continue with request processing
-                    UserProfileDataService.updateUser(req.body)
+                    UserProfileDataService.updateUser(req.body, profile_id)
                         .then(
                             (response) => {
                                 res.set('Access-Control-Allow-Origin', '*')
@@ -70,6 +77,7 @@ userprofile_app.patch('/:profileId', async (req, res) => {
                         )
                         .catch(
                             (e) => {
+                                // Return HTTP Code 400 if error occurred
                                 functions.logger.debug(e, {structuredData: true})
                                 res.status(400).send(e.message);
                             }

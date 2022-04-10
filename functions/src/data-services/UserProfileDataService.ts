@@ -60,7 +60,7 @@ export class UserProfileDataService {
         const repository = new Repository();
 
         // Validate the fields that should be updated
-        const validation_results = Validator.validatePostUser(update_fields);
+        const validation_results = Validator.validatePatchUser(update_fields);
 
         if (!validation_results.validationFoundErrors()) {
             // If no errors were found in the validation initialize the update in the repo

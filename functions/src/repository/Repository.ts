@@ -11,6 +11,8 @@ export class Repository {
     database: any;
     collection_name: string;
 
+    // Todo: Implement logic for 2 tables
+
     constructor() {
         const app = initializeApp(config);
         this.database = getFirestore(app);
