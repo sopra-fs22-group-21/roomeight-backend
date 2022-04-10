@@ -1,6 +1,7 @@
+
 export class ValidationReport {
     private hasErrors: boolean;
-    private errors: Array<string>;
+    private errors: string[];
 
     constructor() {
         this.hasErrors = false;
@@ -18,9 +19,11 @@ export class ValidationReport {
         return this.hasErrors;
     }
 
-    toJson(): any {
-        return {
-            errors: this.errors
+    toString(): any {
+        let error_str = "Errors:\n"
+        for(let index in this.errors) {
+            error_str += this.errors[index] + ", \n";
         }
+        return error_str;
     }
 }

@@ -1,4 +1,5 @@
 import { ValidationReport } from "./ValidationReport";
+import * as functions from "firebase-functions";
 
 export class Validator {
     static validatePostUser(user_json_body: any) {
@@ -33,6 +34,7 @@ export class Validator {
                 report.setErrors("" + key + " is null");
                 continue;
             }
+            functions.logger.debug("Validate Field" + key, {structuredData: true});
             switch (key) {
                 case "password":
                     if (!this.validatePassword(user_json_body[key])) {

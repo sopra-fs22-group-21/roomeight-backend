@@ -49,7 +49,8 @@ export class UserProfileDataService {
 
         } else {
             // Throw value error with list of errors which were found if validation failed
-            throw new Error(validation_results.toJson());
+            functions.logger.debug(validation_results.toString(), {structuredData: true});
+            throw new Error(validation_results.toString());
         }
     }
 
@@ -67,7 +68,7 @@ export class UserProfileDataService {
             return repository.updateUserProfile(update_fields, profile_id);
         } else {
             // Throw value error with list of errors which were found if validation failed
-            throw new Error(validation_results.toJson());
+            throw new Error(validation_results.toString());
         }
     }
 

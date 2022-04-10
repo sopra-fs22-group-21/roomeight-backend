@@ -67,7 +67,6 @@ userprofile_app.patch('/:profileId', async (req, res) => {
         getAuth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
-                functions.logger.debug(decodedToken, {structuredData: true});
                 const uid = decodedToken.uid;
                 if (uid == profile_id) {
                     // If uid of token matches the profileId continue with request processing
