@@ -1,4 +1,4 @@
-import { Validator } from './Validator'
+import { Validator } from '../validation/Validator'
 
 describe('Validator test', () => {
 

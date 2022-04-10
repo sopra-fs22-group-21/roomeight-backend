@@ -34,7 +34,7 @@ export class Validator {
                 report.setErrors("" + key + " is null");
                 continue;
             }
-            if (optionalFields.indexOf(key) == -1) {
+            if (optionalFields.indexOf(key) == -1 && mandatoryFields.indexOf(key) == -1) {
                 report.setErrors("Unknown Field: " + key);
                 continue;
             }
