@@ -1,4 +1,4 @@
-import {Repository} from "../repository/Repository";
+import {UserRepository} from "../repository/UserRepository";
 import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
 import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
@@ -10,7 +10,7 @@ export class UserProfileDataService {
         functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
 
         // Initialize services and vars
-        const repository = new Repository();
+        const repository = new UserRepository();
         const auth = getAuth();
 
         // Validate user which should be added
@@ -58,7 +58,7 @@ export class UserProfileDataService {
         functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
 
         // Initialize services and vars
-        const repository = new Repository();
+        const repository = new UserRepository();
 
         // Validate the fields that should be updated
         const validation_results = Validator.validatePatchUser(update_fields);

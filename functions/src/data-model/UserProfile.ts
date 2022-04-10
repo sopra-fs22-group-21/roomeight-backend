@@ -57,7 +57,6 @@ export class UserProfile implements Profile{
 
     toJson(): any {
         return {
-            profileType: "User",
             profileId: this.profileId,
             firstName: this.first_name,
             lastName: this.last_name,

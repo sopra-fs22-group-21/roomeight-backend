@@ -7,16 +7,15 @@ import QuerySnapshot = firestore.QuerySnapshot;
 import * as functions from "firebase-functions";
 import {UserProfile} from "../data-model/UserProfile";
 
-export class Repository {
+export class UserRepository {
     database: any;
     collection_name: string;
 
-    // Todo: Implement logic for 2 tables
 
     constructor() {
         const app = initializeApp(config);
         this.database = getFirestore(app);
-        this.collection_name = "profiles"
+        this.collection_name = "user-profiles"
     }
 
     // Firestore User Operations
