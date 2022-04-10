@@ -23,7 +23,7 @@ export class UserProfileDataService {
             let user_to_add = UserProfileConverter.convertPostDto(body);
 
             // As soon as the user object is posted into the database precede with auth user profile creation
-            return createUserWithEmailAndPassword(auth, body.EmailAddress, body.Password)
+            return createUserWithEmailAndPassword(auth, body.email, body.password)
                 .then((userCredential) => {
                     user_to_add.profileId = userCredential.user.uid;
                     return repository.addUserProfile(user_to_add)

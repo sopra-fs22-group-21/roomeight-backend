@@ -3,9 +3,9 @@ import { ValidationReport } from "./ValidationReport";
 export class Validator {
     static validatePostUser(user_json_body: any) {
 
-        let mandatoryFields = ["FirstName", "LastName", "Birthday", "EmailAddress", "PhoneNumber", "Password"];
-        let optionalFields = ["Description", "Biography", "Tags", "PictureReference", "Gender", "IsSearchingRoom",
-                             "IsAdvertisingRoom", "MoveInDate", "MoveOutDate"];
+        let mandatoryFields = ["firstName", "lastName", "birthday", "email", "phoneNumber", "password"];
+        let optionalFields = ["description", "biography", "tags", "pictureReference", "gender", "isSearchingRoom",
+                             "isAdvertisingRoom", "moveInDate", "moveOutDate"];
         
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
@@ -26,22 +26,22 @@ export class Validator {
                 continue;
             }
             switch (key) {
-                case "Password":
+                case "password":
                     if (!this.validatePassword(user_json_body[key])) {
                         report.setErrors("invalid Password");
                     }
                     break;
-                case "FirstName":
+                case "firstName":
                     if (!this.validateName(user_json_body[key])) {
                         report.setErrors("invalid FirstName");
                     }
                     break;
-                case "LastName":
+                case "lastName":
                     if (!this.validateName(user_json_body[key])) {
                         report.setErrors("invalid LastName");
                     }
                     break;
-                case "Birthday":
+                case "birthday":
                     if (!this.validateBirthday(user_json_body[key])) {
                         report.setErrors("invalid Birthday, Expected Format: 1999-06-22");
                     } else {
@@ -53,67 +53,67 @@ export class Validator {
                         }
                     }
                     break;
-                case "EmailAddress":
+                case "email":
                     if (!this.validateEmail(user_json_body[key])) {
                         report.setErrors("invalid EmailAddress");
                     }
                     break;
-                case "PhoneNumber":
+                case "phoneNumber":
                     if (!this.validatePhone(user_json_body[key])) {
                         report.setErrors("invalid PhoneNumber");
                     }
                     break;
-                case "Description":
+                case "description":
                     if (!this.validateString(user_json_body[key])) {
                         report.setErrors("invalid Description");
                     }
                     break;
-                case "Biography":
+                case "biography":
                     if (!this.validateString(user_json_body[key])) {
                         report.setErrors("invalid Biography");
                     }
                     break;
-                case "Tags":
+                case "tags":
                     if (!this.validateTags(user_json_body[key])) {
                         report.setErrors("invalid Tags");
                     }
                     break;
-                case "PictureReference":
+                case "pictureReference":
                     if (!this.validateString(user_json_body[key])) {
                         report.setErrors("invalid PictureReference");
                     }
                     break;
-                case "Matches":
+                case "matches":
                     if (!this.validateMatches(user_json_body[key])) {
                         report.setErrors("invalid Matches");
                     }
                     break;
-                case "Mismatches":
+                case "mismatches":
                     if (!this.validateMismatches(user_json_body[key])) {
                         report.setErrors("invalid Mismatches");
                     }
                     break;
-                case "Gender":
+                case "gender":
                     if (!this.validateGender(user_json_body[key], allowedGenders)) {
                         report.setErrors("invalid Gender, must be MALE/FEMALE or OTHERS");
                     }
                     break;
-                case "IsSearchingRoom":
+                case "isSearchingRoom":
                     if (!this.validateBoolean(user_json_body[key])) {
                         report.setErrors("invalid IsSearchingRoom, has to be true or false (string)");
                     }
                     break;
-                case "IsAdvertisingRoom":
+                case "isAdvertisingRoom":
                     if (!this.validateBoolean(user_json_body[key])) {
                         report.setErrors("invalid IsAdvertisingRoom, has to be true or false (string)");
                     }
                     break;
-                case "MoveInDate":
+                case "moveInDate":
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid MoveInDate, Expected Format: 1999-06-22");
                     }
                     break;
-                case "MoveOutDate":
+                case "moveOutDate":
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid MoveOutDate, Expected Format: 1999-06-22");
                     } else {

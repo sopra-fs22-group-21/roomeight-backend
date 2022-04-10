@@ -20,7 +20,7 @@ export class UserProfile implements Profile{
     moveInDate: Date;
     moveOutDate: Date;
     birthday: Date;
-    emailAddress: string;
+    email: string;
     phoneNumber: string;
     gender: Gender;
     isSearchingRoom: boolean;
@@ -29,7 +29,7 @@ export class UserProfile implements Profile{
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
                 pictureReference: string, matches: string[], creationDate: Date, onlineStatus: Status,
-                moveInDate: Date, moveOutDate: Date, birthday: Date, emailAddress: string, phoneNumber: string,
+                moveInDate: Date, moveOutDate: Date, birthday: Date, email: string, phoneNumber: string,
                 gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
                 likes: string[], profile_id: string) {
         this.first_name = first_name;
@@ -44,7 +44,7 @@ export class UserProfile implements Profile{
         this.moveInDate = moveInDate;
         this.moveOutDate = moveOutDate;
         this.birthday = birthday;
-        this.emailAddress = emailAddress;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.gender = gender;
         this.isSearchingRoom = isSearchingRoom;
@@ -57,27 +57,27 @@ export class UserProfile implements Profile{
 
     toJson(): any {
         return {
-            ProfileType: "User",
-            ProfileId: this.profileId,
-            FirstName: this.first_name,
-            LastName: this.last_name,
-            Description: this.description,
-            Biography: this.biography,
-            Tags: this.tags,
-            PictureReference: this.pictureReference,
-            Matches: this.matches,
-            Viewed: this.viewed,
-            Likes: this.likes,
-            CreationDate: this.creationDate,
-            OnlineStatus: this.onlineStatus,
-            Birthday: this.birthday,
-            EmailAddress: this.emailAddress,
-            PhoneNumber: this.phoneNumber,
-            Gender: this.gender,
-            IsSearchingRoom: this.isSearchingRoom,
-            IsAdvertisingRoom: this.isAdvertisingRoom,
-            MoveInDate: this.moveInDate,
-            MoveOutDate: this.moveOutDate
+            profileType: "User",
+            profileId: this.profileId,
+            firstName: this.first_name,
+            lastName: this.last_name,
+            description: this.description,
+            biography: this.biography,
+            tags: this.tags,
+            pictureReference: this.pictureReference,
+            matches: this.matches,
+            viewed: this.viewed,
+            likes: this.likes,
+            creationDate: this.creationDate,
+            onlineStatus: this.onlineStatus,
+            birthday: this.birthday,
+            email: this.email,
+            phoneNumber: this.phoneNumber,
+            gender: this.gender,
+            isSearchingRoom: this.isSearchingRoom,
+            isAdvertisingRoom: this.isAdvertisingRoom,
+            moveInDate: this.moveInDate,
+            moveOutDate: this.moveOutDate
         };
     }
     getMatches(): UserProfile[] {
