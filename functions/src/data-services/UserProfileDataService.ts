@@ -1,4 +1,5 @@
 import {Repository} from "../repository/Repository";
+import {getAuth as adminGetAuth} from "firebase-admin/auth";
 import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
 import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
@@ -51,7 +52,29 @@ export class UserProfileDataService {
     }
 
     static async updateUser(body: any): Promise<string> {
+        throw new Error("Method not implemented.");
+    }
 
+
+    static async deleteUser(profileId: string): Promise<string> {
+
+        const repository = new Repository();
+        return (
+        adminGetAuth()
+            .deleteUser(profileId)
+            .then(() => {
+                return repository.deleteUserProfile(profileId)
+                    .then((response) => {
+                        return response
+                    })
+                    .catch((error) => {
+                        throw new Error('Error: User was deleted from firestore but not from repository: ' + error.message);
+                    })
+            })
+            .catch((error) => {
+                throw new Error('Error: could not delete User from Firestore: ' + error.message);
+            })
+        );
     }
 
 }
