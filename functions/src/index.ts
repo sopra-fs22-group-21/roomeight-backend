@@ -1,11 +1,17 @@
 import * as functions from "firebase-functions";
-import * as express from "express"
+import * as express from "express";
 import {UserProfileDataService} from "./data-services/UserProfileDataService";
 import {getAuth} from "firebase-admin/auth";
+import {config} from "../firebase_config";
 
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
+
+
+// The Firebase Admin SDK to access Firestore.
+const admin = require('firebase-admin');
+admin.initializeApp(config);
 
 // Required instances
 const userprofile_app = express();

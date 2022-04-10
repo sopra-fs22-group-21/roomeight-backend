@@ -1,9 +1,6 @@
-import {getFirestore, doc, setDoc} from "firebase/firestore";
+import {getFirestore, doc, setDoc, deleteDoc} from "firebase/firestore";
 import {initializeApp} from "firebase/app"
 import {config} from "../../firebase_config";
-import {firestore} from "firebase-admin";
-import DocumentData = firestore.DocumentData;
-import QuerySnapshot = firestore.QuerySnapshot;
 import * as functions from "firebase-functions";
 import {UserProfile} from "../data-model/UserProfile";
 
@@ -31,17 +28,11 @@ export class Repository {
     }
 
     deleteUserProfile(profileId: string): Promise<string> {
-        let query = this.database.collection(this.collection_name).where('profileId','==', profileId);
-        return query.get()
-            .then( (query_result: QuerySnapshot<DocumentData>) => {
-                query_result.forEach((doc) => {
-                    doc.ref.delete().then(() => {
-                            return "Successfully deleted User with profileId: " + profileId;
-                        }
-                    );
-                });
-            }
-        );
+        const doc_reference = doc(this.database, this.collection_name, profileId);
+        return deleteDoc(doc_reference)
+            .then(() => {
+                return "Successfully deleted User with id: " + profileId;
+    })
     }
 
 }

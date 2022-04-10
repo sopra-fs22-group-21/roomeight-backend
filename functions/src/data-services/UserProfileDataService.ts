@@ -68,11 +68,8 @@ export class UserProfileDataService {
                         return response
                     })
                     .catch((error) => {
-                        throw new Error('Error: User was deleted from firestore but not from repository: ' + error.message);
+                        throw new Error('Error: User was deleted from auth but not from firestore: ' + error.message);
                     })
-            })
-            .catch((error) => {
-                throw new Error('Error: could not delete User from Firestore: ' + error.message);
             })
         );
     }
