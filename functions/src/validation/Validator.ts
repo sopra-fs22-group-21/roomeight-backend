@@ -132,7 +132,10 @@ export class Validator {
                         report.setErrors("invalid MoveOutDate, Expected Format: 1999-06-22");
                     } else {
                         // Todo: improve field validation -> MoveIn date not always in body
-                        if (this.validateDate(user_json_body["moveOutDate"]) && !user_json_body.hasOwnProperty("moveInDate")) {
+                        if (!user_json_body.hasOwnProperty("moveInDate")) {
+                            break;
+                        }
+                        if (this.validateDate(user_json_body["moveInDate"])) {
                             let moveOutDate = new Date(user_json_body["moveOutDate"]);
                             let moveInDate = new Date(user_json_body["moveInDate"]);
                             if (moveInDate > moveOutDate) {
