@@ -50,23 +50,8 @@ export class UserProfileDataService {
         }
     }
 
-    //static async updateUser(body: any): Promise<string> {
-        // Todo: first validate body, then convert dto to instance, then check if token uid == profileId (if not return 403)
-        // Todo: finally make db call
+    static async updateUser(body: any): Promise<string> {
 
-        //getAuth()
-        //    .verifyIdToken(idToken)
-        //    .then((decodedToken) => {
-        //        const uid = decodedToken.uid;
-        //        if (uid == user_to_update.profileId) {
-        //            // Continue with request processing
-        //        } else {
-        //            // return 403
-        //        }
-        //    })
-        //    .catch((error) => {
-        //        // Handle error
-        //    });
-    //}
+    }
 
 }

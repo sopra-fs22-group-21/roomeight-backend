@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import * as express from "express"
 import {UserProfileDataService} from "./data-services/UserProfileDataService";
+import {getAuth} from "firebase-admin/lib/auth";
 
 
 // Start writing Firebase Functions
@@ -49,12 +50,42 @@ userprofile_app.post('/', async (req, res) => {
 
 
 // Update User
-userprofile_app.patch('/', async (req, res) => {
+userprofile_app.patch('/:profileId', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-        // const idToken = req.headers.authorization.split('Bearer ')[1]
-        // userprofile data service call
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                const uid = decodedToken.uid;
+                if (uid == req.params.profileId) {
+                    // If uid of token matches the profileId continue with request processing
+                    UserProfileDataService.updateUser(req.body)
+                        .then(
+                            (response) => {
+                                res.set('Access-Control-Allow-Origin', '*')
+                                res.status(200).send(response);
+                            }
+                        )
+                        .catch(
+                            (e) => {
+                                functions.logger.debug(e, {structuredData: true})
+                                res.status(400).send(e.message);
+                            }
+                        );
+                } else {
+                    // Else return NotAuthorized-Exception
+                    res.status(403).send("Not authorized to update the selected user!");
+                }
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
     }
-    res.status(404).send();
 });
 
 // Delete User
