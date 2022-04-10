@@ -15,7 +15,7 @@ export class Validator {
         let mandatoryFields: string[] = [];
         let optionalFields = ["description", "biography", "tags", "pictureReference", "gender", "isSearchingRoom",
                               "isAdvertisingRoom", "moveInDate", "moveOutDate", "firstName", "lastName", "birthday",
-                              "phoneNumber", "email"];
+                              "phoneNumber", "email", "flatId"];
         return this.validateFields(update_fields, mandatoryFields, optionalFields);
     }
 
@@ -32,6 +32,10 @@ export class Validator {
         for (let key in user_json_body) {
             if (user_json_body[key] === null) {
                 report.setErrors("" + key + " is null");
+                continue;
+            }
+            if (optionalFields.indexOf(key) == -1) {
+                report.setErrors("Unknown Field: " + key);
                 continue;
             }
             functions.logger.debug("Validate Field" + key, {structuredData: true});
@@ -127,7 +131,8 @@ export class Validator {
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid MoveOutDate, Expected Format: 1999-06-22");
                     } else {
-                        if (this.validateDate(user_json_body["MoveOutDate"])) {
+                        // Todo: improve field validation -> MoveIn date not always in body
+                        if (this.validateDate(user_json_body["MoveOutDate"]) && !user_json_body.hasOwnProperty("MoveInDate")) {
                             let moveOutDate = new Date(user_json_body["MoveOutDate"]);
                             let moveInDate = new Date(user_json_body["MoveInDate"]);
                             if (moveInDate > moveOutDate) {
@@ -136,10 +141,13 @@ export class Validator {
                         }
                     }
                     break;
-                default:
-                    if (optionalFields.indexOf(key) == -1) {
-                        report.setErrors("Unknown Field: " + key);
+                case "flatId":
+                    if (!this.validateString(user_json_body[key])) {
+                        report.setErrors("invalid PictureReference");
                     }
+                    continue;
+                default:
+                    report.setErrors("Unknown Field: " + key);
             }
         }
         return report;
