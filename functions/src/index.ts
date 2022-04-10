@@ -2,15 +2,18 @@ import * as functions from "firebase-functions";
 import * as express from "express";
 import {UserProfileDataService} from "./data-services/UserProfileDataService";
 import {getAuth} from "firebase-admin/auth";
-import {initializeApp} from "firebase/app";
 import {config} from "../firebase_config";
 
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
+
+// The Firebase Admin SDK to access Firestore.
+const admin = require('firebase-admin');
+admin.initializeApp(config);
+
 // Required instances
-const app = initializeApp(config);
 const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
@@ -61,7 +64,7 @@ userprofile_app.patch('/:profileId', async (req, res) => {
         const idToken = req.headers.authorization.split('Bearer ')[1]
         const profile_id = req.params.profileId;
 
-        getAuth(app)
+        getAuth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
                 functions.logger.debug(decodedToken, {structuredData: true});
