@@ -5,7 +5,6 @@ import { Status } from "./Status";
 import { Tag } from "./Tag";
 import { UserProfile } from "./UserProfile";
 
-//Todo: split matches for flat: userprofile -> matches: array<string>, viewed: array<string> / flatprofile -> matches<Like>
 
 export class FlatProfile implements Profile {
     profileId: string;

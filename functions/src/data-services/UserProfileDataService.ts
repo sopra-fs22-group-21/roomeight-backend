@@ -3,6 +3,7 @@ import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth
 import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
+import {getAuth as adminGetAuth} from "firebase-admin/auth";
 
 export class UserProfileDataService {
 
@@ -28,7 +29,6 @@ export class UserProfileDataService {
                     user_to_add.profileId = userCredential.user.uid;
                     return repository.addUserProfile(user_to_add)
                         .then((response) => {
-
                             return user_to_add.toJson();
                         })
                         .catch((e) => {
@@ -70,6 +70,25 @@ export class UserProfileDataService {
             // Throw value error with list of errors which were found if validation failed
             throw new Error(validation_results.toString());
         }
+    }
+
+
+    static async deleteUser(profileId: string): Promise<string> {
+
+        const repository = new UserRepository();
+        return (
+        adminGetAuth()
+            .deleteUser(profileId)
+            .then(() => {
+                return repository.deleteUserProfile(profileId)
+                    .then((response) => {
+                        return response
+                    })
+                    .catch((error) => {
+                        throw new Error('Error: User was deleted from auth but not from firestore: ' + error.message);
+                    })
+            })
+        );
     }
 
 }
