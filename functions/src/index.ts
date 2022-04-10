@@ -1,7 +1,7 @@
 import * as functions from "firebase-functions";
 import * as express from "express"
 import {UserProfileDataService} from "./data-services/UserProfileDataService";
-import {getAuth} from "firebase-admin/lib/auth";
+import {getAuth} from "firebase-admin/auth";
 
 
 // Start writing Firebase Functions
