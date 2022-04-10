@@ -28,18 +28,21 @@ export class UserProfileDataService {
                     user_to_add.profileId = userCredential.user.uid;
                     return repository.addUserProfile(user_to_add)
                         .then((response) => {
+
                             return user_to_add.toJson();
                         })
                         .catch((e) => {
                             functions.logger.debug(e, {structuredData: true})
                             deleteUser(userCredential.user)
                                 .then(() => {
-                                        throw new Error("Error: Could not post user due to: " + e.message)
+                                    functions.logger.debug(e, {structuredData: true});
+                                    throw new Error("Error: Could not post user due to: " + e.message)
                                     }
                                 )
                                 .catch(((delete_error) => {
-                                    throw new Error("Could not post user object to firestore " +
-                                        "but could also not delete already signed up auth user: " + e.message)
+                                    functions.logger.debug(delete_error, {structuredData: true});
+                                    throw new Error("Could not post user object to firestore (" + e.message + ")" +
+                                        "but could also not delete already signed up auth user: " + delete_error.message)
                                 }));
                         });
                 });
@@ -50,8 +53,22 @@ export class UserProfileDataService {
         }
     }
 
-    static async updateUser(body: any): Promise<string> {
+    static async updateUser(update_fields: any, profile_id: string): Promise<string> {
+        functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
 
+        // Initialize services and vars
+        const repository = new Repository();
+
+        // Validate the fields that should be updated
+        const validation_results = Validator.validatePostUser(update_fields);
+
+        if (!validation_results.validationFoundErrors()) {
+            // If no errors were found in the validation initialize the update in the repo
+            return repository.updateUserProfile(update_fields, profile_id);
+        } else {
+            // Throw value error with list of errors which were found if validation failed
+            throw new Error(validation_results.toJson());
+        }
     }
 
 }

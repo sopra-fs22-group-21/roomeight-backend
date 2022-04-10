@@ -10,6 +10,14 @@ export class Validator {
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 
+    static validatePatchUser(update_fields: any) {
+        let mandatoryFields: string[] = [];
+        let optionalFields = ["description", "biography", "tags", "pictureReference", "gender", "isSearchingRoom",
+                              "isAdvertisingRoom", "moveInDate", "moveOutDate", "firstName", "lastName", "birthday",
+                              "phoneNumber", "email"];
+        return this.validateFields(update_fields, mandatoryFields, optionalFields);
+    }
+
     private static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
         let report = new ValidationReport();
         let allowedGenders = ["MALE", "FEMALE", "OTHERS", "NOT SET"];

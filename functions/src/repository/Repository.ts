@@ -1,4 +1,4 @@
-import {getFirestore, doc, setDoc} from "firebase/firestore";
+import {getFirestore, doc, setDoc, updateDoc} from "firebase/firestore";
 import {initializeApp} from "firebase/app"
 import {config} from "../../firebase_config";
 import {firestore} from "firebase-admin";
@@ -28,6 +28,14 @@ export class Repository {
                         return r;
                     }
                 )
+    }
+
+    updateUserProfile(update_fields: any, profile_id: string): Promise<string> {
+        const doc_reference = doc(this.database, this.collection_name, profile_id);
+        return updateDoc(doc_reference, update_fields)
+            .then(() => {
+                return "Successfully updated User with id: " + profile_id;
+            })
     }
 
     deleteUserProfile(email: string): Promise<string> {
