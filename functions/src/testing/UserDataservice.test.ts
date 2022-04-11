@@ -1,6 +1,5 @@
 import {UserProfileDataService} from "../data-services/UserProfileDataService";
-import {UserRepository} from "../repository/UserRepository";
-import {UserProfile} from "../data-model/UserProfile";
+import {InvalidMockUserRepository, ValidMockUserRepository} from "../repository/MockUserRepository";
 
 
 // Declaring mocks
@@ -14,49 +13,36 @@ jest.mock('firebase/auth', () => {
     }
     return {
         getAuth: jest.fn(),
-        createUserWithEmailAndPassword: jest.fn(() => {
-            console.log("Entered Mock createUserWithEmailAndPassword")
-            return Promise.resolve(userCredentialMock);
-        })
+        createUserWithEmailAndPassword: jest.fn()
+            // Value for first test
+            .mockReturnValueOnce(Promise.resolve(userCredentialMock))
+            // Value for second test
+
+            // Value for third test
+            .mockRejectedValueOnce(Promise.reject(new Error("Firebase: Error (auth/email-already-in-use).")))
+            // Value for further tests
+            .mockReturnValue(Promise.resolve(userCredentialMock)),
+        deleteUser: jest.fn()
+            // Default Value
+            .mockReturnValue(Promise.resolve("Successfully deleted user"))
     }
 });
 
 jest.mock('../repository/UserRepository', () => {
     return {
-        UserRepository: jest.fn().mockImplementation(() => {
-            console.log(new MockUserRepository())
-            return new MockUserRepository();
-        })
+        UserRepository: jest.fn()
+            // Value for first test
+            .mockImplementationOnce(() => new ValidMockUserRepository())
+            // Value for second test
+            .mockImplementationOnce(() => new ValidMockUserRepository())
+            // Value for third test
+            .mockImplementationOnce(() => new ValidMockUserRepository())
+            // Value for fourth test
+            .mockImplementationOnce(() => new InvalidMockUserRepository())
+            // Value for further tests
+            .mockImplementation(() => new ValidMockUserRepository())
     }
 });
-
-// Mock Repository for db calls
-
-class MockUserRepository implements UserRepository{
-    constructor() {
-        this.collection_name = "";
-        this.database = null;
-    }
-
-    collection_name: string;
-    database: any;
-
-    addUserProfile(user_to_add: UserProfile): Promise<string> {
-        console.log("Entered Mock addUserProfile");
-        return Promise.resolve("Successfully added " + user_to_add.email);
-    }
-
-    deleteUserProfile(profileId: string): Promise<string> {
-        console.log("Entered Mock deleteUserProfile");
-        return Promise.resolve("Successfully deleted user  " + profileId);
-    }
-
-    updateUserProfile(update_fields: any, profile_id: string): Promise<string> {
-        console.log("Entered Mock updateUserProfile");
-        return Promise.resolve("Successfully updated user  " + profile_id);
-    }
-
-}
 
 // Stub inputs
 
@@ -144,11 +130,6 @@ describe("User Profile Test", () => {
     });
 
     test('Test UserAlreadyExists Error Add UserProfile Request', () => {
-        // Define specific mock for error throwing
-        jest.mock('firebase/auth', () => {
-            throw new Error("Firebase: Error (auth/email-already-in-use).")
-        });
-
         const expected_response = "Firebase: Error (auth/email-already-in-use)."
 
         return UserProfileDataService.addUserProfile(StubInputs.getValidUserPostBody())
@@ -160,10 +141,28 @@ describe("User Profile Test", () => {
             )
             .catch(
                 (error) => {
+                    expect(error).toEqual(Promise.reject(new Error(expected_response)));
+                }
+            )
+    });
+
+    it('Test Cannot access Repo Add UserProfile Request', async () =>  {
+        const expected_response = "Error: Error: Could not post user due to: Could not add User"
+
+        return UserProfileDataService.addUserProfile(StubInputs.getValidUserPostBody())
+            .then(
+                (response) => {
+                    console.log(response);
+                    throw new TypeError("Expected a repo error")
+                }
+            )
+            .catch(
+                (error) => {
                     expect(error).toEqual(new Error(expected_response))
                 }
             )
     });
+
 
 });
 

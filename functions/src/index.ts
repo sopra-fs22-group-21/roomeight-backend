@@ -39,9 +39,9 @@ userprofile_app.get('/', async (req, res) => {
 userprofile_app.post('/', async (req, res) => {
     functions.logger.debug("Started Post Request", {structuredData: true});
     return UserProfileDataService.addUserProfile(req.body)
-        .then((response) => {
+        .then((data_service_response) => {
                 res.set('Access-Control-Allow-Origin', '*')
-                res.status(200).send(response);
+                res.status(200).send(data_service_response);
             }
         )
         .catch ((e) => {
@@ -72,9 +72,9 @@ userprofile_app.patch('/:profileId', async (req, res) => {
                     // If uid of token matches the profileId continue with request processing
                     UserProfileDataService.updateUser(req.body, profile_id)
                         .then(
-                            (response) => {
+                            (data_service_response) => {
                                 res.set('Access-Control-Allow-Origin', '*')
-                                res.status(200).send(response);
+                                res.status(200).send(data_service_response);
                             }
                         )
                         .catch(
@@ -112,9 +112,9 @@ userprofile_app.delete('/:profileId', async (req, res) => {
                     // If uid of token matches the profileId continue with request processing
                     UserProfileDataService.deleteUser(req.params.profileId)
                         .then(
-                            (response) => {
+                            (data_service_response) => {
                                 res.set('Access-Control-Allow-Origin', '*')
-                                res.status(200).send(response);
+                                res.status(200).send(data_service_response);
                             }
                         )
                         .catch(

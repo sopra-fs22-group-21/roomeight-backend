@@ -4,9 +4,9 @@ import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 // Prod import for admin auth
-//import {getAuth as adminGetAuth} from "firebase-admin/auth";
+import {getAuth as adminGetAuth} from "firebase-admin/auth";
 // Testing import for admin auth
-import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
+// import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
 
 export class UserProfileDataService {
 
@@ -29,11 +29,9 @@ export class UserProfileDataService {
             // As soon as the user object is posted into the database precede with auth user profile creation
             return createUserWithEmailAndPassword(auth, body.email, body.password)
                 .then((userCredential) => {
-                    console.log("2")
                     user_to_add.profileId = userCredential.user.uid;
-                    console.log("3")
                     return repository.addUserProfile(user_to_add)
-                        .then((response) => {
+                        .then((repo_response) => {
                             return user_to_add.toJson();
                         })
                         .catch((e) => {
@@ -41,14 +39,9 @@ export class UserProfileDataService {
                             deleteUser(userCredential.user)
                                 .then(() => {
                                     functions.logger.debug(e, {structuredData: true});
-                                    throw new Error("Error: Could not post user due to: " + e.message)
+                                    throw new Error("Error: Could not post user due to: " + e.message);
                                     }
-                                )
-                                .catch(((delete_error) => {
-                                    functions.logger.debug(delete_error, {structuredData: true});
-                                    throw new Error("Could not post user object to firestore (" + e.message + ")" +
-                                        "but could also not delete already signed up auth user: " + delete_error.message)
-                                }));
+                                );
                         });
                 });
 
