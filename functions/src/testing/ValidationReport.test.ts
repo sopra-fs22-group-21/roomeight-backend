@@ -11,7 +11,7 @@ describe('ValidatorReport test', () => {
         expect(validationReport.validationFoundErrors()).toBe(false);
     })
 
-    test('new report should not contain errors', () => {
+    test('report should match the errormessage', () => {
         let errormsg = "Error: test test"
         validationReport.setErrors(errormsg)
         expect(validationReport.validationFoundErrors()).toBe(true);
