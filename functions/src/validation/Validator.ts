@@ -1,5 +1,4 @@
 import { ValidationReport } from "./ValidationReport";
-import * as functions from "firebase-functions";
 
 export class Validator {
     static validatePostUser(user_json_body: any) {
@@ -18,6 +17,8 @@ export class Validator {
                               "phoneNumber", "email", "flatId"];
         return this.validateFields(update_fields, mandatoryFields, optionalFields);
     }
+
+
 
     private static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
         let report = new ValidationReport();
@@ -38,7 +39,7 @@ export class Validator {
                 report.setErrors("Unknown Field: " + key);
                 continue;
             }
-            functions.logger.debug("Validate Field" + key, {structuredData: true});
+
             switch (key) {
                 case "password":
                     if (!this.validatePassword(user_json_body[key])) {

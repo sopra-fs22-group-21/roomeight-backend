@@ -130,3 +130,64 @@ describe('Validate PostUser', () => {
   })
 })
 
+
+describe('Validate PatchUser', () => {
+
+  let validAllFields = {
+    "firstName": "test",
+    "lastName": "test",
+    "description": "test",
+    "biography": "test",
+    "tags": "test",
+    "pictureReference": "test",
+    "birthday": "2019-06-22",
+    "email": "test@test.ch",
+    "phoneNumber": "+41795233087",
+    "gender": "MALE",
+    "isSearchingRoom": "true",
+    "isAdvertisingRoom": "false",
+    "moveInDate": "1999-06-22",
+    "moveOutDate": "1999-06-22",
+    "flatId": "18-921-981"
+  }
+
+  let invalidFields = {
+    "password": "",
+    "firstName": "",
+    "lastName": "",
+    "birthday": "asdf",
+    "email": "testtest",
+    "phoneNumber": "000417952330",
+    "isSearchingRoom": "tru",
+    "isAdvertisingRoom": "fals",
+    "moveInDate": "2212019",
+    "moveOutDate": "2212019"
+  }
+
+  let unexpectedField = {
+    "password": "test12",
+    "firstName": "test",
+    "lastName": "test",
+    "birthday": "2019-06-22",
+    "email": "test@test.ch",
+    "phoneNumber": "+41795233087"
+  }
+
+  test('test valid input for all fields', () => {
+    let res = Validator.validatePatchUser(validAllFields);
+    expect(res.validationFoundErrors()).toBe(false);
+  })
+
+  test('test invalid input fields', () => {
+    let res = Validator.validatePatchUser(invalidFields);
+    expect(res.validationFoundErrors()).toBe(true);
+  })
+
+  test('test invalid input with unexpected fields', () => {
+    let res = Validator.validatePatchUser(unexpectedField);
+    let expected = "Errors:\nUnknown Field: password, \n"
+    expect(res.validationFoundErrors()).toBe(true);
+    expect(res.toString()).toEqual(expected);
+  })
+})
+
