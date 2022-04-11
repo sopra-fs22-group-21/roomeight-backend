@@ -22,7 +22,11 @@ export class ValidationReport {
     toString(): any {
         let error_str = "Errors:\n"
         for(let index in this.errors) {
-            error_str += this.errors[index] + ", \n";
+            if (index == (this.errors.length-1).toString()) {
+                error_str += this.errors[index];
+            } else {
+                error_str += this.errors[index] + ", \n";
+            }
         }
         return error_str;
     }

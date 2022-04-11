@@ -6,10 +6,16 @@ export class UserProfileConverter {
 
     // Dynamically converts a json body of a post user request to a userprofile object
     static convertPostDto(json_body: any): UserProfile {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+        let current_date = mm + '/' + dd + '/' + yyyy;
+
         // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.firstName, json_body.lastName, "", "", [],
-                      "", [], new Date(0), Status.online, new Date(0),
-                                    new Date(0), json_body.birthday, json_body.email, json_body.phoneNumber,
+                      "", [], new Date(current_date), Status.online, new Date(NaN),
+                                    new Date(NaN), json_body.birthday, json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
                             "")
 
