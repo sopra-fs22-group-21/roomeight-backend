@@ -4,9 +4,9 @@ import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 // Prod import for admin auth
-// import {getAuth as adminGetAuth} from "firebase-admin/auth";
+import {getAuth as adminGetAuth} from "firebase-admin/auth";
 // Testing import for admin auth
-import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
+// import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
 
 export class UserProfileDataService {
 
@@ -27,7 +27,7 @@ export class UserProfileDataService {
             let user_to_add = UserProfileConverter.convertPostDto(body);
 
             // As soon as the user object is posted into the database precede with auth user profile creation
-            const userCredential = await createUserWithEmailAndPassword(auth, body.email, body.password)
+            const userCredential = await createUserWithEmailAndPassword(auth, user_to_add.email, body.password)
             user_to_add.profileId = userCredential.user.uid;
             // After profile id is fetched from auth write user into db
             const repo_response = await repository.addUserProfile(user_to_add)

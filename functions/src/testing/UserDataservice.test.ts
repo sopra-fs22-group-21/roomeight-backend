@@ -145,7 +145,7 @@ class StubInputs {
 
 // Unit Tests
 
-describe("User Profile Test", () => {
+describe("UserProfileDataService Test", () => {
 
     // Post User Profile Tests
 

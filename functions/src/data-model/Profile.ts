@@ -2,7 +2,6 @@ import { Status } from "./Status";
 import { Tag } from "./Tag";
 import { UserProfile } from "./UserProfile";
 
-// Todo: add id
 export interface Profile {
     profileId: string
     description: string,
@@ -16,6 +15,6 @@ export interface Profile {
     matches: string[]
 
     toJson(): any,
-    getMatches(): Array<UserProfile>,
+    getMatches(): UserProfile[],
     match(user: UserProfile): void
 }

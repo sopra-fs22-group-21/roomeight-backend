@@ -103,28 +103,28 @@ describe('Validate PostUser', () => {
 
   test('test invalid input with missing fields', () => {
     let res = Validator.validatePostUser(missingMandatory);
-    let expected = "Errors:\nJSON object does not contain required field: lastName, \nJSON object does not contain required field: phoneNumber, \n"
+    let expected = "Errors:\nJSON object does not contain required field: lastName, \nJSON object does not contain required field: phoneNumber"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
 
   test('test invalid input with unexpected fields', () => {
     let res = Validator.validatePostUser(unexpectedField);
-    let expected = "Errors:\nUnknown Field: hometown, \n"
+    let expected = "Errors:\nUnknown Field: hometown"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
 
   test('test invalid date range', () => {
     let res = Validator.validatePostUser(invalidDateRange);
-    let expected = "Errors:\nmoveInDate must be before moveOutDate, \n"
+    let expected = "Errors:\nmoveInDate must be before moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
 
   test('test json with null value', () => {
     let res = Validator.validatePostUser(containingNull);
-    let expected = "Errors:\nfirstName is null, \n"
+    let expected = "Errors:\nfirstName is null"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
@@ -185,7 +185,7 @@ describe('Validate PatchUser', () => {
 
   test('test invalid input with unexpected fields', () => {
     let res = Validator.validatePatchUser(unexpectedField);
-    let expected = "Errors:\nUnknown Field: password, \n"
+    let expected = "Errors:\nUnknown Field: password"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
