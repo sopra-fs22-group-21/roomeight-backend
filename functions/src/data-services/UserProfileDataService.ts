@@ -4,9 +4,9 @@ import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 // Prod import for admin auth
-import {getAuth as adminGetAuth} from "firebase-admin/auth";
+// import {getAuth as adminGetAuth} from "firebase-admin/auth";
 // Testing import for admin auth
-// import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
+import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
 
 export class UserProfileDataService {
 
@@ -34,7 +34,6 @@ export class UserProfileDataService {
                 .catch((repo_error) => {
                     functions.logger.debug(repo_error, {structuredData: true})
                     deleteUser(userCredential.user)
-                    functions.logger.debug(repo_error, {structuredData: true});
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
             functions.logger.debug(repo_response, {structuredData: true});
@@ -69,7 +68,7 @@ export class UserProfileDataService {
 
 
     static async deleteUser(profileId: string): Promise<string> {
-
+        // initialize repo
         const repository = new UserRepository();
         return (
         adminGetAuth()

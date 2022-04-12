@@ -43,22 +43,22 @@ export class Validator {
             switch (key) {
                 case "password":
                     if (!this.validatePassword(user_json_body[key])) {
-                        report.setErrors("invalid Password");
+                        report.setErrors("invalid password");
                     }
                     break;
                 case "firstName":
                     if (!this.validateName(user_json_body[key])) {
-                        report.setErrors("invalid FirstName");
+                        report.setErrors("invalid firstName");
                     }
                     break;
                 case "lastName":
                     if (!this.validateName(user_json_body[key])) {
-                        report.setErrors("invalid LastName");
+                        report.setErrors("invalid lastName");
                     }
                     break;
                 case "birthday":
                     if (!this.validateBirthday(user_json_body[key])) {
-                        report.setErrors("invalid Birthday, Expected Format: 1999-06-22");
+                        report.setErrors("invalid birthday, Expected Format: 1999-06-22");
                     } else {
                         let today = new Date();
                         today.setHours(0, 0, 0, 0);
@@ -70,67 +70,67 @@ export class Validator {
                     break;
                 case "email":
                     if (!this.validateEmail(user_json_body[key])) {
-                        report.setErrors("invalid EmailAddress");
+                        report.setErrors("invalid email");
                     }
                     break;
                 case "phoneNumber":
                     if (!this.validatePhone(user_json_body[key])) {
-                        report.setErrors("invalid PhoneNumber");
+                        report.setErrors("invalid phoneNumber");
                     }
                     break;
                 case "description":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid Description");
+                        report.setErrors("invalid description");
                     }
                     break;
                 case "biography":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid Biography");
+                        report.setErrors("invalid biography");
                     }
                     break;
                 case "tags":
                     if (!this.validateTags(user_json_body[key])) {
-                        report.setErrors("invalid Tags");
+                        report.setErrors("invalid tags");
                     }
                     break;
                 case "pictureReference":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid PictureReference");
+                        report.setErrors("invalid pictureReference");
                     }
                     break;
                 case "matches":
                     if (!this.validateMatches(user_json_body[key])) {
-                        report.setErrors("invalid Matches");
+                        report.setErrors("invalid matches");
                     }
                     break;
                 case "mismatches":
                     if (!this.validateMismatches(user_json_body[key])) {
-                        report.setErrors("invalid Mismatches");
+                        report.setErrors("invalid mismatches");
                     }
                     break;
                 case "gender":
                     if (!this.validateGender(user_json_body[key], allowedGenders)) {
-                        report.setErrors("invalid Gender, must be MALE/FEMALE or OTHERS");
+                        report.setErrors("invalid gender, must be MALE/FEMALE or OTHERS");
                     }
                     break;
                 case "isSearchingRoom":
                     if (!this.validateBoolean(user_json_body[key])) {
-                        report.setErrors("invalid IsSearchingRoom, has to be true or false (string)");
+                        report.setErrors("invalid isSearchingRoom, has to be true or false (string)");
                     }
                     break;
                 case "isAdvertisingRoom":
                     if (!this.validateBoolean(user_json_body[key])) {
-                        report.setErrors("invalid IsAdvertisingRoom, has to be true or false (string)");
+                        report.setErrors("invalid isAdvertisingRoom, has to be true or false (string)");
                     }
                     break;
                 case "moveInDate":
                     if (!this.validateDate(user_json_body[key])) {
-                        report.setErrors("invalid MoveInDate, Expected Format: 1999-06-22");
+                        report.setErrors("invalid moveInDate, Expected Format: 1999-06-22");
                     }
                     break;
                 case "moveOutDate":
                     if (!this.validateDate(user_json_body[key])) {
-                        report.setErrors("invalid MoveOutDate, Expected Format: 1999-06-22");
+                        report.setErrors("invalid moveOutDate, Expected Format: 1999-06-22");
                     } else {
                         // Todo: improve field validation -> MoveIn date not always in body
                         if (!user_json_body.hasOwnProperty("moveInDate")) {
@@ -147,7 +147,7 @@ export class Validator {
                     break;
                 case "flatId":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid PictureReference");
+                        report.setErrors("invalid flatId");
                     }
                     continue;
                 default:

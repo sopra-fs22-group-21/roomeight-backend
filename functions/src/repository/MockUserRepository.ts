@@ -19,12 +19,12 @@ export class ValidMockUserRepository implements UserRepository{
 
     deleteUserProfile(profileId: string): Promise<string> {
         console.log("Entered Mock deleteUserProfile");
-        return Promise.resolve("Successfully deleted user  " + profileId);
+        return Promise.resolve("Successfully deleted user " + profileId);
     }
 
     updateUserProfile(update_fields: any, profile_id: string): Promise<string> {
         console.log("Entered Mock updateUserProfile");
-        return Promise.resolve("Successfully updated user  " + profile_id);
+        return Promise.resolve("Successfully updated user " + profile_id);
     }
 
 }
@@ -45,7 +45,7 @@ export class InvalidMockUserRepository implements UserRepository{
 
     deleteUserProfile(profileId: string): Promise<string> {
         console.log("Entered Mock invalid deleteUserProfile");
-        return Promise.reject(new Error("Could not add User"));
+        return Promise.reject(new Error("Could not delete User"));
     }
 
     updateUserProfile(update_fields: any, profile_id: string): Promise<string> {
