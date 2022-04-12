@@ -27,23 +27,19 @@ export class UserProfileDataService {
             let user_to_add = UserProfileConverter.convertPostDto(body);
 
             // As soon as the user object is posted into the database precede with auth user profile creation
-            return createUserWithEmailAndPassword(auth, body.email, body.password)
-                .then((userCredential) => {
-                    user_to_add.profileId = userCredential.user.uid;
-                    return repository.addUserProfile(user_to_add)
-                        .then((repo_response) => {
-                            return user_to_add.toJson();
-                        })
-                        .catch((e) => {
-                            functions.logger.debug(e, {structuredData: true})
-                            deleteUser(userCredential.user)
-                                .then(() => {
-                                    functions.logger.debug(e, {structuredData: true});
-                                    throw new Error("Error: Could not post user due to: " + e.message);
-                                    }
-                                );
-                        });
-                });
+            const userCredential = await createUserWithEmailAndPassword(auth, body.email, body.password)
+            user_to_add.profileId = userCredential.user.uid;
+            // After profile id is fetched from auth write user into db
+            const repo_response = await repository.addUserProfile(user_to_add)
+                .catch((repo_error) => {
+                    functions.logger.debug(repo_error, {structuredData: true})
+                    deleteUser(userCredential.user)
+                    functions.logger.debug(repo_error, {structuredData: true});
+                    throw new Error("Could not post user due to: " + repo_error.message);
+                })
+            functions.logger.debug(repo_response, {structuredData: true});
+            return user_to_add.toJson();
+
 
         } else {
             // Throw value error with list of errors which were found if validation failed

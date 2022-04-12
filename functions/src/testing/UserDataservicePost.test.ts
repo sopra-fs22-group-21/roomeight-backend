@@ -146,8 +146,8 @@ describe("User Profile Test", () => {
             )
     });
 
-    it('Test Cannot access Repo Add UserProfile Request', async () =>  {
-        const expected_response = "Error: Error: Could not post user due to: Could not add User"
+    test('Test Cannot access Repo Add UserProfile Request', async () =>  {
+        const expected_response = "Could not post user due to: Could not post User"
 
         return UserProfileDataService.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -158,7 +158,7 @@ describe("User Profile Test", () => {
             )
             .catch(
                 (error) => {
-                    expect(error).toEqual(new Error(expected_response))
+                    expect(error).toEqual(new Error(expected_response));
                 }
             )
     });
