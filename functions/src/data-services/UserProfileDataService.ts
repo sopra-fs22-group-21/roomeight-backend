@@ -3,6 +3,8 @@ import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth
 import {Validator} from "../validation/Validator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
+import {initializeApp} from "firebase/app";
+import {config} from "../../firebase_config";
 // Prod import for admin auth
 import {getAuth as adminGetAuth} from "firebase-admin/auth";
 // Testing import for admin auth
@@ -10,11 +12,16 @@ import {getAuth as adminGetAuth} from "firebase-admin/auth";
 
 export class UserProfileDataService {
 
-    static async addUserProfile(body: any): Promise<string> {
+    repository: UserRepository;
+
+    constructor(repo: UserRepository) {
+        this.repository = repo;
+        initializeApp(config);
+    }
+
+    async addUserProfile(body: any): Promise<string> {
         functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
 
-        // Initialize services and vars
-        const repository = new UserRepository();
         const auth = getAuth();
 
         // Validate user which should be added
@@ -30,7 +37,7 @@ export class UserProfileDataService {
             const userCredential = await createUserWithEmailAndPassword(auth, user_to_add.email, body.password)
             user_to_add.profileId = userCredential.user.uid;
             // After profile id is fetched from auth write user into db
-            const repo_response = await repository.addUserProfile(user_to_add)
+            const repo_response = await this.repository.addUserProfile(user_to_add)
                 .catch((repo_error) => {
                     functions.logger.debug(repo_error, {structuredData: true})
                     deleteUser(userCredential.user)
@@ -48,18 +55,15 @@ export class UserProfileDataService {
     }
 
 
-    static async updateUser(update_fields: any, profile_id: string): Promise<string> {
+    async updateUser(update_fields: any, profile_id: string): Promise<string> {
         functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
-
-        // Initialize services and vars
-        const repository = new UserRepository();
 
         // Validate the fields that should be updated
         const validation_results = Validator.validatePatchUser(update_fields);
 
         if (!validation_results.validationFoundErrors()) {
             // If no errors were found in the validation initialize the update in the repo
-            return repository.updateUserProfile(update_fields, profile_id);
+            return this.repository.updateUserProfile(update_fields, profile_id);
         } else {
             // Throw value error with list of errors which were found if validation failed
             throw new Error(validation_results.toString());
@@ -67,14 +71,12 @@ export class UserProfileDataService {
     }
 
 
-    static async deleteUser(profileId: string): Promise<string> {
-        // initialize repo
-        const repository = new UserRepository();
+    async deleteUser(profileId: string): Promise<string> {
         return (
         adminGetAuth()
             .deleteUser(profileId)
             .then(() => {
-                return repository.deleteUserProfile(profileId)
+                return this.repository.deleteUserProfile(profileId)
                     .then((response) => {
                         return response
                     })

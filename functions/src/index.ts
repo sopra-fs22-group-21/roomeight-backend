@@ -3,6 +3,7 @@ import * as express from "express";
 import {UserProfileDataService} from "./data-services/UserProfileDataService";
 import {getAuth} from "firebase-admin/auth";
 import {config} from "../firebase_config";
+import {UserRepository} from "./repository/UserRepository";
 
 
 // Start writing Firebase Functions
@@ -11,13 +12,19 @@ import {config} from "../firebase_config";
 
 // The Firebase Admin SDK to access Firestore.
 const admin = require('firebase-admin');
-admin.initializeApp(config);
+const app = admin.initializeApp(config);
 
 // Required instances
 const userprofile_app = express();
 const flatprofile_app = express();
 const profile_app = express();
 const cors = require('cors');
+
+// Repository Initialization
+const userRepo = new UserRepository(app);
+
+// Data Service Initialization
+const userProfileDataService = new UserProfileDataService(userRepo);
 
 // Export functions and set allowed origins
 exports.userprofiles = functions.https.onRequest(userprofile_app);
@@ -38,7 +45,7 @@ userprofile_app.get('/', async (req, res) => {
 // Create User
 userprofile_app.post('/', async (req, res) => {
     functions.logger.debug("Started Post Request", {structuredData: true});
-    return UserProfileDataService.addUserProfile(req.body)
+    return userProfileDataService.addUserProfile(req.body)
         .then((data_service_response) => {
                 res.set('Access-Control-Allow-Origin', '*')
                 res.status(200).send(data_service_response);
@@ -70,7 +77,7 @@ userprofile_app.patch('/:profileId', async (req, res) => {
                 const uid = decodedToken.uid;
                 if (uid == profile_id) {
                     // If uid of token matches the profileId continue with request processing
-                    UserProfileDataService.updateUser(req.body, profile_id)
+                    userProfileDataService.updateUser(req.body, profile_id)
                         .then(
                             (data_service_response) => {
                                 res.set('Access-Control-Allow-Origin', '*')
@@ -110,7 +117,7 @@ userprofile_app.delete('/:profileId', async (req, res) => {
                 const uid = decodedToken.uid;
                 if (uid == req.params.profileId) {
                     // If uid of token matches the profileId continue with request processing
-                    UserProfileDataService.deleteUser(req.params.profileId)
+                    userProfileDataService.deleteUser(req.params.profileId)
                         .then(
                             (data_service_response) => {
                                 res.set('Access-Control-Allow-Origin', '*')
