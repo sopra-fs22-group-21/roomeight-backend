@@ -19,7 +19,7 @@ export class ValidationReport {
         return this.hasErrors;
     }
 
-    toString(): any {
+    toString(): string {
         let error_str = "Errors:\n"
         for(let index in this.errors) {
             if (index == (this.errors.length-1).toString()) {

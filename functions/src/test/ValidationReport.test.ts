@@ -15,6 +15,6 @@ describe('ValidatorReport test', () => {
         let errormsg = "Error: test test"
         validationReport.setErrors(errormsg)
         expect(validationReport.validationFoundErrors()).toBe(true);
-        expect(validationReport.toString().toEqual(errormsg));
+        expect(validationReport.toString()).toEqual("Errors:\n" + errormsg);
     })
 })
