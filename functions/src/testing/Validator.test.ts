@@ -1,9 +1,18 @@
 import { Validator } from '../validation/Validator'
 
+function generatePW(length: number): string {
+  let pw = "";
+  for ( let i = 0; i < length; i++ ) {
+      pw += "1"
+  }
+  return pw;
+}
+
+
 describe('Validate PostUser', () => {
 
   let validAllFields = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": "test",
     "lastName": "test",
     "description": "test",
@@ -21,7 +30,7 @@ describe('Validate PostUser', () => {
   }
 
   let invalidFields = {
-    "password": "",
+    "password":  generatePW(1),
     "firstName": "",
     "lastName": "",
     "birthday": "asdf",
@@ -34,7 +43,7 @@ describe('Validate PostUser', () => {
   }
 
   let validMandatory = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": "test",
     "lastName": "test",
     "birthday": "2019-06-22",
@@ -43,14 +52,14 @@ describe('Validate PostUser', () => {
   }
 
   let missingMandatory = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": "test",
     "birthday": "2019-06-22",
     "email": "test@test.ch"
   }
 
   let unexpectedField = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": "test",
     "lastName": "test",
     "birthday": "2019-06-22",
@@ -60,7 +69,7 @@ describe('Validate PostUser', () => {
   }
 
   let invalidDateRange = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": "test",
     "lastName": "test",
     "description": "test",
@@ -78,7 +87,7 @@ describe('Validate PostUser', () => {
   }
 
   let containingNull = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": null,
     "lastName": "test",
     "birthday": "2019-06-22",
