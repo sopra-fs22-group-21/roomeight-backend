@@ -96,8 +96,16 @@ class StubInputs {
             birthday: "1999-06-22",
             email: "test@test.ch",
             phoneNumber: "0795553030",
-            password: "1234567"
+            password: StubInputs.generatePW(6)
         }
+    }
+
+    private static generatePW(length: number): string {
+        let pw = "";
+        for ( let i = 0; i < length; i++ ) {
+            pw += "1"
+        }
+        return pw;
     }
 
     static getValidUpdateBody(): any {
