@@ -1,8 +1,16 @@
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 
+function generatePW(length: number): string {
+    let pw = "";
+    for ( let i = 0; i < length; i++ ) {
+        pw += "1"
+    }
+    return pw;
+}
+
 describe('ValidatorReport test', () => {
     let json_body = {
-        "password": "test12",
+        "password": generatePW(6),
         "firstName": "test",
         "lastName": "test",
         "description": "test",

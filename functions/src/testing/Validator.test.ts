@@ -174,7 +174,7 @@ describe('Validate PatchUser', () => {
   }
 
   let unexpectedField = {
-    "password": "test12",
+    "password": generatePW(6),
     "firstName": "test",
     "lastName": "test",
     "birthday": "2019-06-22",
