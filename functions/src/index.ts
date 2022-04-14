@@ -107,14 +107,15 @@ userprofile_app.delete('/:profileId', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         // Get token from header
         const idToken = req.headers.authorization.split('Bearer ')[1]
+        const profile_id = sanitizeHtml(req.params.profileId);
         // Verify token
         getAuth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
-                const uid = sanitizeHtml(req.params.profileId);
-                if (uid == req.params.profileId) {
+                const uid = decodedToken.uid;
+                if (uid == profile_id) {
                     // If uid of token matches the profileId continue with request processing
-                    userProfileDataService.deleteUser(req.params.profileId)
+                    userProfileDataService.deleteUser(profile_id)
                         .then(
                             (data_service_response) => {
                                 res.set('Access-Control-Allow-Origin', '*')
