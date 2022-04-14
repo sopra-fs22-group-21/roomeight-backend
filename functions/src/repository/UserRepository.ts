@@ -6,10 +6,10 @@ import {UserProfile} from "../data-model/UserProfile";
 import {getFirestore} from "firebase-admin/firestore";
 import {app} from "firebase-admin";
 import App = app.App;
-import {ProfileQueryInterface} from "./ProfileQueryInterface";
+import {ProfileQueryRepository} from "./ProfileQueryRepository";
 import { Profile } from "../data-model/Profile";
 
-export class UserRepository implements ProfileQueryInterface {
+export class UserRepository implements ProfileQueryRepository {
     database: any;
     collection_name: string;
 

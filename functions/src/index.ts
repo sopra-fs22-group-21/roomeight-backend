@@ -5,6 +5,8 @@ import {getAuth} from "firebase-admin/auth";
 import {config} from "../firebase_config";
 import {UserRepository} from "./repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
+import {FlatRepository} from "./repository/FlatRepository";
+import {ProfileDataService} from "./data-services/ProfileDataService";
 
 
 
@@ -24,6 +26,7 @@ const cors = require('cors');
 
 // Repository Initialization
 const userRepo = new UserRepository(app);
+const flatRepo = new FlatRepository(app)
 
 // Data Service Initialization
 const userProfileDataService = new UserProfileDataService(userRepo);
@@ -169,8 +172,19 @@ flatprofile_app.delete('/', async (req, res) => {
 // General Profile Operations
 
 // Get specific Profile
-profile_app.get('/', async (req, res) => {
-    res.status(200).send(mock_user_profile_list);
+profile_app.get('/:profileId', async (req, res) => {
+    const profile_id = sanitizeHtml(req.params.profileId);
+    let result;
+    try {
+        if(profile_id.split("#")[0] == "flt") {
+            result = await ProfileDataService.getProfileByIdFromRepo(flatRepo, profile_id)
+        } else {
+            result = await ProfileDataService.getProfileByIdFromRepo(userRepo, profile_id);
+        }
+        res.status(200).send(result);
+    } catch (error) {
+        res.status(400).send(error)
+    }
 });
 
 //Todo: Complete rest spec
