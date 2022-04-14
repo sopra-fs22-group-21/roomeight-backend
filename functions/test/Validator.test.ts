@@ -1,4 +1,4 @@
-import { Validator } from '../validation/Validator'
+import { Validator } from '../src/validation/Validator'
 
 function generatePW(length: number): string {
   let pw = "";

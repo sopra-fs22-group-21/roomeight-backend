@@ -1,4 +1,4 @@
-import {UserProfileConverter} from "../converters/UserProfileConverter";
+import {UserProfileConverter} from "../src/converters/UserProfileConverter";
 
 function generatePW(length: number): string {
     let pw = "";

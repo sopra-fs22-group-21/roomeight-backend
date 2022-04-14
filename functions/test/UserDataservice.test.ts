@@ -1,5 +1,5 @@
-import {UserProfileDataService} from "../data-services/UserProfileDataService";
-import {InvalidMockUserRepository, ValidMockUserRepository} from "../repository/MockUserRepository";
+import {UserProfileDataService} from "../src/data-services/UserProfileDataService";
+import {InvalidMockUserRepository, ValidMockUserRepository} from "../src/repository/MockUserRepository";
 
 
 // Declaring mocks
