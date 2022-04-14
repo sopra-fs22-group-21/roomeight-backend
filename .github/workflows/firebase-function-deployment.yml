@@ -29,6 +29,10 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Installations
+        run: |
+          cd functions
+          npm ci
       - name: Run Tests
         run: jest --coverage
       - name: SonarCloud Scan
