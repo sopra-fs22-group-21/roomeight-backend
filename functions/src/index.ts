@@ -4,6 +4,8 @@ import {UserProfileDataService} from "./data-services/UserProfileDataService";
 import {getAuth} from "firebase-admin/auth";
 import {config} from "../firebase_config";
 import {UserRepository} from "./repository/UserRepository";
+import sanitizeHtml = require("sanitize-html");
+
 
 
 // Start writing Firebase Functions
@@ -37,11 +39,6 @@ profile_app.use(cors({ origin: "*" }));
 
 // User Operations
 
-// Get Users
-userprofile_app.get('/', async (req, res) => {
-    res.status(200).send(mock_user_profile_list);
-});
-
 // Create User
 userprofile_app.post('/', async (req, res) => {
     functions.logger.debug("Started Post Request", {structuredData: true});
@@ -69,7 +66,7 @@ userprofile_app.patch('/:profileId', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         // Get Profile Id and Token from request
         const idToken = req.headers.authorization.split('Bearer ')[1]
-        const profile_id = req.params.profileId;
+        const profile_id = sanitizeHtml(req.params.profileId);
 
         getAuth()
             .verifyIdToken(idToken)
@@ -114,7 +111,7 @@ userprofile_app.delete('/:profileId', async (req, res) => {
         getAuth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
-                const uid = decodedToken.uid;
+                const uid = sanitizeHtml(req.params.profileId);
                 if (uid == req.params.profileId) {
                     // If uid of token matches the profileId continue with request processing
                     userProfileDataService.deleteUser(req.params.profileId)

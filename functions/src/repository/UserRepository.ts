@@ -1,10 +1,15 @@
 import * as functions from "firebase-functions";
 import {UserProfile} from "../data-model/UserProfile";
+// Testing import for admin auth
+// import {getFirestore} from "firebase-admin/lib/firestore";
+// Prod import for admin auth
 import {getFirestore} from "firebase-admin/firestore";
 import {app} from "firebase-admin";
 import App = app.App;
+import {ProfileQueryInterface} from "./ProfileQueryInterface";
+import { Profile } from "../data-model/Profile";
 
-export class UserRepository {
+export class UserRepository implements ProfileQueryInterface {
     database: any;
     collection_name: string;
 
@@ -16,30 +21,31 @@ export class UserRepository {
 
     // Firestore User Operations
 
+    getProfileById(): Profile {
+        throw new Error("Method not implemented.");
+    }
+
     addUserProfile(user_to_add: UserProfile): Promise<string>  {
         // Add user to database with set unique profile id
         functions.logger.debug(user_to_add.toJson(), {structuredData: true})
         return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add.toJson())
-                .then(
-                    (r: any) => {
+                .then((r: any) => {
                         return r;
-                    }
-                )
+                    });
     }
 
-    // Todo: refactor as soon as p
     updateUserProfile(update_fields: any, profile_id: string): Promise<string> {
         return this.database.collection(this.collection_name).doc(profile_id).update(update_fields)
             .then(() => {
                 return "Successfully updated User with id: " + profile_id;
-            })
+            });
     }
     
     deleteUserProfile(profile_id: string): Promise<string> {
         return this.database.collection(this.collection_name).doc(profile_id).delete()
             .then(() => {
                 return "Successfully deleted User with id: " + profile_id;
-    })
+        });
     }
 
 }
