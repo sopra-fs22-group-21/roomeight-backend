@@ -35,7 +35,9 @@ jobs:
           npm ci
           npm install jest -g
       - name: Run Tests
-        run: jest --coverage
+        run: |
+          cd functions
+          jest --coverage
       - name: SonarCloud Scan
         uses: sonarsource/sonarcloud-github-action@master
         env:
