@@ -1,8 +1,8 @@
-import {UserRepository} from "../src/repository/UserRepository";
-import {UserProfile} from "../src/data-model/UserProfile";
-import {Status} from "../src/data-model/Status";
-import {Gender} from "../src/data-model/Gender";
-import {config} from "../firebase_config";
+import {UserRepository} from "../main/repository/UserRepository";
+import {UserProfile} from "../main/data-model/UserProfile";
+import {Status} from "../main/data-model/Status";
+import {Gender} from "../main/data-model/Gender";
+import {config} from "../../firebase_config";
 
 // Declaring Mocks
 

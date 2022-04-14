@@ -1,4 +1,4 @@
-import {ValidationReport} from "../src/validation/ValidationReport";
+import {ValidationReport} from "../main/validation/ValidationReport";
 
 describe('ValidatorReport test', () => {
     let validationReport: ValidationReport;

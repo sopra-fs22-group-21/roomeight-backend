@@ -1,6 +1,6 @@
-import {UserProfile} from "../src/data-model/UserProfile";
-import {Status} from "../src/data-model/Status";
-import {Gender} from "../src/data-model/Gender";
+import {UserProfile} from "../main/data-model/UserProfile";
+import {Status} from "../main/data-model/Status";
+import {Gender} from "../main/data-model/Gender";
 
 describe('ValidatorReport test', () => {
     let userProfile: UserProfile;
