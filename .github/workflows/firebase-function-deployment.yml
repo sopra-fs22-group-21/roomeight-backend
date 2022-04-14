@@ -33,6 +33,7 @@ jobs:
         run: |
           cd functions
           npm ci
+          npm install jest -g
       - name: Run Tests
         run: jest --coverage
       - name: SonarCloud Scan
