@@ -112,28 +112,36 @@ describe('Validate PostUser', () => {
 
   test('test invalid input with missing fields', () => {
     let res = Validator.validatePostUser(missingMandatory);
-    let expected = "Errors:\nJSON object does not contain required field: lastName, \nJSON object does not contain required field: phoneNumber"
+    let expected = "Errors:\nJSON object does not contain required field: lastName, \nJSON object does not contain required field: phoneNumber, \n" +
+        "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
+        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
 
   test('test invalid input with unexpected fields', () => {
     let res = Validator.validatePostUser(unexpectedField);
-    let expected = "Errors:\nUnknown Field: hometown"
+    let expected = "Errors:\nUnknown Field: hometown, \n" +
+        "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
+        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
 
   test('test invalid date range', () => {
     let res = Validator.validatePostUser(invalidDateRange);
-    let expected = "Errors:\nmoveInDate must be before moveOutDate"
+    let expected = "Errors:\nmoveInDate must be before moveOutDate, \n" +
+        "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
+        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
 
   test('test json with null value', () => {
     let res = Validator.validatePostUser(containingNull);
-    let expected = "Errors:\nfirstName is null"
+    let expected = "Errors:\nfirstName is null, \n" +
+        "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
+        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
@@ -194,7 +202,9 @@ describe('Validate PatchUser', () => {
 
   test('test invalid input with unexpected fields', () => {
     let res = Validator.validatePatchUser(unexpectedField);
-    let expected = "Errors:\nUnknown Field: password"
+    let expected = "Errors:\nUnknown Field: password, \n" +
+        "Mandatory fields are: , \n" +
+        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
