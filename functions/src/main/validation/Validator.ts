@@ -21,7 +21,7 @@ export class Validator {
 
 
     private static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
-        let report = new ValidationReport();
+        let report = new ValidationReport(mandatoryFields, optionalFields);
         let allowedGenders = ["MALE", "FEMALE", "OTHERS", "NOT SET"];
 
         for (let i in mandatoryFields) {
