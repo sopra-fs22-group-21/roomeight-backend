@@ -1,6 +1,6 @@
 import { ValidationReport } from "./ValidationReport";
 
-export class Validator {
+export class UserValidator {
     static validatePostUser(user_json_body: any) {
 
         let mandatoryFields = ["firstName", "lastName", "birthday", "email", "phoneNumber", "password"];
