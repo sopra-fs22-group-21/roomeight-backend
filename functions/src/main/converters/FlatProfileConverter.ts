@@ -16,7 +16,6 @@ export class FlatProfileConverter {
 
 
         // Create Template userprofile with default values and mandatory fields
-        // ToDo insert new Address from json_body
         let flat = new FlatProfile(json_body.name, "", "", [], "",
             [], new Date(current_date), Status.online, new Date(NaN), new Date(NaN),
             address, NaN, false, NaN,  NaN, NaN, [uid], "", [])
