@@ -36,6 +36,7 @@ export class FlatProfileDataService {
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
             functions.logger.debug(repo_response, {structuredData: true});
+            // Todo convert references
             return flat_to_add.toJson();
 
 
