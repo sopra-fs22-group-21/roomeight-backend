@@ -1,6 +1,8 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
 import {Address} from "../data-model/Address";
+import {Tag} from "../data-model/Tag";
+import {Like} from "../data-model/Like";
 
 export class FlatProfileConverter {
 
@@ -61,4 +63,39 @@ export class FlatProfileConverter {
         return flat;
     }
 
+    // Dynamically converts DB entry to a valid FlatProfile
+    static convertDBEntryToProfile(db_entry: any): FlatProfile {
+        try {
+            // Define Vars
+            const fields = db_entry._fieldsProto;
+            let tags: Tag[] = [];
+            let matches: string[] = [];
+            let room_mates: string[] = [];
+            let likes: Like[] = [];
+
+            let temp_likes: string[];
+
+            // Build arrays
+            fields.tags.arrayValue.values.map((tag: any) => {tags.push(tag.stringValue)});
+            fields.roomMates.arrayValue.values.map((mate: any) => {room_mates.push(mate.stringValue)});
+            fields.likes.arrayValue.values.map((like: any) => {
+                temp_likes = [];
+                like.likesUserIds.arrayValue.values.map((user_id: any) =>{
+                    temp_likes.push(user_id.stringValue);
+                });
+                likes.push(new Like(temp_likes, like.likedUserId.stringValue))
+            });
+            fields.matches.arrayValue.values.map((match: any) => {matches.push(match.stringValue)});
+
+            return new FlatProfile(fields.name.stringValue, fields.description.stringValue, fields.biography.stringValue,
+                tags, fields.pictureReference.stringValue, likes, new Date(fields.creationDate.timestampValue.seconds),
+                fields.onlineStatus.stringValue, new Date(fields.moveInDate.timestampValue.seconds),
+                new Date(fields.moveOutDate.timestampValue.seconds), fields.address.stringValue, fields.rent.stringValue,
+                fields.permanent.booleanValue, fields.numberOfRoommates.numberValue, fields.roomSize.numberValue,
+                fields.numberOfBaths.numberValue, room_mates, fields.profileId.stringValue, matches)
+
+        } catch (e) {
+            throw new TypeError("DB entry does not have expected format")
+        }
+    }
 }

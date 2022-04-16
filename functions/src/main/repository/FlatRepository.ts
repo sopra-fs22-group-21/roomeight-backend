@@ -17,7 +17,10 @@ export class FlatRepository implements ProfileQueryRepository {
     }
 
     getProfileById(profile_id:string): any {
-        throw new Error("Method not implemented.");
+        return this.database.collection(this.collection_name).doc(profile_id).get()
+            .then((response: any) => {
+                return response
+            });
     }
 
     addFlatProfile(flat_to_add: FlatProfile): Promise<string>  {

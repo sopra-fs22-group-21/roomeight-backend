@@ -7,12 +7,13 @@ import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
 // Prod import for admin auth
 import {getAuth as adminGetAuth} from "firebase-admin/auth";
+import {ReferenceConverter} from "../converters/ReferenceConverter";
 // Testing import for admin auth
 // import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
 
 export class UserProfileDataService {
 
-    repository: UserRepository;
+    private repository: UserRepository;
 
     constructor(repo: UserRepository) {
         this.repository = repo;
@@ -44,8 +45,25 @@ export class UserProfileDataService {
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
             functions.logger.debug(repo_response, {structuredData: true});
-            return user_to_add.toJson();
+            let dto = user_to_add.toJson();
 
+            // Convert references to actual profiles
+            const reference_converter = new ReferenceConverter(this.repository);
+            await reference_converter.resolveProfileReferenceList(dto.likes)
+                .then((resolution) => {
+                    dto.likes = resolution.result;
+                });
+            await reference_converter.resolveProfileReferenceList(dto.matches)
+                .then((resolution) => {
+                    dto.matches = resolution.result;
+                });
+            await reference_converter.resolveProfileReferenceList(dto.viewed)
+                .then((resolution) => {
+                    dto.viewed = resolution.result;
+                });
+
+            // Return UserProfile which has been added
+            return dto;
 
         } else {
             // Throw value error with list of errors which were found if validation failed

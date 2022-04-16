@@ -259,17 +259,6 @@ profile_app.get('/:profileId', async (req, res) => {
 });
 
 //Todo: Complete rest spec
-profile_app.post('/', async (req, res) => {
-    res.status(404).send();
-});
-
-profile_app.patch('/', async (req, res) => {
-    res.status(404).send();
-});
-
-profile_app.delete('/', async (req, res) => {
-    res.status(404).send();
-});
 
 
 
