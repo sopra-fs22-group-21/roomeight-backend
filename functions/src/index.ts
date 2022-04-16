@@ -175,16 +175,23 @@ flatprofile_app.delete('/', async (req, res) => {
 profile_app.get('/:profileId', async (req, res) => {
     const profile_id = sanitizeHtml(req.params.profileId);
     let result;
-    try {
-        if(profile_id.split("#")[0] == "flt") {
-            result = await ProfileDataService.getProfileByIdFromRepo(flatRepo, profile_id)
-        } else {
-            result = await ProfileDataService.getProfileByIdFromRepo(userRepo, profile_id);
-        }
-        res.status(200).send(result);
-    } catch (error) {
-        res.status(400).send(error)
+    let repo;
+    if(profile_id.split("#")[0] == "flt") {
+        repo = flatRepo;
+    } else {
+        repo = userRepo;
     }
+    result = await ProfileDataService.getProfileByIdFromRepo(repo, profile_id)
+        .catch((error) => {
+            if (error.message == "DB entry does not have expected format") {
+                res.status(500).send(error.message)
+            } else if(error.message == "Profile not found!"){
+                res.status(404).send("Profile with id " + profile_id + " not found!")
+            } else  {
+                res.status(400).send(error.message)
+            }
+        })
+    res.status(200).send(result);
 });
 
 //Todo: Complete rest spec

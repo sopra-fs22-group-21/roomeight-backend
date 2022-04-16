@@ -1,4 +1,4 @@
 
 export interface ProfileQueryRepository {
-    getProfileById(): any;
+    getProfileById(profile_id: string): Promise<any>;
 }

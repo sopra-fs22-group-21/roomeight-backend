@@ -14,6 +14,7 @@ export class FlatRepository implements ProfileQueryRepository {
         this.collection_name = "flat-profiles"
     }
 
-    getProfileById(): any {
+    getProfileById(profile_id:string): any {
+        throw new Error("Method not implemented.");
     }
 }

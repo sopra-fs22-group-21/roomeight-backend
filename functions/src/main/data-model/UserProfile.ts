@@ -76,7 +76,8 @@ export class UserProfile implements Profile{
             isSearchingRoom: this.isSearchingRoom,
             isAdvertisingRoom: this.isAdvertisingRoom,
             moveInDate: this.moveInDate,
-            moveOutDate: this.moveOutDate
+            moveOutDate: this.moveOutDate,
+            flatId: this.flatId
         };
     }
     getMatches(): UserProfile[] {

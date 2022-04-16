@@ -7,7 +7,6 @@ import {getFirestore} from "firebase-admin/firestore";
 import {app} from "firebase-admin";
 import App = app.App;
 import {ProfileQueryRepository} from "./ProfileQueryRepository";
-import { Profile } from "../data-model/Profile";
 
 export class UserRepository implements ProfileQueryRepository {
     database: any;
@@ -21,16 +20,19 @@ export class UserRepository implements ProfileQueryRepository {
 
     // Firestore User Operations
 
-    getProfileById(): Profile {
-        throw new Error("Method not implemented.");
+    getProfileById(profile_id:string): Promise<string> {
+        return this.database.collection(this.collection_name).doc(profile_id).get()
+            .then((response: any) => {
+                return response
+            })
     }
 
     addUserProfile(user_to_add: UserProfile): Promise<string>  {
         // Add user to database with set unique profile id
         functions.logger.debug(user_to_add.toJson(), {structuredData: true})
         return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add.toJson())
-                .then((r: any) => {
-                        return r;
+                .then((response: any) => {
+                        return response;
                     });
     }
 

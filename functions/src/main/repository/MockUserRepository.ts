@@ -1,7 +1,5 @@
 import {UserRepository} from "./UserRepository";
 import {UserProfile} from "../data-model/UserProfile";
-import { Profile } from "../data-model/Profile";
-
 
 // Mock Repository for db calls
 
@@ -29,7 +27,7 @@ export class ValidMockUserRepository implements UserRepository {
         return Promise.resolve("Successfully updated user " + profile_id);
     }
 
-    getProfileById(): Profile {
+    getProfileById(profile_id:string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
@@ -44,7 +42,7 @@ export class InvalidMockUserRepository implements UserRepository {
         this.database = null;
     }
 
-    getProfileById(): Profile {
+    getProfileById(profile_id:string): Promise<string> {
         throw new Error("Method not implemented.");
     }
 
