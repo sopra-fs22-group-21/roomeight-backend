@@ -1,6 +1,6 @@
 import {UserRepository} from "../repository/UserRepository";
 import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
-import {Validator} from "../validation/Validator";
+import {UserValidator} from "../validation/UserValidator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {initializeApp} from "firebase/app";
@@ -25,7 +25,7 @@ export class UserProfileDataService {
         const auth = getAuth();
 
         // Validate user which should be added
-        const validation_results = Validator.validatePostUser(body);
+        const validation_results = UserValidator.validatePostUser(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
@@ -59,7 +59,7 @@ export class UserProfileDataService {
         functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
 
         // Validate the fields that should be updated
-        const validation_results = Validator.validatePatchUser(update_fields);
+        const validation_results = UserValidator.validatePatchUser(update_fields);
 
         if (!validation_results.validationFoundErrors()) {
             // If no errors were found in the validation initialize the update in the repo

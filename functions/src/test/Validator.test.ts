@@ -1,4 +1,4 @@
-import { Validator } from '../main/validation/Validator'
+import { UserValidator } from '../main/validation/UserValidator'
 
 function generatePW(length: number): string {
   let pw = "";
@@ -96,22 +96,22 @@ describe('Validate PostUser', () => {
   }
 
   test('test valid input for all fields', () => {
-    let res = Validator.validatePostUser(validAllFields);
+    let res = UserValidator.validatePostUser(validAllFields);
     expect(res.validationFoundErrors()).toBe(false);
   })
 
   test('test valid input for mandatory fields', () => {
-    let res = Validator.validatePostUser(validMandatory);
+    let res = UserValidator.validatePostUser(validMandatory);
     expect(res.validationFoundErrors()).toBe(false);
   })
 
   test('test invalid input fields', () => {
-    let res = Validator.validatePostUser(invalidFields);
+    let res = UserValidator.validatePostUser(invalidFields);
     expect(res.validationFoundErrors()).toBe(true);
   })
 
   test('test invalid input with missing fields', () => {
-    let res = Validator.validatePostUser(missingMandatory);
+    let res = UserValidator.validatePostUser(missingMandatory);
     let expected = "Errors:\nJSON object does not contain required field: lastName, \nJSON object does not contain required field: phoneNumber, \n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
         "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
@@ -120,7 +120,7 @@ describe('Validate PostUser', () => {
   })
 
   test('test invalid input with unexpected fields', () => {
-    let res = Validator.validatePostUser(unexpectedField);
+    let res = UserValidator.validatePostUser(unexpectedField);
     let expected = "Errors:\nUnknown Field: hometown, \n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
         "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
@@ -129,7 +129,7 @@ describe('Validate PostUser', () => {
   })
 
   test('test invalid date range', () => {
-    let res = Validator.validatePostUser(invalidDateRange);
+    let res = UserValidator.validatePostUser(invalidDateRange);
     let expected = "Errors:\nmoveInDate must be before moveOutDate, \n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
         "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
@@ -138,7 +138,7 @@ describe('Validate PostUser', () => {
   })
 
   test('test json with null value', () => {
-    let res = Validator.validatePostUser(containingNull);
+    let res = UserValidator.validatePostUser(containingNull);
     let expected = "Errors:\nfirstName is null, \n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
         "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
@@ -191,17 +191,17 @@ describe('Validate PatchUser', () => {
   }
 
   test('test valid input for all fields', () => {
-    let res = Validator.validatePatchUser(validAllFields);
+    let res = UserValidator.validatePatchUser(validAllFields);
     expect(res.validationFoundErrors()).toBe(false);
   })
 
   test('test invalid input fields', () => {
-    let res = Validator.validatePatchUser(invalidFields);
+    let res = UserValidator.validatePatchUser(invalidFields);
     expect(res.validationFoundErrors()).toBe(true);
   })
 
   test('test invalid input with unexpected fields', () => {
-    let res = Validator.validatePatchUser(unexpectedField);
+    let res = UserValidator.validatePatchUser(unexpectedField);
     let expected = "Errors:\nUnknown Field: password, \n" +
         "Mandatory fields are: , \n" +
         "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
