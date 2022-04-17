@@ -170,7 +170,9 @@ describe("UserProfileDataService Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\ninvalid email"
+        const expected_response = "Errors:\ninvalid email\n" +
+            "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
+            "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
 
@@ -186,7 +188,7 @@ describe("UserProfileDataService Test", () => {
             )
             .catch(
                 (error) => {
-                    expect(error).toEqual(new Error(expected_response))
+                    expect(error.message).toEqual(expected_response)
                 }
             )
     });
@@ -254,7 +256,10 @@ describe("UserProfileDataService Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\ninvalid phoneNumber"
+        const expected_response = "Errors:\ninvalid phoneNumber\n" +
+            "Mandatory fields are: \n" +
+            "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom," +
+                                    "moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
 
@@ -270,7 +275,7 @@ describe("UserProfileDataService Test", () => {
             )
             .catch(
                 (error) => {
-                    expect(error).toEqual(new Error(expected_response))
+                    expect(error.message).toEqual(expected_response)
                 }
             )
     });
