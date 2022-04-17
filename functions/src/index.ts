@@ -30,7 +30,7 @@ const userRepo = new UserRepository(app);
 const flatRepo = new FlatRepository(app)
 
 // Data Service Initialization
-const userProfileDataService = new UserProfileDataService(userRepo);
+const userProfileDataService = new UserProfileDataService(userRepo, app);
 const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
 const profileDataService = new ProfileDataService(userRepo, flatRepo);
 
@@ -256,6 +256,5 @@ profile_app.get('/:profileId', async (req, res) => {
 });
 
 profile_app.post('/match', async (req, res) => {
-
+    res.status(404).send();
 });
-

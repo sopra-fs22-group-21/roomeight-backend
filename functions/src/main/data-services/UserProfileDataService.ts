@@ -6,17 +6,16 @@ import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
 import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
-// Prod import for admin auth
-// import {getAuth as adminGetAuth} from "firebase-admin/auth";
-// Testing import for admin auth
-import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
+import * as admin from 'firebase-admin';
 
 export class UserProfileDataService {
 
     private repository: UserRepository;
+    private app: any;
 
-    constructor(repo: UserRepository) {
+    constructor(repo: UserRepository, app: any) {
         this.repository = repo;
+        this.app = app;
         initializeApp(config);
     }
 
@@ -84,7 +83,7 @@ export class UserProfileDataService {
 
     async deleteUser(profileId: string): Promise<string> {
         return (
-        adminGetAuth()
+        admin.auth(this.app)
             .deleteUser(profileId)
             .then(() => {
                 return this.repository.deleteProfile(profileId)

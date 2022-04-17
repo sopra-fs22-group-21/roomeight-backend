@@ -1,11 +1,7 @@
 import * as functions from "firebase-functions";
 import {UserProfile} from "../data-model/UserProfile";
-// Testing import for admin auth
-import {getFirestore} from "firebase-admin/lib/firestore";
-// Prod import for admin auth
-// import {getFirestore} from "firebase-admin/firestore";
-import {app} from "firebase-admin";
-import App = app.App;
+import * as admin from 'firebase-admin';
+import App = admin.app.App;
 import {ProfileRepository} from "./ProfileRepository";
 
 export class UserRepository implements ProfileRepository {
@@ -14,7 +10,7 @@ export class UserRepository implements ProfileRepository {
 
 
     constructor(app: App) {
-        this.database = getFirestore(app);
+        this.database = admin.firestore(app);
         this.collection_name = "user-profiles"
     }
 
