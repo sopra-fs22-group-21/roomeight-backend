@@ -5,13 +5,17 @@ import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
 import {v4 as uuidv4} from "uuid";
 import {FlatValidator} from "../validation/FlatValidator";
+import {ProfileRepository} from "../repository/ProfileRepository";
+import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
 
 export class FlatProfileDataService {
 
-    repository: FlatRepository;
+    flat_repository: FlatRepository;
+    user_repository: ProfileRepository;
 
-    constructor(repo: FlatRepository) {
-        this.repository = repo;
+    constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
+        this.flat_repository = flat_repo;
+        this.user_repository = user_repo;
         initializeApp(config);
     }
 
@@ -30,13 +34,26 @@ export class FlatProfileDataService {
 
             flat_to_add.profileId = "flt#" + uuidv4();
             // After profile id is fetched from auth write flat into db
-            const repo_response = await this.repository.addFlatProfile(flat_to_add)
+            const repo_response = await this.flat_repository.addProfile(flat_to_add)
                 .catch((repo_error) => {
                     functions.logger.debug(repo_error, {structuredData: true})
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
             functions.logger.debug(repo_response, {structuredData: true});
-            // Todo convert references
+
+            // Convert references
+
+            const reference_converter = new ReferenceControler(this.user_repository);
+            await reference_converter.resolveProfileReferenceList(flat_to_add.matches)
+                .then((resolution) => {
+                    flat_to_add.matches = resolution.result;
+                });
+            await reference_converter.resolveProfileReferenceList(flat_to_add.roomMates)
+                .then((resolution) => {
+                    flat_to_add.roomMates = resolution.result;
+                });
+
+
             return flat_to_add.toJson();
 
 
@@ -49,7 +66,7 @@ export class FlatProfileDataService {
 
 
     async deleteFlat(profileId: string): Promise<string> {
-        return (this.repository.deleteFlatProfile(profileId)
+        return (this.flat_repository.deleteProfile(profileId)
             .then((response) => {
                 return response
             })

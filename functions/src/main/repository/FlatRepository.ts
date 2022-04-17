@@ -1,4 +1,4 @@
-import {ProfileQueryRepository} from "./ProfileQueryRepository";
+import {ProfileRepository} from "./ProfileRepository";
 import {getFirestore} from "firebase-admin/firestore";
 import {app} from "firebase-admin";
 import App = app.App;
@@ -6,7 +6,7 @@ import {FlatProfile} from "../data-model/FlatProfile";
 import * as functions from "firebase-functions";
 
 
-export class FlatRepository implements ProfileQueryRepository {
+export class FlatRepository implements ProfileRepository {
     database: any;
     collection_name: string;
 
@@ -23,25 +23,27 @@ export class FlatRepository implements ProfileQueryRepository {
             });
     }
 
-    addFlatProfile(flat_to_add: FlatProfile): Promise<string>  {
+    addProfile(flat_to_add: FlatProfile): Promise<string>  {
         // Add flat to database with set unique profile id
         functions.logger.debug(flat_to_add.toJson(), {structuredData: true})
-        return this.database.collection(this.collection_name).doc(flat_to_add.profileId).set(flat_to_add.toJson())
+        return this.database.collection(this.collection_name).doc(flat_to_add.profileId).set(flat_to_add.toDbEntry())
             .then((r: any) => {
                 return r;
             });
     }
 
-    updateFlatProfile(update_fields: any, profile_id: string): Promise<string> {
+    updateProfile(update_fields: any, profile_id: string): Promise<string> {
         return this.database.collection(this.collection_name).doc(profile_id).update(update_fields)
-            .then(() => {
+            .then((r: any) => {
+                functions.logger.info(r, {structuredData: true});
                 return "Successfully updated Flat with id: " + profile_id;
             });
     }
 
-    deleteFlatProfile(profile_id: string): Promise<string> {
+    deleteProfile(profile_id: string): Promise<string> {
         return this.database.collection(this.collection_name).doc(profile_id).delete()
-            .then(() => {
+            .then((r: any) => {
+                functions.logger.info(r, {structuredData: true});
                 return "Successfully deleted Flat with id: " + profile_id;
             });
     }

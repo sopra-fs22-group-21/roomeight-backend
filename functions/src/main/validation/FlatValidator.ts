@@ -4,7 +4,7 @@ export class FlatValidator {
     static validatePostUser(user_json_body: any) {
         let mandatoryFields = ["name", "address"];
         let optionalFields = ["description", "biography", "tags", "pictureReference", "likes", "creationDate", "onlineStatus", "moveInDate",
-            "moveOutDate", "address", "rent", "permanent", "numberOfRoommates", "roomSize", "numberOfBaths", "roomMates", "matches"]
+            "moveOutDate", "address", "rent", "permanent", "roomSize", "numberOfBaths", "roomMates", "matches"]
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 

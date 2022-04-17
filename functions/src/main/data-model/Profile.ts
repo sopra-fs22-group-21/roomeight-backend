@@ -15,6 +15,7 @@ export interface Profile {
     matches: string[]
 
     toJson(): any,
+    toDbEntry(): any,
     getMatches(): UserProfile[],
     match(user: UserProfile): void
 }

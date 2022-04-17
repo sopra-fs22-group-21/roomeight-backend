@@ -76,6 +76,30 @@ export class FlatProfile implements Profile {
         };
     }
 
+    toDbEntry(): any {
+        return {
+            profileId: this.profileId,
+            name: this.name,
+            description: this.description,
+            biography: this.biography,
+            tags: this.tags,
+            pictureReference: this.pictureReference,
+            likes: this.likes,
+            creationDate: this.creationDate,
+            onlineStatus: this.onlineStatus,
+            moveInDate: this.moveInDate,
+            moveOutDate: this.moveOutDate,
+            address: this.address,
+            rent: this.rent,
+            permanent: this.permanent,
+            numberOfRoommates: this.numberOfRoommates,
+            roomSize: this.roomSize,
+            numberOfBaths: this.numberOfBaths,
+            roomMates: this.roomMates,
+            matches: this.matches
+        };
+    }
+
     getMatches(): UserProfile[] {
         throw new Error("Method not implemented.");
     }

@@ -7,7 +7,7 @@ import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
 // Prod import for admin auth
 import {getAuth as adminGetAuth} from "firebase-admin/auth";
-import {ReferenceConverter} from "../converters/ReferenceConverter";
+import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
 // Testing import for admin auth
 // import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
 
@@ -38,7 +38,7 @@ export class UserProfileDataService {
             const userCredential = await createUserWithEmailAndPassword(auth, user_to_add.email, body.password)
             user_to_add.profileId = userCredential.user.uid;
             // After profile id is fetched from auth write user into db
-            const repo_response = await this.repository.addUserProfile(user_to_add)
+            const repo_response = await this.repository.addProfile(user_to_add)
                 .catch((repo_error) => {
                     functions.logger.debug(repo_error, {structuredData: true})
                     deleteUser(userCredential.user)
@@ -48,18 +48,11 @@ export class UserProfileDataService {
             let dto = user_to_add.toJson();
 
             // Convert references to actual profiles
-            const reference_converter = new ReferenceConverter(this.repository);
-            await reference_converter.resolveProfileReferenceList(dto.likes)
-                .then((resolution) => {
-                    dto.likes = resolution.result;
-                });
+            const reference_converter = new ReferenceControler(this.repository);
+
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
                     dto.matches = resolution.result;
-                });
-            await reference_converter.resolveProfileReferenceList(dto.viewed)
-                .then((resolution) => {
-                    dto.viewed = resolution.result;
                 });
 
             // Return UserProfile which has been added
@@ -81,7 +74,7 @@ export class UserProfileDataService {
 
         if (!validation_results.validationFoundErrors()) {
             // If no errors were found in the validation initialize the update in the repo
-            return this.repository.updateUserProfile(update_fields, profile_id);
+            return this.repository.updateProfile(update_fields, profile_id);
         } else {
             // Throw value error with list of errors which were found if validation failed
             throw new Error(validation_results.toString());
@@ -94,7 +87,7 @@ export class UserProfileDataService {
         adminGetAuth()
             .deleteUser(profileId)
             .then(() => {
-                return this.repository.deleteUserProfile(profileId)
+                return this.repository.deleteProfile(profileId)
                     .then((response) => {
                         return response
                     })

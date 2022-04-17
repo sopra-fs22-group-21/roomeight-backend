@@ -65,6 +65,30 @@ export class UserProfile implements Profile{
             tags: this.tags,
             pictureReference: this.pictureReference,
             matches: this.matches,
+            creationDate: this.creationDate,
+            onlineStatus: this.onlineStatus,
+            birthday: this.birthday,
+            email: this.email,
+            phoneNumber: this.phoneNumber,
+            gender: this.gender,
+            isSearchingRoom: this.isSearchingRoom,
+            isAdvertisingRoom: this.isAdvertisingRoom,
+            moveInDate: this.moveInDate,
+            moveOutDate: this.moveOutDate,
+            flatId: this.flatId
+        };
+    }
+
+    toDbEntry(): any {
+        return {
+            profileId: this.profileId,
+            firstName: this.first_name,
+            lastName: this.last_name,
+            description: this.description,
+            biography: this.biography,
+            tags: this.tags,
+            pictureReference: this.pictureReference,
+            matches: this.matches,
             viewed: this.viewed,
             likes: this.likes,
             creationDate: this.creationDate,
@@ -92,4 +116,5 @@ export class UserProfile implements Profile{
     match(user: UserProfile): void {
         throw new Error("Method not implemented.");
     }
+
 }

@@ -31,7 +31,8 @@ const flatRepo = new FlatRepository(app)
 
 // Data Service Initialization
 const userProfileDataService = new UserProfileDataService(userRepo);
-const flatProfileDataService = new FlatProfileDataService(flatRepo);
+const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
+const profileDataService = new ProfileDataService(userRepo, flatRepo);
 
 // Export functions and set allowed origins
 exports.userprofiles = functions.https.onRequest(userprofile_app);
@@ -150,11 +151,6 @@ userprofile_app.delete('/:profileId', async (req, res) => {
 
 // Flat Operation
 
-// Get Flats
-flatprofile_app.get('/', async (req, res) => {
-    res.status(200).send(mock_flat_profile);
-});
-
 // Create Flat
 flatprofile_app.post('/', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
@@ -185,6 +181,12 @@ flatprofile_app.post('/', async (req, res) => {
     } else {
         res.status(401).send("Authorization failed: No authorization header present");
     }
+});
+
+// Add Room Mate
+// Todo: Add reference to the room mate array
+flatprofile_app.post('/roommate/:mate_id', async (req, res) => {
+    res.status(404).send();
 });
 
 // Update Flat
@@ -239,13 +241,8 @@ flatprofile_app.patch('/', async (req, res) => {
 profile_app.get('/:profileId', async (req, res) => {
     const profile_id = sanitizeHtml(req.params.profileId);
     let result;
-    let repo;
-    if(profile_id.split("#")[0] == "flt") {
-        repo = flatRepo;
-    } else {
-        repo = userRepo;
-    }
-    result = await ProfileDataService.getProfileByIdFromRepo(repo, profile_id)
+
+    result = await profileDataService.getProfileByIdFromRepo(profile_id)
         .catch((error) => {
             if (error.message == "DB entry does not have expected format") {
                 res.status(500).send(error.message)
@@ -258,77 +255,7 @@ profile_app.get('/:profileId', async (req, res) => {
     res.status(200).send(result);
 });
 
-//Todo: Complete rest spec
+profile_app.post('/match', async (req, res) => {
 
+});
 
-
-const mock_user_profile_list = [
-    {
-        firstName: "test",
-        lastName: "test",
-        description: "test",
-        biography: "test",
-        tags: "test",
-        pictureReference: "test",
-        matches: "test",
-        creationDate: new Date().getDate().toString(),
-        onlineStatus: "Online",
-        birthday: new Date().getDate().toString(),
-        email: "test@test.ch",
-        phoneNumber: "123",
-        gender: "Male",
-        isSearchingRoom: "true",
-        isAdvertisingRoom: "false",
-        moveInDate: new Date().getDate().toString(),
-        moveOutDate: new Date().getDate().toString()
-    },
-    {
-        firstName: "test",
-        lastName: "test",
-        description: "test",
-        biography: "test",
-        tags: "test",
-        pictureReference: "test",
-        matches: "test",
-        creationDate: new Date().getDate().toString(),
-        onlineStatus: "Online",
-        birthday: new Date().getDate().toString(),
-        email: "test@test.ch",
-        phoneNumber: "123",
-        gender: "Male",
-        isSearchingRoom: "true",
-        isAdvertisingRoom: "false",
-        moveInDate: new Date().getDate().toString(),
-        moveOutDate: new Date().getDate().toString()
-    }
-]
-
-
-const mock_flat_profile = {
-  name: "test",
-  description: "test",
-  biography: "test",
-  tags: "test",
-  pictureReference: "test",
-  matches: "test",
-  creationDate: new Date().getDate().toString(),
-  onlineStatus: "Online",
-  address: {
-    street: "test",
-    city: "test",
-    province: "test",
-    postalCode: "test",
-    country: "test"
-  },
-  rent: "1",
-  permanent: "true",
-  moveInDate: new Date().getDate().toString(),
-  moveOutDate: new Date().getDate().toString(),
-  numberOfRooms: "1",
-  roomSize: "1",
-  numberOfBaths: "1",
-  roomMates: {
-    roomMate1: mock_user_profile_list,
-    roomMate2: mock_user_profile_list
-  }
-}

@@ -81,7 +81,7 @@ export class UserProfileConverter {
                 viewed, fields.flatId.stringValue, likes, fields.profileId.stringValue)
 
         } catch (e) {
-            throw new TypeError("DB entry does not have expected format")
+            throw new TypeError("DB entry does not have expected format: " + e)
         }
     }
 

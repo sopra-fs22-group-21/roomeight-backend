@@ -1,10 +1,10 @@
 
 export class Like {
-    likesUserIds: string[];
-    likedUserId: string;
+    likes: string[];
+    likedUser: string;
 
     constructor(likesUserIds: string[], likedUserId: string) {
-        this.likesUserIds = likesUserIds;
-        this.likedUserId = likedUserId;
+        this.likes = likesUserIds;
+        this.likedUser = likedUserId;
     }
 }

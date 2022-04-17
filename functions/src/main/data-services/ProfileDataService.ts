@@ -1,30 +1,43 @@
-import {ProfileQueryRepository} from "../repository/ProfileQueryRepository";
+import {ProfileRepository} from "../repository/ProfileRepository";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
-import {ReferenceConverter} from "../converters/ReferenceConverter";
+import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
 
 export class ProfileDataService {
 
+    userRepo;
+    flatRepo;
+
+    constructor(user_repo: ProfileRepository, flat_repo: ProfileRepository) {
+        this.userRepo = user_repo;
+        this.flatRepo = flat_repo;
+    }
+
     // Todo: Clean up unresolved references
-    static async getProfileByIdFromRepo(repo: ProfileQueryRepository, profile_id: string): Promise<string> {
+    async getProfileByIdFromRepo(profile_id: string): Promise<string> {
+        let repo;
+        if(profile_id.split("#")[0] == "flt") {
+            repo = this.flatRepo;
+        } else {
+            repo = this.userRepo;
+        }
         const db_entry = await repo.getProfileById(profile_id)
         let dto: any;
+
         if (db_entry._fieldsProto) {
             if(profile_id.split("#")[0] == "flt") {
                 // Convert references to actual profiles
                 dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
 
-                const reference_converter = new ReferenceConverter(repo);
-                await reference_converter.resolveSingleProfileReference(dto.likes.likedUserId)
-                    .then((resolution) => {
-                        dto.likes.likedUserId = resolution.result;
-                    });
+                const reference_converter = new ReferenceControler(this.userRepo);
                 await reference_converter.resolveProfileReferenceList(dto.matches)
                     .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
                         dto.matches = resolution.result;
                     });
                 await reference_converter.resolveProfileReferenceList(dto.roomMates)
                     .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(profile_id, "roomMates", dto.roomMates, resolution.unresolvedReferences);
                         dto.roomMates = resolution.result;
                     });
 
@@ -33,18 +46,11 @@ export class ProfileDataService {
                 dto = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
 
                 // Convert references to actual profiles
-                const reference_converter = new ReferenceConverter(repo);
-                await reference_converter.resolveProfileReferenceList(dto.likes)
-                    .then((resolution) => {
-                        dto.likes = resolution.result;
-                    });
+                const reference_converter = new ReferenceControler(this.userRepo);
                 await reference_converter.resolveProfileReferenceList(dto.matches)
                     .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
                         dto.matches = resolution.result;
-                    });
-                await reference_converter.resolveProfileReferenceList(dto.viewed)
-                    .then((resolution) => {
-                        dto.viewed = resolution.result;
                     });
             }
             return dto;
