@@ -9,5 +9,4 @@ module.exports = {
     "transform": {
       "^.+\\.(ts|tsx)$": "ts-jest"
     },
-    resolver: 'jest-node-exports-resolver'
   }
