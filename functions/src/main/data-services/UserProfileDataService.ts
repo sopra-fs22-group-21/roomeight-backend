@@ -5,11 +5,11 @@ import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
-// Prod import for admin auth
-import {getAuth as adminGetAuth} from "firebase-admin/auth";
 import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
+// Prod import for admin auth
+// import {getAuth as adminGetAuth} from "firebase-admin/auth";
 // Testing import for admin auth
-// import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
+import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
 
 export class UserProfileDataService {
 

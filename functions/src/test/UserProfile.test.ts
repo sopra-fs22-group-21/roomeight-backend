@@ -22,8 +22,6 @@ describe('ValidatorReport test', () => {
             "\"tags\":[]," +
             "\"pictureReference\":\"\"," +
             "\"matches\":[]," +
-            "\"viewed\":[]," +
-            "\"likes\":[]," +
             "\"creationDate\":\"1970-01-01T00:00:00.000Z\"," +
             "\"onlineStatus\":\"ONLINE\"," +
             "\"birthday\":\"1970-01-01T00:00:00.000Z\"," +
@@ -33,7 +31,8 @@ describe('ValidatorReport test', () => {
             "\"isSearchingRoom\":true," +
             "\"isAdvertisingRoom\":false," +
             "\"moveInDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"}"
+            "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"," +
+            "\"flatId\":\"\"}"
 
         expect(JSON.stringify(userProfile.toJson())).toEqual(expected);
     })

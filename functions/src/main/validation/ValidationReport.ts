@@ -26,7 +26,12 @@ export class ValidationReport {
     toString(): string {
         let error_str = "Errors:\n"
         for(let index in this.errors) {
-                error_str += this.errors[index] + ", \n"
+            if (index < this.errors.length.toString()){
+                error_str += this.errors[index] + ",\n"
+            }
+            else {
+                error_str += this.errors[index] + "\n\n"
+            }
         }
         error_str += "Mandatory fields are: " + this.mandatoryFields + ", \n";
         error_str += "Optional fields are: " + this.optionalFields;

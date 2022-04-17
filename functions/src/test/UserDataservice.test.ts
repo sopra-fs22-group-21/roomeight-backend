@@ -141,18 +141,17 @@ describe("UserProfileDataService Test", () => {
             tags: [],
             pictureReference: "",
             matches: [],
-            viewed: [],
-            likes: [],
             creationDate: new Date(StubInputs.getCurrentDateStr()),
             onlineStatus: "ONLINE",
-            birthday: "1999-06-22",
+            birthday: "1999-06-22T00:00:00.000Z",
             email: "test@test.ch",
             phoneNumber: "0795553030",
             gender: "NOT SET",
             isSearchingRoom: true,
             isAdvertisingRoom: false,
             moveInDate: new Date(NaN),
-            moveOutDate: new Date(NaN)
+            moveOutDate: new Date(NaN),
+            flatId: ""
         }
 
         const repo = new ValidMockUserRepository();

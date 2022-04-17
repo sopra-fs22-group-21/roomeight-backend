@@ -1,9 +1,9 @@
 import * as functions from "firebase-functions";
 import {UserProfile} from "../data-model/UserProfile";
 // Testing import for admin auth
-//import {getFirestore} from "firebase-admin/lib/firestore";
+import {getFirestore} from "firebase-admin/lib/firestore";
 // Prod import for admin auth
-import {getFirestore} from "firebase-admin/firestore";
+// import {getFirestore} from "firebase-admin/firestore";
 import {app} from "firebase-admin";
 import App = app.App;
 import {ProfileRepository} from "./ProfileRepository";
