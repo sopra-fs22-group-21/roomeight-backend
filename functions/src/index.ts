@@ -211,16 +211,16 @@ const mock_user_profile_list = [
         tags: "test",
         pictureReference: "test",
         matches: "test",
-        creationDate: new Date().getDate().toString(),
+        creationDate: new Date().toString(),
         onlineStatus: "Online",
-        birthday: new Date().getDate().toString(),
+        birthday: new Date().toString(),
         email: "test@test.ch",
         phoneNumber: "123",
         gender: "Male",
         isSearchingRoom: "true",
         isAdvertisingRoom: "false",
-        moveInDate: new Date().getDate().toString(),
-        moveOutDate: new Date().getDate().toString()
+        moveInDate: new Date().toString(),
+        moveOutDate: new Date().toString()
     },
     {
         firstName: "test",
@@ -230,16 +230,16 @@ const mock_user_profile_list = [
         tags: "test",
         pictureReference: "test",
         matches: "test",
-        creationDate: new Date().getDate().toString(),
+        creationDate: new Date().toString(),
         onlineStatus: "Online",
-        birthday: new Date().getDate().toString(),
+        birthday: new Date().toString(),
         email: "test@test.ch",
         phoneNumber: "123",
         gender: "Male",
         isSearchingRoom: "true",
         isAdvertisingRoom: "false",
-        moveInDate: new Date().getDate().toString(),
-        moveOutDate: new Date().getDate().toString()
+        moveInDate: new Date().toString(),
+        moveOutDate: new Date().toString()
     }
 ]
 
@@ -251,7 +251,7 @@ const mock_flat_profile = {
   tags: "test",
   pictureReference: "test",
   matches: "test",
-  creationDate: new Date().getDate().toString(),
+  creationDate: new Date().toString(),
   onlineStatus: "Online",
   address: {
     street: "test",
@@ -262,8 +262,8 @@ const mock_flat_profile = {
   },
   rent: "1",
   permanent: "true",
-  moveInDate: new Date().getDate().toString(),
-  moveOutDate: new Date().getDate().toString(),
+  moveInDate: new Date().toString(),
+  moveOutDate: new Date().toString(),
   numberOfRooms: "1",
   roomSize: "1",
   numberOfBaths: "1",
