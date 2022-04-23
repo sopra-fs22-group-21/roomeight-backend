@@ -15,7 +15,7 @@ export class UserProfileConverter {
         // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.firstName, json_body.lastName, "", "", [],
                       "", [], new Date(current_date), Status.online, new Date(NaN),
-                                    new Date(NaN), json_body.birthday, json_body.email, json_body.phoneNumber,
+                                    new Date(NaN), new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
                             "")
 
