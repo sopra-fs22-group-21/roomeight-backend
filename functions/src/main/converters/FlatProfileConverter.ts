@@ -1,6 +1,5 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
-// import {Address} from "../data-model/Address";
 import {Tag} from "../data-model/Tag";
 import {Like} from "../data-model/Like";
 

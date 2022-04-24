@@ -98,12 +98,12 @@ export class ReferenceController {
         functions.logger.info(updated_reference_list, {structuredData: true});
         let update: any = {}
         update[field] = updated_reference_list;
-        try {
-            this.resolvingRepository.updateProfile(update, profile_id).then((r) => functions.logger.info(r, {structuredData: true}));
-        } catch (e) {
-            functions.logger.info("Could not update References of profile " + profile_id + " due to: ", {structuredData: true});
-            functions.logger.info(e, {structuredData: true});
-        }
+        this.resolvingRepository.updateProfile(update, profile_id)
+            .then((r) => functions.logger.info(r, {structuredData: true}))
+            .catch((e) => {
+                functions.logger.info("Could not update References of profile " + profile_id + " due to: ", {structuredData: true});
+                functions.logger.info(e, {structuredData: true});
+            });
     }
 }
 

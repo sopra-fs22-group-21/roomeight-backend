@@ -1,13 +1,13 @@
 import * as functions from "firebase-functions";
 import * as express from "express";
 import {UserProfileDataService} from "./main/data-services/UserProfileDataService";
-import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
 import {getAuth} from "firebase-admin/auth";
 import {config} from "../firebase_config";
 import {UserRepository} from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
 import {FlatRepository} from "./main/repository/FlatRepository";
 import {ProfileDataService} from "./main/data-services/ProfileDataService";
+import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
 
 
 
