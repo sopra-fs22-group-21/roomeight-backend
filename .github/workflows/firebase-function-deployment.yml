@@ -14,6 +14,7 @@ jobs:
       - name: Installations
         run: |
           cd functions
+          npm i @types/uuid
           npm ci
           npm run build
       - name: Deployment
