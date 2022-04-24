@@ -24,7 +24,7 @@ export class FlatProfileDataService {
 
 
         // Validate user which should be added
-        const validation_results = FlatValidator.validatePostUser(body);
+        let validation_results = FlatValidator.validatePostUser(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
@@ -66,6 +66,8 @@ export class FlatProfileDataService {
 
 
     async deleteFlat(profileId: string): Promise<string> {
+
+        functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
         return (this.flat_repository.deleteProfile(profileId)
             .then((response) => {
                 return response

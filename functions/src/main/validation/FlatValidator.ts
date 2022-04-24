@@ -1,10 +1,12 @@
 import {ValidationReport} from "./ValidationReport";
+import * as functions from "firebase-functions";
 
 export class FlatValidator {
     static validatePostUser(user_json_body: any) {
         let mandatoryFields = ["name", "address"];
         let optionalFields = ["description", "biography", "tags", "pictureReference", "likes", "creationDate", "onlineStatus", "moveInDate",
             "moveOutDate", "address", "rent", "permanent", "roomSize", "numberOfBaths", "roomMates", "matches"]
+        functions.logger.log(user_json_body);
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 
@@ -35,7 +37,7 @@ export class FlatValidator {
                     break;
                 case "address":
                     if (!this.validateAddress(user_json_body[key])) {
-                        report.setErrors("invalid name");
+                        report.setErrors("invalid address");
                     }
                     break;
             }
@@ -50,7 +52,7 @@ export class FlatValidator {
     private static validateAddress(address: any): boolean {
         let fields = ["street", "city", "province", "postalCode", "country"];
         for (let i in fields) {
-            if(!address.hasOwnProperty(i)) {
+            if(!address.hasOwnProperty(fields[i])) {
                 return false;
             }
         }
