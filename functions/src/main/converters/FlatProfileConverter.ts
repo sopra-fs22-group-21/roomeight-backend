@@ -19,7 +19,7 @@ export class FlatProfileConverter {
 
         // Create Template userprofile with default values and mandatory fields
         let flat = new FlatProfile(json_body.name, "", "", [], "",
-            [], new Date(current_date), Status.online, new Date(NaN), new Date(NaN),
+            [], new Date(current_date), Status.online, new Date(0), new Date(9),
             address, NaN, false, NaN,  NaN, NaN, [uid], "", [])
 
         // Check if optional fields are in the json body

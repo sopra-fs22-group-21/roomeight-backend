@@ -14,10 +14,11 @@ export class UserProfileConverter {
         let yyyy = today.getFullYear();
         let current_date = mm + '/' + dd + '/' + yyyy;
 
+        // Todo: Nullable dates
         // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.firstName, json_body.lastName, "", "", [],
-                      "", [], new Date(current_date), Status.online, new Date(NaN),
-                                    new Date(NaN), new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
+                      "", [], new Date(current_date), Status.online, new Date(0),
+                                    new Date(0), new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
                             "")
 
