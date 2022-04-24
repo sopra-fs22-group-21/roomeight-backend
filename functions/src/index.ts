@@ -37,7 +37,7 @@ const profileDataService = new ProfileDataService(userRepo, flatRepo);
 // Export functions and set allowed origins
 exports.userprofiles = functions.https.onRequest(userprofile_app);
 userprofile_app.use(cors({ origin: "*" }));
-exports.flatprofiles = functions.https.onRequest(userprofile_app);
+exports.flatprofiles = functions.https.onRequest(flatprofile_app);
 flatprofile_app.use(cors({ origin: "*" }));
 exports.profiles = functions.https.onRequest(profile_app);
 profile_app.use(cors({ origin: "*" }));
