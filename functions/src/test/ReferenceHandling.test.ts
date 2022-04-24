@@ -54,11 +54,28 @@ describe("ReferenceController Test", () => {
 
     // Reference Clean Up Tests
 
-    test('2 Test Resolving of Reference List containing single element -> element not found', () => {
+    test('3 Test Clean Up outdated References', () => {
+        const mock_user_repo = new ValidMockUserRepository();
+        const resolver = new ReferenceController(mock_user_repo);
+
+        return resolver.cleanUpReferencesList("123", "matches", ["456", "789"], ["789"])
+            .then(
+                (r) => {
+                    expect(r).toEqual("Successfully removed outdated references");
+                }
+        )
+    });
+
+    test('4 Test Clean Up outdated References -> Update not possible', () => {
         const mock_user_repo = new InvalidMockUserRepository();
         const resolver = new ReferenceController(mock_user_repo);
 
         return resolver.cleanUpReferencesList("123", "matches", ["456", "789"], ["789"])
+            .then(
+                (r) => {
+                    expect(r).toEqual("Could not update References of profile 123 due to: Could not update User");
+                }
+            )
     });
 
 });

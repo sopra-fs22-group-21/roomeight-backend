@@ -93,16 +93,16 @@ export class ReferenceController {
      * @Input current_references: Array of the current references
      * @Input outdated_references: References that should be removed
     **/
-    cleanUpReferencesList(profile_id: string, field: string, current_references: string[], outdated_references: string[]): void {
+    cleanUpReferencesList(profile_id: string, field: string, current_references: string[], outdated_references: string[]): Promise<string> {
         const updated_reference_list = current_references.filter(reference => outdated_references.indexOf(reference))
         functions.logger.info(updated_reference_list, {structuredData: true});
         let update: any = {}
         update[field] = updated_reference_list;
-        this.resolvingRepository.updateProfile(update, profile_id)
-            .then((r) => functions.logger.info(r, {structuredData: true}))
+        return this.resolvingRepository.updateProfile(update, profile_id)
+            .then(() => {return "Successfully removed outdated references"})
             .catch((e) => {
-                functions.logger.info("Could not update References of profile " + profile_id + " due to: ", {structuredData: true});
                 functions.logger.info(e, {structuredData: true});
+                return "Could not update References of profile " + profile_id + " due to: " + e.message;
             });
     }
 }
