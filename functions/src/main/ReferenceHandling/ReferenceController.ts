@@ -39,7 +39,7 @@ export class ReferenceController {
         const db_entry = await this.resolvingRepository.getProfileById(reference_id);
 
         // If the referenced profile exists convert it to a Profile Entity
-        if (db_entry._fieldsProto) {
+        if (db_entry) {
             if(reference_id.split("#")[0] == "flt") {
                 resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             } else {
@@ -71,7 +71,7 @@ export class ReferenceController {
         // Loop over the reference list and add every found profile to a solution array and mark each unresolved reference as unresolved
         for (let key in reference_id_list) {
             db_entry = await this.resolvingRepository.getProfileById(reference_id_list[key]);
-            if (db_entry._fieldsProto) {
+            if (db_entry) {
                 if(reference_id_list[key].split("#")[0] == "flt") {
                     temp_resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry);
                 } else {

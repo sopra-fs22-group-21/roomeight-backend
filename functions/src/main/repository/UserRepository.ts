@@ -19,7 +19,8 @@ export class UserRepository implements ProfileRepository {
     getProfileById(profile_id:string): Promise<string> {
         return this.database.collection(this.collection_name).doc(profile_id).get()
             .then((response: any) => {
-                return response
+                console.log(response.data())
+                return response.data();
             })
     }
 

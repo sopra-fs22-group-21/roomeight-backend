@@ -24,7 +24,7 @@ export class ProfileDataService {
         const db_entry = await repo.getProfileById(profile_id)
         let dto: any;
 
-        if (db_entry._fieldsProto) {
+        if (db_entry) {
             if(profile_id.split("#")[0] == "flt") {
                 // Convert references to actual profiles
                 dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
