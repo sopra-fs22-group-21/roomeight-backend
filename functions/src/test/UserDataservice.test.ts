@@ -19,7 +19,7 @@ jest.mock('firebase/auth', () => {
             // Value for second test
                 //Not needed for second test
             // Value for third test
-            .mockRejectedValueOnce(Promise.reject(new Error("Firebase: Error (auth/email-already-in-use).")))
+            .mockRejectedValueOnce(Promise.reject("Firebase: Error (auth/email-already-in-use)."))
             // Value for fourth tests
             .mockReturnValueOnce(Promise.resolve(userCredentialMock)),
             // Value for fifth tests
@@ -208,7 +208,7 @@ describe("UserProfileDataService Test", () => {
             )
             .catch(
                 (error) => {
-                    expect(error).toEqual(Promise.reject(new Error(expected_response)));
+                    expect(error).toEqual(Promise.reject(expected_response));
                 }
             )
     });
