@@ -1,6 +1,6 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
-import {Address} from "../data-model/Address";
+// import {Address} from "../data-model/Address";
 import {Tag} from "../data-model/Tag";
 import {Like} from "../data-model/Like";
 
@@ -13,13 +13,14 @@ export class FlatProfileConverter {
         let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         let yyyy = today.getFullYear();
         let current_date = mm + '/' + dd + '/' + yyyy;
-        let address = new Address(json_body.address.street, json_body.address.city, json_body.address.province,
-            json_body.address.postalCode, json_body.address.country);
+        // let address = new Address(json_body.address.street, json_body.address.city, json_body.address.province,
+        //     json_body.address.postalCode, json_body.address.country);
+        let address = JSON.stringify(json_body.address);
 
 
         // Create Template userprofile with default values and mandatory fields
         let flat = new FlatProfile(json_body.name, "", "", [], "",
-            [], new Date(current_date), Status.online, new Date(NaN), new Date(NaN),
+            [], new Date(current_date), Status.online, new Date(), new Date(),
             address, NaN, false, NaN,  NaN, NaN, [uid], "", [])
 
         // Check if optional fields are in the json body
