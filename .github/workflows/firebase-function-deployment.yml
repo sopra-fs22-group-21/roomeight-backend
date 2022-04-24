@@ -35,6 +35,7 @@ jobs:
           cd functions
           npm ci
           npm install jest -g
+          npm install jest-sonar-reporter -g
       - name: Run Tests
         run: |
           cd functions
