@@ -78,4 +78,49 @@ describe("ReferenceController Test", () => {
             )
     });
 
+    // Resolve Single Reference
+    test('5 Test Resolving of Single Reference', () => {
+        const expected_answer = {
+            profileId: '',
+            firstName: 'Mock first_name',
+            lastName: 'Mock last_name',
+            description: '',
+            biography: '',
+            tags: [],
+            pictureReference: '',
+            matches: [],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: 'ONLINE',
+            birthday: "1970-01-01T00:00:00.000Z",
+            email: 'test@test.com',
+            phoneNumber: '0795556677',
+            gender: 'NOT SET',
+            isSearchingRoom: false,
+            isAdvertisingRoom: false,
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate:  "1970-01-01T00:00:00.000Z",
+            flatId: ''
+        };
+        const mock_user_repo = new ValidMockUserRepository();
+        const resolver = new ReferenceController(mock_user_repo);
+
+        return resolver.resolveSingleProfileReference("123").then((response) => {
+            console.log(response);
+            expect(JSON.stringify(response.result)).toEqual(JSON.stringify(expected_answer));
+            expect(JSON.stringify(response.unresolvedReferences)).toEqual("[]");
+        })
+    });
+
+    test('6 Test Resolving of single Reference -> element not found', () => {
+        const reference_list = ["123"]
+        const mock_user_repo = new InvalidMockUserRepository();
+        const resolver = new ReferenceController(mock_user_repo);
+
+        return resolver.resolveProfileReferenceList(reference_list).then((response) => {
+            console.log(response);
+            expect(JSON.stringify(response.result)).toEqual("[]");
+            expect(JSON.stringify(response.unresolvedReferences)).toEqual("[\"123\"]");
+        })
+    });
+
 });
