@@ -40,9 +40,9 @@ jest.mock('firebase/auth', () => {
     }
 });
 
-jest.mock('firebase-admin/lib/auth', () => {
+jest.mock('firebase-admin', () => {
     return {
-        getAuth: jest.fn()
+        auth: jest.fn()
             // Value for first test
                 //Not needed for first test
             // Value for second test
@@ -141,22 +141,21 @@ describe("UserProfileDataService Test", () => {
             tags: [],
             pictureReference: "",
             matches: [],
-            viewed: [],
-            likes: [],
             creationDate: new Date(StubInputs.getCurrentDateStr()),
             onlineStatus: "ONLINE",
-            birthday: "1999-06-22",
+            birthday: "1999-06-22T00:00:00.000Z",
             email: "test@test.ch",
             phoneNumber: "0795553030",
             gender: "NOT SET",
             isSearchingRoom: true,
             isAdvertisingRoom: false,
             moveInDate: new Date(NaN),
-            moveOutDate: new Date(NaN)
+            moveOutDate: new Date(NaN),
+            flatId: ""
         }
 
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody()).then(
             (response) => {
@@ -171,12 +170,14 @@ describe("UserProfileDataService Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\ninvalid email"
+        const expected_response = "Errors:\ninvalid email\n" +
+            "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
+            "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
 
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.addUserProfile(invalid_input)
             .then(
@@ -187,7 +188,7 @@ describe("UserProfileDataService Test", () => {
             )
             .catch(
                 (error) => {
-                    expect(error).toEqual(new Error(expected_response))
+                    expect(error.message).toEqual(expected_response)
                 }
             )
     });
@@ -196,7 +197,7 @@ describe("UserProfileDataService Test", () => {
         const expected_response = "Firebase: Error (auth/email-already-in-use)."
 
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -218,7 +219,7 @@ describe("UserProfileDataService Test", () => {
         const expected_response = "Could not post user due to: Could not post User"
 
         const repo = new InvalidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -240,7 +241,7 @@ describe("UserProfileDataService Test", () => {
         const expected_response = "Successfully updated user 123"
 
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123").then(
             (response) => {
@@ -255,12 +256,15 @@ describe("UserProfileDataService Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\ninvalid phoneNumber"
+        const expected_response = "Errors:\ninvalid phoneNumber\n" +
+            "Mandatory fields are: \n" +
+            "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom," +
+                                    "moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
 
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.updateUser(invalid_input, "123")
             .then(
@@ -271,7 +275,7 @@ describe("UserProfileDataService Test", () => {
             )
             .catch(
                 (error) => {
-                    expect(error).toEqual(new Error(expected_response))
+                    expect(error.message).toEqual(expected_response)
                 }
             )
     });
@@ -280,7 +284,7 @@ describe("UserProfileDataService Test", () => {
         const expected_response = "Could not update User"
 
         const repo = new InvalidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123")
             .then(
@@ -302,7 +306,7 @@ describe("UserProfileDataService Test", () => {
         const expected_response = "Successfully deleted user 123"
 
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.deleteUser("123").then(
             (response) => {
@@ -315,7 +319,7 @@ describe("UserProfileDataService Test", () => {
     test('9 Test Cannot access Auth Delete UserProfile Request', async () =>  {
         const expected_response = "Could not delete auth User"
         const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.deleteUser("123")
             .then(
@@ -335,7 +339,7 @@ describe("UserProfileDataService Test", () => {
         const expected_response = "Error: User was deleted from auth but not from firestore: Could not delete User"
 
         const repo = new InvalidMockUserRepository();
-        const ds = new UserProfileDataService(repo);
+        const ds = new UserProfileDataService(repo, jest.fn());
 
         return ds.deleteUser("123")
             .then(

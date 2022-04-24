@@ -1,49 +1,50 @@
 import * as functions from "firebase-functions";
 import {UserProfile} from "../data-model/UserProfile";
-// Testing import for admin auth
-//import {getFirestore} from "firebase-admin/lib/firestore";
-// Prod import for admin auth
-import {getFirestore} from "firebase-admin/firestore";
-import {app} from "firebase-admin";
-import App = app.App;
-import {ProfileQueryRepository} from "./ProfileQueryRepository";
-import { Profile } from "../data-model/Profile";
+import * as admin from 'firebase-admin';
+import App = admin.app.App;
+import {ProfileRepository} from "./ProfileRepository";
 
-export class UserRepository implements ProfileQueryRepository {
+export class UserRepository implements ProfileRepository {
     database: any;
     collection_name: string;
 
 
     constructor(app: App) {
-        this.database = getFirestore(app);
+        this.database = admin.firestore(app);
         this.collection_name = "user-profiles"
     }
 
     // Firestore User Operations
 
-    getProfileById(): Profile {
-        throw new Error("Method not implemented.");
+    getProfileById(profile_id:string): Promise<string> {
+        return this.database.collection(this.collection_name).doc(profile_id).get()
+            .then((response: any) => {
+                return response
+            })
     }
 
-    addUserProfile(user_to_add: UserProfile): Promise<string>  {
+    addProfile(user_to_add: UserProfile): Promise<string>  {
         // Add user to database with set unique profile id
-        functions.logger.debug(user_to_add.toJson(), {structuredData: true})
-        return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add.toJson())
-                .then((r: any) => {
-                        return r;
+        functions.logger.debug(user_to_add.toDbEntry(), {structuredData: true})
+        return this.database.collection(this.collection_name).doc(user_to_add.profileId).set(user_to_add.toDbEntry())
+                .then((response: any) => {
+                        return response;
                     });
     }
 
-    updateUserProfile(update_fields: any, profile_id: string): Promise<string> {
+    updateProfile(update_fields: any, profile_id: string): Promise<string> {
+        functions.logger.info(update_fields, {structuredData: true});
         return this.database.collection(this.collection_name).doc(profile_id).update(update_fields)
-            .then(() => {
+            .then((r: any) => {
+                functions.logger.info(r, {structuredData: true});
                 return "Successfully updated User with id: " + profile_id;
             });
     }
     
-    deleteUserProfile(profile_id: string): Promise<string> {
+    deleteProfile(profile_id: string): Promise<string> {
         return this.database.collection(this.collection_name).doc(profile_id).delete()
-            .then(() => {
+            .then((r: any) => {
+                functions.logger.info(r, {structuredData: true});
                 return "Successfully deleted User with id: " + profile_id;
         });
     }

@@ -24,13 +24,13 @@ export class FlatProfile implements Profile {
     numberOfRoommates: number;
     roomSize: number;
     numberOfBaths: number;
-    roomMates: Array<UserProfile>;
+    roomMates: string[];
     matches: string[];
 
     constructor(name: string, description: string, biography: string, tags: Tag[], pictureReference: string,
                 likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: Date, moveOutDate: Date,
                 address: Address, rent: Number, permanent: boolean, numberOfRoommates: number, roomSize: number,
-                numberOfBaths: number, roomMates: Array<UserProfile>, profile_id: string, matches: string[]) {
+                numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[]) {
         this.name = name;
         this.description = description;
         this.biography = biography;
@@ -52,9 +52,54 @@ export class FlatProfile implements Profile {
         this.matches = matches;
     }
 
-    toJson(): { FirstName: string; LastName: string } {
-        throw new Error("Method not implemented.");
+    toJson(): any {
+        return {
+            profileId: this.profileId,
+            name: this.name,
+            description: this.description,
+            biography: this.biography,
+            tags: this.tags,
+            pictureReference: this.pictureReference,
+            likes: this.likes,
+            creationDate: this.creationDate,
+            onlineStatus: this.onlineStatus,
+            moveInDate: this.moveInDate,
+            moveOutDate: this.moveOutDate,
+            address: this.address,
+            rent: this.rent,
+            permanent: this.permanent,
+            numberOfRoommates: this.numberOfRoommates,
+            roomSize: this.roomSize,
+            numberOfBaths: this.numberOfBaths,
+            roomMates: this.roomMates,
+            matches: this.matches
+        };
     }
+
+    toDbEntry(): any {
+        return {
+            profileId: this.profileId,
+            name: this.name,
+            description: this.description,
+            biography: this.biography,
+            tags: this.tags,
+            pictureReference: this.pictureReference,
+            likes: this.likes,
+            creationDate: this.creationDate,
+            onlineStatus: this.onlineStatus,
+            moveInDate: this.moveInDate,
+            moveOutDate: this.moveOutDate,
+            address: this.address,
+            rent: this.rent,
+            permanent: this.permanent,
+            numberOfRoommates: this.numberOfRoommates,
+            roomSize: this.roomSize,
+            numberOfBaths: this.numberOfBaths,
+            roomMates: this.roomMates,
+            matches: this.matches
+        };
+    }
+
     getMatches(): UserProfile[] {
         throw new Error("Method not implemented.");
     }

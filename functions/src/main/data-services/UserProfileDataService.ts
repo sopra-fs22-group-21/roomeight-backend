@@ -1,21 +1,21 @@
 import {UserRepository} from "../repository/UserRepository";
 import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
-import {Validator} from "../validation/Validator";
+import {UserValidator} from "../validation/UserValidator";
 import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
-// Prod import for admin auth
-import {getAuth as adminGetAuth} from "firebase-admin/auth";
-// Testing import for admin auth
-// import {getAuth as adminGetAuth} from "firebase-admin/lib/auth";
+import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
+import * as admin from 'firebase-admin';
 
 export class UserProfileDataService {
 
-    repository: UserRepository;
+    private repository: UserRepository;
+    private app: any;
 
-    constructor(repo: UserRepository) {
+    constructor(repo: UserRepository, app: any) {
         this.repository = repo;
+        this.app = app;
         initializeApp(config);
     }
 
@@ -25,7 +25,7 @@ export class UserProfileDataService {
         const auth = getAuth();
 
         // Validate user which should be added
-        const validation_results = Validator.validatePostUser(body);
+        const validation_results = UserValidator.validatePostUser(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
@@ -37,15 +37,25 @@ export class UserProfileDataService {
             const userCredential = await createUserWithEmailAndPassword(auth, user_to_add.email, body.password)
             user_to_add.profileId = userCredential.user.uid;
             // After profile id is fetched from auth write user into db
-            const repo_response = await this.repository.addUserProfile(user_to_add)
+            const repo_response = await this.repository.addProfile(user_to_add)
                 .catch((repo_error) => {
                     functions.logger.debug(repo_error, {structuredData: true})
                     deleteUser(userCredential.user)
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
             functions.logger.debug(repo_response, {structuredData: true});
-            return user_to_add.toJson();
+            let dto = user_to_add.toJson();
 
+            // Convert references to actual profiles
+            const reference_converter = new ReferenceControler(this.repository);
+
+            await reference_converter.resolveProfileReferenceList(dto.matches)
+                .then((resolution) => {
+                    dto.matches = resolution.result;
+                });
+
+            // Return UserProfile which has been added
+            return dto;
 
         } else {
             // Throw value error with list of errors which were found if validation failed
@@ -59,11 +69,11 @@ export class UserProfileDataService {
         functions.logger.debug("Entered UserProfileDataService", {structuredData: true});
 
         // Validate the fields that should be updated
-        const validation_results = Validator.validatePatchUser(update_fields);
+        const validation_results = UserValidator.validatePatchUser(update_fields);
 
         if (!validation_results.validationFoundErrors()) {
             // If no errors were found in the validation initialize the update in the repo
-            return this.repository.updateUserProfile(update_fields, profile_id);
+            return this.repository.updateProfile(update_fields, profile_id);
         } else {
             // Throw value error with list of errors which were found if validation failed
             throw new Error(validation_results.toString());
@@ -73,10 +83,10 @@ export class UserProfileDataService {
 
     async deleteUser(profileId: string): Promise<string> {
         return (
-        adminGetAuth()
+        admin.auth(this.app)
             .deleteUser(profileId)
             .then(() => {
-                return this.repository.deleteUserProfile(profileId)
+                return this.repository.deleteProfile(profileId)
                     .then((response) => {
                         return response
                     })

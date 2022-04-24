@@ -15,8 +15,8 @@ describe('ValidatorReport test', () => {
     })
 
     test('report should match the errormessage', () => {
-        let errormsg = "Error: test test, \n" +
-            "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password, \n" +
+        let errormsg = "Error: test test\n" +
+            "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
             "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
         validationReport.setErrors("Error: test test")
         expect(validationReport.validationFoundErrors()).toBe(true);
