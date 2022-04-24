@@ -160,7 +160,7 @@ describe("UserProfileDataService Test", () => {
         return ds.addUserProfile(StubInputs.getValidUserPostBody()).then(
             (response) => {
                 console.log(response);
-                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response))
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
             }
         );
     });
@@ -183,12 +183,12 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a validation error")
+                    throw new TypeError("Expected a validation error");
                 }
             )
             .catch(
                 (error) => {
-                    expect(error.message).toEqual(expected_response)
+                    expect(error.message).toEqual(expected_response);
                 }
             )
     });
@@ -203,7 +203,7 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a userAlreadyExists error")
+                    throw new TypeError("Expected a userAlreadyExists error");
                 }
             )
             .catch(
@@ -225,7 +225,7 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a repo error")
+                    throw new TypeError("Expected a repo error");
                 }
             )
             .catch(
@@ -246,7 +246,7 @@ describe("UserProfileDataService Test", () => {
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123").then(
             (response) => {
                 console.log(response);
-                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response))
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
             }
         );
     });
@@ -270,12 +270,12 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a validation error")
+                    throw new TypeError("Expected a validation error");
                 }
             )
             .catch(
                 (error) => {
-                    expect(error.message).toEqual(expected_response)
+                    expect(error.message).toEqual(expected_response);
                 }
             )
     });
@@ -290,7 +290,7 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a repo error")
+                    throw new TypeError("Expected a repo error");
                 }
             )
             .catch(
@@ -311,7 +311,7 @@ describe("UserProfileDataService Test", () => {
         return ds.deleteUser("123").then(
             (response) => {
                 console.log(response);
-                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response))
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
             }
         );
     });
@@ -325,7 +325,7 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a auth error")
+                    throw new TypeError("Expected a auth error");
                 }
             )
             .catch(
@@ -345,7 +345,7 @@ describe("UserProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a repo error")
+                    throw new TypeError("Expected a repo error");
                 }
             )
             .catch(
