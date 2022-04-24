@@ -67,3 +67,6 @@ node_modules/
 
 #IDE
 .idea
+
+#Testing
+functions/test-report.xml
