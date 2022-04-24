@@ -9,8 +9,7 @@ import * as functions from "firebase-functions";
  * Reference Converter resolves profile id references to Profile Jsons
  * @Input resolving_repository: Repository which should be used to resolve the references
  * **/
-// Todo: Reference cleanup: delete references that were not found
-export class ReferenceControler {
+export class ReferenceController {
 
     private resolvingRepository;
 
@@ -71,7 +70,7 @@ export class ReferenceControler {
 
         // Loop over the reference list and add every found profile to a solution array and mark each unresolved reference as unresolved
         for (let key in reference_id_list) {
-            db_entry =await this.resolvingRepository.getProfileById(reference_id_list[key]);
+            db_entry = await this.resolvingRepository.getProfileById(reference_id_list[key]);
             if (db_entry._fieldsProto) {
                 if(reference_id_list[key].split("#")[0] == "flt") {
                     temp_resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry);

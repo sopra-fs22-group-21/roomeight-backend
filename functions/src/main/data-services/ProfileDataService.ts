@@ -1,7 +1,7 @@
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
-import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
+import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 
 export class ProfileDataService {
 
@@ -29,7 +29,7 @@ export class ProfileDataService {
                 // Convert references to actual profiles
                 dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
 
-                const reference_converter = new ReferenceControler(this.userRepo);
+                const reference_converter = new ReferenceController(this.userRepo);
                 await reference_converter.resolveProfileReferenceList(dto.matches)
                     .then((resolution) => {
                         reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
@@ -46,7 +46,7 @@ export class ProfileDataService {
                 dto = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
 
                 // Convert references to actual profiles
-                const reference_converter = new ReferenceControler(this.userRepo);
+                const reference_converter = new ReferenceController(this.userRepo);
                 await reference_converter.resolveProfileReferenceList(dto.matches)
                     .then((resolution) => {
                         reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);

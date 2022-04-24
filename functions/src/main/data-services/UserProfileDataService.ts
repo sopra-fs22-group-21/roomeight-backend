@@ -5,7 +5,7 @@ import * as functions from "firebase-functions";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
-import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
+import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 import * as admin from 'firebase-admin';
 
 export class UserProfileDataService {
@@ -47,7 +47,7 @@ export class UserProfileDataService {
             let dto = user_to_add.toJson();
 
             // Convert references to actual profiles
-            const reference_converter = new ReferenceControler(this.repository);
+            const reference_converter = new ReferenceController(this.repository);
 
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {

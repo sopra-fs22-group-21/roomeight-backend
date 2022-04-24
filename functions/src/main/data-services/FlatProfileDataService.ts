@@ -6,7 +6,7 @@ import {config} from "../../../firebase_config";
 import {v4 as uuidv4} from "uuid";
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
-import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
+import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 
 export class FlatProfileDataService {
 
@@ -43,7 +43,7 @@ export class FlatProfileDataService {
 
             // Convert references
 
-            const reference_converter = new ReferenceControler(this.user_repository);
+            const reference_converter = new ReferenceController(this.user_repository);
             await reference_converter.resolveProfileReferenceList(flat_to_add.matches)
                 .then((resolution) => {
                     flat_to_add.matches = resolution.result;
