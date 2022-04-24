@@ -1,5 +1,5 @@
 import {ReferenceController} from "../main/ReferenceHandling/ReferenceController";
-import {ValidMockUserRepository} from "../main/repository/MockUserRepository";
+import {InvalidMockUserRepository, ValidMockUserRepository} from "../main/repository/MockUserRepository";
 
 // Unit Tests
 
@@ -39,4 +39,26 @@ describe("ReferenceController Test", () => {
             expect(JSON.stringify(response.unresolvedReferences)).toEqual("[]");
         })
     });
+
+    test('2 Test Resolving of Reference List containing single element -> element not found', () => {
+        const reference_list = ["123"]
+        const mock_user_repo = new InvalidMockUserRepository();
+        const resolver = new ReferenceController(mock_user_repo);
+
+        return resolver.resolveProfileReferenceList(reference_list).then((response) => {
+            console.log(response);
+            expect(JSON.stringify(response.result)).toEqual("[]");
+            expect(JSON.stringify(response.unresolvedReferences)).toEqual("[\"123\"]");
+        })
+    });
+
+    // Reference Clean Up Tests
+
+    test('2 Test Resolving of Reference List containing single element -> element not found', () => {
+        const mock_user_repo = new InvalidMockUserRepository();
+        const resolver = new ReferenceController(mock_user_repo);
+
+        return resolver.cleanUpReferencesList("123", "matches", ["456", "789"], ["789"])
+    });
+
 });

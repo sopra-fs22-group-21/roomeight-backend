@@ -69,7 +69,7 @@ export class InvalidMockUserRepository implements UserRepository {
 
     getProfileById(profile_id:string): Promise<any> {
         console.log("Entered Mock invalid getProfileById");
-        return Promise.reject(new Error("Could not find User"));
+        return Promise.resolve(undefined);
     }
 
     addProfile(user_to_add: UserProfile): Promise<string> {
@@ -83,7 +83,6 @@ export class InvalidMockUserRepository implements UserRepository {
     }
 
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
-        console.log("Entered Mock invalid updateUserProfile");
         return Promise.reject(new Error("Could not update User"));
     }
 
