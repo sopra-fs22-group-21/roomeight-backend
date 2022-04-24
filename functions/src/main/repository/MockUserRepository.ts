@@ -1,7 +1,7 @@
 import {UserRepository} from "./UserRepository";
 import {UserProfile} from "../data-model/UserProfile";
-import {firestore} from "firebase-admin";
-import Timestamp = firestore.Timestamp;
+import firebase from "firebase/compat";
+import Timestamp = firebase.firestore.Timestamp;
 
 // Mock Repository for db calls
 
