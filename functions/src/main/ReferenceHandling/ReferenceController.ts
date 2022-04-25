@@ -9,8 +9,7 @@ import * as functions from "firebase-functions";
  * Reference Converter resolves profile id references to Profile Jsons
  * @Input resolving_repository: Repository which should be used to resolve the references
  * **/
-// Todo: Reference cleanup: delete references that were not found
-export class ReferenceControler {
+export class ReferenceController {
 
     private resolvingRepository;
 
@@ -40,7 +39,7 @@ export class ReferenceControler {
         const db_entry = await this.resolvingRepository.getProfileById(reference_id);
 
         // If the referenced profile exists convert it to a Profile Entity
-        if (db_entry._fieldsProto) {
+        if (db_entry) {
             if(reference_id.split("#")[0] == "flt") {
                 resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             } else {
@@ -71,8 +70,8 @@ export class ReferenceControler {
 
         // Loop over the reference list and add every found profile to a solution array and mark each unresolved reference as unresolved
         for (let key in reference_id_list) {
-            db_entry =await this.resolvingRepository.getProfileById(reference_id_list[key]);
-            if (db_entry._fieldsProto) {
+            db_entry = await this.resolvingRepository.getProfileById(reference_id_list[key]);
+            if (db_entry) {
                 if(reference_id_list[key].split("#")[0] == "flt") {
                     temp_resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry);
                 } else {
@@ -94,17 +93,17 @@ export class ReferenceControler {
      * @Input current_references: Array of the current references
      * @Input outdated_references: References that should be removed
     **/
-    cleanUpReferencesList(profile_id: string, field: string, current_references: string[], outdated_references: string[]): void {
+    cleanUpReferencesList(profile_id: string, field: string, current_references: string[], outdated_references: string[]): Promise<string> {
         const updated_reference_list = current_references.filter(reference => outdated_references.indexOf(reference))
         functions.logger.info(updated_reference_list, {structuredData: true});
         let update: any = {}
         update[field] = updated_reference_list;
-        try {
-            this.resolvingRepository.updateProfile(update, profile_id).then((r) => functions.logger.info(r, {structuredData: true}));
-        } catch (e) {
-            functions.logger.info("Could not update References of profile " + profile_id + " due to: ", {structuredData: true});
-            functions.logger.info(e, {structuredData: true});
-        }
+        return this.resolvingRepository.updateProfile(update, profile_id)
+            .then(() => {return "Successfully removed outdated references"})
+            .catch((e) => {
+                functions.logger.info(e, {structuredData: true});
+                return "Could not update References of profile " + profile_id + " due to: " + e.message;
+            });
     }
 }
 

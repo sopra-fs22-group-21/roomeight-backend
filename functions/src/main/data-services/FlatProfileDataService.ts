@@ -6,7 +6,7 @@ import {config} from "../../../firebase_config";
 import {v4 as uuidv4} from "uuid";
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
-import {ReferenceControler} from "../ReferenceHandling/ReferenceControler";
+import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 
 export class FlatProfileDataService {
 
@@ -19,18 +19,18 @@ export class FlatProfileDataService {
         initializeApp(config);
     }
 
-    async addFlatProfile(body: any, uid: string): Promise<string> {
+    async addFlatProfile(body: any, user_uid: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
 
-
-        // Validate user which should be added
-        const validation_results = FlatValidator.validatePostUser(body);
+        // Validate flat which should be added
+        let validation_results = FlatValidator.validatePostFlat(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            let flat_to_add = FlatProfileConverter.convertPostDto(body, uid);
+            body["user_uid"] = user_uid;
+            let flat_to_add = FlatProfileConverter.convertPostDto(body);
 
             flat_to_add.profileId = "flt#" + uuidv4();
             // After profile id is fetched from auth write flat into db
@@ -43,7 +43,7 @@ export class FlatProfileDataService {
 
             // Convert references
 
-            const reference_converter = new ReferenceControler(this.user_repository);
+            const reference_converter = new ReferenceController(this.user_repository);
             await reference_converter.resolveProfileReferenceList(flat_to_add.matches)
                 .then((resolution) => {
                     flat_to_add.matches = resolution.result;
@@ -66,6 +66,8 @@ export class FlatProfileDataService {
 
 
     async deleteFlat(profileId: string): Promise<string> {
+
+        functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
         return (this.flat_repository.deleteProfile(profileId)
             .then((response) => {
                 return response

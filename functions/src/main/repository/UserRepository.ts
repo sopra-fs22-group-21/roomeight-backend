@@ -19,7 +19,7 @@ export class UserRepository implements ProfileRepository {
     getProfileById(profile_id:string): any {
         return this.database.collection(this.collection_name).doc(profile_id).get()
             .then((response: any) => {
-                return response
+                return response.data();
             })
     }
 

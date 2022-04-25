@@ -1,13 +1,13 @@
 import * as functions from "firebase-functions";
 import * as express from "express";
 import {UserProfileDataService} from "./main/data-services/UserProfileDataService";
-import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
 import {getAuth} from "firebase-admin/auth";
 import {config} from "../firebase_config";
 import {UserRepository} from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
 import {FlatRepository} from "./main/repository/FlatRepository";
 import {ProfileDataService} from "./main/data-services/ProfileDataService";
+import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
 
 
 
@@ -37,7 +37,7 @@ const profileDataService = new ProfileDataService(userRepo, flatRepo);
 // Export functions and set allowed origins
 exports.userprofiles = functions.https.onRequest(userprofile_app);
 userprofile_app.use(cors({ origin: "*" }));
-exports.flatprofiles = functions.https.onRequest(userprofile_app);
+exports.flatprofiles = functions.https.onRequest(flatprofile_app);
 flatprofile_app.use(cors({ origin: "*" }));
 exports.profiles = functions.https.onRequest(profile_app);
 profile_app.use(cors({ origin: "*" }));
@@ -47,7 +47,7 @@ profile_app.use(cors({ origin: "*" }));
 
 // Create User
 userprofile_app.post('/', async (req, res) => {
-    functions.logger.debug("Started Post Request", {structuredData: true});
+    functions.logger.debug("Started User Post Request", {structuredData: true});
     return userProfileDataService.addUserProfile(req.body)
         .then((data_service_response) => {
                 res.set('Access-Control-Allow-Origin', '*')
@@ -158,7 +158,7 @@ flatprofile_app.post('/', async (req, res) => {
         getAuth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
-                functions.logger.debug("Started Post Request", {structuredData: true});
+                functions.logger.debug("Started Flat Post Request", {structuredData: true});
                 return flatProfileDataService.addFlatProfile(req.body, decodedToken.uid)
                     .then((data_service_response) => {
                             res.set('Access-Control-Allow-Origin', '*')
@@ -195,44 +195,58 @@ flatprofile_app.patch('/', async (req, res) => {
 });
 
 // Delete Flat
-// flatprofile_app.delete('/:profileId', async (req, res) => {
-//     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
-//         // Get token from header
-//         const idToken = req.headers.authorization.split('Bearer ')[1]
-//         const profile_id = sanitizeHtml(req.params.profileId);
-//         // Verify token
-//         getAuth()
-//             .verifyIdToken(idToken)
-//             .then((decodedToken) => {
-//                 const uid = decodedToken.uid;
-//                 if (uid == profile_id) {
-//                     // If uid of token matches the profileId continue with request processing
-//                     flatProfileDataService.deleteFlat(profile_id)
-//                         .then(
-//                             (data_service_response) => {
-//                                 res.set('Access-Control-Allow-Origin', '*')
-//                                 res.status(200).send(data_service_response);
-//                             }
-//                         )
-//                         .catch(
-//                             (e) => {
-//                                 functions.logger.debug(e, {structuredData: true})
-//                                 res.status(400).send(e.message);
-//                             }
-//                         );
-//                 } else {
-//                     // Else return NotAuthorized-Exception
-//                     res.status(403).send("Not authorized to delete the selected user!");
-//                 }
-//             })
-//             .catch((error) => {
-//                 res.status(401).send("Authorization failed: " + error);
-//             });
-//
-//     } else {
-//         res.status(401).send("Authorization failed: No authorization header present");
-//     }
-// });
+flatprofile_app.delete('/:profileId', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const profile_id = sanitizeHtml(req.params.profileId);
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                functions.logger.debug("Started Flat Delete Request", {structuredData: true});
+                functions.logger.log(req.params.profileId);
+                // ToDo verify if user is part of flat
+                const uid = decodedToken.uid;
+                profileDataService.getProfileByIdFromRepo(profile_id)
+                    .then(
+                        (flat_toDelete) => {
+                            if (flat_toDelete.roomMates.indexOf(uid) > -1) {
+                                // If uid of token matches the profileId continue with request processing
+                                flatProfileDataService.deleteFlat(profile_id)
+                                    .then(
+                                        (data_service_response) => {
+                                            res.set('Access-Control-Allow-Origin', '*')
+                                            res.status(200).send(data_service_response);
+                                        }
+                                    )
+                                    .catch(
+                                        (e) => {
+                                            functions.logger.debug(e, {structuredData: true})
+                                            res.status(400).send(e.message);
+                                        }
+                                    );
+                            } else {
+                                // Else return NotAuthorized-Exception
+                                res.status(403).send("User is not authorized to delete the selected flat!");
+                            }
+                        }
+                    )
+                    .catch(
+                        (e) => {
+                            functions.logger.debug(e, {structuredData: true})
+                            res.status(404).send(e.message);
+                        }
+                    )
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
 
 
 // General Profile Operations

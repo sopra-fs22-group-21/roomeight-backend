@@ -29,7 +29,7 @@ export class UserProfile implements Profile{
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
                 pictureReference: string, matches: string[], creationDate: Date, onlineStatus: Status,
-                moveInDate: Date, moveOutDate: Date, birthday: Date, email: string, phoneNumber: string,
+                moveInDate: any, moveOutDate: any, birthday: Date, email: string, phoneNumber: string,
                 gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
                 likes: string[], profile_id: string) {
         this.first_name = first_name;

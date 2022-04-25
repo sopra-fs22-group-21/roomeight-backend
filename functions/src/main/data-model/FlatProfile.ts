@@ -1,4 +1,4 @@
-import { Address } from "./Address";
+// import { Address } from "./Address";
 import { Like } from "./Like";
 import { Profile } from "./Profile";
 import { Status } from "./Status";
@@ -18,7 +18,7 @@ export class FlatProfile implements Profile {
     onlineStatus: Status;
     moveInDate: Date;
     moveOutDate: Date;
-    address: Address;
+    address: string;
     rent: Number;
     permanent: boolean;
     numberOfRoommates: number;
@@ -28,8 +28,8 @@ export class FlatProfile implements Profile {
     matches: string[];
 
     constructor(name: string, description: string, biography: string, tags: Tag[], pictureReference: string,
-                likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: Date, moveOutDate: Date,
-                address: Address, rent: Number, permanent: boolean, numberOfRoommates: number, roomSize: number,
+                likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: any, moveOutDate: any,
+                address: string, rent: Number, permanent: boolean, numberOfRoommates: number, roomSize: number,
                 numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[]) {
         this.name = name;
         this.description = description;

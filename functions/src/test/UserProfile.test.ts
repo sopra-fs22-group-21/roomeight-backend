@@ -6,11 +6,7 @@ describe('ValidatorReport test', () => {
     let userProfile: UserProfile;
 
     beforeEach(() => {
-        userProfile = new UserProfile("test", "test", "", "", [],
-            "", [], new Date(0), Status.online, new Date(0),
-            new Date(0), new Date(0), "lars.boesch@uzh.ch", "+41799127396",
-            Gender.notSet, true, false, [], "", [],
-            "");
+        userProfile = new UserProfile("test", "test", "", "", [], "", [], new Date(0), Status.online, new Date(0), new Date(0), new Date(0), "lars.boesch@uzh.ch", "+41799127396", Gender.notSet, true, false, [], "", [], "");
     });
 
     test('new report should not contain errors', () => {

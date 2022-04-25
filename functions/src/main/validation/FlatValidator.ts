@@ -1,10 +1,12 @@
 import {ValidationReport} from "./ValidationReport";
+import * as functions from "firebase-functions";
 
 export class FlatValidator {
-    static validatePostUser(user_json_body: any) {
+    static validatePostFlat(user_json_body: any) {
         let mandatoryFields = ["name", "address"];
         let optionalFields = ["description", "biography", "tags", "pictureReference", "likes", "creationDate", "onlineStatus", "moveInDate",
             "moveOutDate", "address", "rent", "permanent", "roomSize", "numberOfBaths", "roomMates", "matches"]
+        functions.logger.log(user_json_body);
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 
@@ -34,8 +36,8 @@ export class FlatValidator {
                     }
                     break;
                 case "address":
-                    if (!this.validateAddress(user_json_body[key])) {
-                        report.setErrors("invalid name");
+                    if (!this.validateString(user_json_body[key])) {
+                        report.setErrors("invalid address");
                     }
                     break;
             }
@@ -47,20 +49,20 @@ export class FlatValidator {
         return (name.length >= 0 && name.length < 300);
     }
 
-    private static validateAddress(address: any): boolean {
-        let fields = ["street", "city", "province", "postalCode", "country"];
-        for (let i in fields) {
-            if(!address.hasOwnProperty(i)) {
-                return false;
-            }
-        }
-        for (let key in address) {
-            if (!this.validateString(address[key])) {
-                return false
-            }
-        }
-        return true;
-    }
+    // private static validateAddress(address: any): boolean {
+    //     let fields = ["street", "city", "province", "postalCode", "country"];
+    //     for (let i in fields) {
+    //         if(!address.hasOwnProperty(fields[i])) {
+    //             return false;
+    //         }
+    //     }
+    //     for (let key in address) {
+    //         if (!this.validateString(address[key])) {
+    //             return false
+    //         }
+    //     }
+    //     return true;
+    // }
 }
 
 

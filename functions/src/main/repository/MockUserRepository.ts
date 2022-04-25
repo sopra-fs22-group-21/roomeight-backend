@@ -1,5 +1,7 @@
 import {UserRepository} from "./UserRepository";
 import {UserProfile} from "../data-model/UserProfile";
+import firebase from "firebase/compat";
+import Timestamp = firebase.firestore.Timestamp;
 
 // Mock Repository for db calls
 
@@ -27,8 +29,31 @@ export class ValidMockUserRepository implements UserRepository {
         return Promise.resolve("Successfully updated user " + profile_id);
     }
 
-    getProfileById(profile_id:string): Promise<string> {
-        throw new Error("Method not implemented.");
+    getProfileById(profile_id:string): Promise<any> {
+        console.log("Entered Mock updateUserProfile");
+        return Promise.resolve({
+          firstName: 'Mock first_name',
+          moveInDate: new Timestamp(0, 0),
+          likes: [],
+          phoneNumber: '0795556677',
+          flatId: '',
+          tags: [],
+          isSearchingRoom: false,
+          isAdvertisingRoom: false,
+          biography: '',
+          profileId: '',
+          gender: 'NOT SET',
+          pictureReference: '',
+          birthday:  new Timestamp(0, 0),
+          description: '',
+          lastName: 'Mock last_name',
+          onlineStatus: 'ONLINE',
+          viewed: [],
+          creationDate:  new Timestamp(0, 0),
+          moveOutDate:  new Timestamp(0, 0),
+          matches: [],
+          email: 'test@test.com'
+        });
     }
 
 }
@@ -42,8 +67,9 @@ export class InvalidMockUserRepository implements UserRepository {
         this.database = null;
     }
 
-    getProfileById(profile_id:string): Promise<string> {
-        throw new Error("Method not implemented.");
+    getProfileById(profile_id:string): Promise<any> {
+        console.log("Entered Mock invalid getProfileById");
+        return Promise.resolve(undefined);
     }
 
     addProfile(user_to_add: UserProfile): Promise<string> {
@@ -57,7 +83,6 @@ export class InvalidMockUserRepository implements UserRepository {
     }
 
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
-        console.log("Entered Mock invalid updateUserProfile");
         return Promise.reject(new Error("Could not update User"));
     }
 

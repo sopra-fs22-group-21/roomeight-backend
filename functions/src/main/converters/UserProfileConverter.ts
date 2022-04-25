@@ -1,8 +1,6 @@
 import {UserProfile} from "../data-model/UserProfile";
 import {Status} from "../data-model/Status";
 import {Gender} from "../data-model/Gender";
-import {Tag} from "../data-model/Tag";
-// import {Profile} from "../data-model/Profile";
 
 export class UserProfileConverter {
 
@@ -14,10 +12,11 @@ export class UserProfileConverter {
         let yyyy = today.getFullYear();
         let current_date = mm + '/' + dd + '/' + yyyy;
 
+        // Todo: Nullable dates
         // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.firstName, json_body.lastName, "", "", [],
-                      "", [], new Date(current_date), Status.online, new Date(NaN),
-                                    new Date(NaN), new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
+                      "", [], new Date(current_date), Status.online, null,
+                                    null, new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
                             "")
 
@@ -47,10 +46,10 @@ export class UserProfileConverter {
             user.moveOutDate = new Date(Date.parse(json_body.moveOutDate));
         }
         if (json_body.hasOwnProperty("isSearchingRoom")) {
-            user.isSearchingRoom = json_body.isSearchingRoom == "True";
+            user.isSearchingRoom = json_body.isSearchingRoom;
         }
         if (json_body.hasOwnProperty("isAdvertisingRoom")) {
-            user.isAdvertisingRoom = json_body.isAdvertisingRoom == "True";
+            user.isAdvertisingRoom = json_body.isAdvertisingRoom;
         }
 
         return user;
@@ -59,26 +58,12 @@ export class UserProfileConverter {
     // Dynamically converts DB entry to a valid UserProfile
     static convertDBEntryToProfile(db_entry: any): UserProfile {
         try {
-            // Define Vars
-            const fields = db_entry._fieldsProto;
-            let tags: Tag[] = [];
-            let viewed: string[] = [];
-            let likes: string[] = [];
-            let matches: string[] = [];
 
-            // Build arrays
-            fields.tags.arrayValue.values.map((tag: any) => {tags.push(tag.stringValue)});
-            fields.viewed.arrayValue.values.map((viewed_user: any) => {viewed.push(viewed_user.stringValue)});
-            fields.likes.arrayValue.values.map((like: any) => {likes.push(like.stringValue)});
-            fields.matches.arrayValue.values.map((match: any) => {matches.push(match.stringValue)});
-
-            return new UserProfile(fields.firstName.stringValue, fields.lastName.stringValue, fields.description.stringValue,
-                fields.biography.stringValue, tags, fields.pictureReference.stringValue,
-                matches, new Date(fields.creationDate.timestampValue.seconds), fields.onlineStatus.stringValue,
-                new Date(fields.moveInDate.timestampValue.seconds), new Date(fields.moveOutDate.timestampValue.seconds),
-                new Date(fields.birthday.timestampValue.seconds), fields.email.stringValue, fields.phoneNumber.stringValue,
-                fields.gender.stringValue, fields.isSearchingRoom.booleanValue, fields.isAdvertisingRoom.booleanValue,
-                viewed, fields.flatId.stringValue, likes, fields.profileId.stringValue)
+            return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography,
+                db_entry.tags, db_entry.pictureReference, db_entry.matches, db_entry.creationDate.toDate(),
+                db_entry.onlineStatus, db_entry.moveInDate.toDate(), db_entry.moveOutDate.toDate(),
+                db_entry.birthday.toDate(), db_entry.email, db_entry.phoneNumber, db_entry.gender, db_entry.isSearchingRoom,
+                db_entry.isAdvertisingRoom, db_entry.viewed, db_entry.flatId, db_entry.likes, db_entry.profileId)
 
         } catch (e) {
             throw new TypeError("DB entry does not have expected format: " + e)
