@@ -40,7 +40,18 @@ flatprofile_app.use(cors({ origin: "*" }));
 
 // User Operations
 
-// Get specific Profile
+// Get User Profiles
+userprofile_app.get('/', async (req, res) => {
+    let result;
+
+    result = await userProfileDataService.getProfilesFromRepo()
+        .catch((error) => {
+            res.status(400).send(error.message)
+        })
+    res.status(200).send(result);
+});
+
+// Get specific User Profile
 userprofile_app.get('/:profileId', async (req, res) => {
     const profile_id = sanitizeHtml(req.params.profileId);
     let result;
@@ -218,7 +229,7 @@ userprofile_app.post('/likeFlat/:likedFlatId', async (req, res) => {
 
 // Flat Operation
 
-// Get Profiles
+// Get Flat Profiles
 flatprofile_app.get('/', async (req, res) => {
     let result;
 
@@ -229,7 +240,7 @@ flatprofile_app.get('/', async (req, res) => {
     res.status(200).send(result);
 });
 
-// Get specific Profile
+// Get specific Flat Profile
 flatprofile_app.get('/:profileId', async (req, res) => {
     const profile_id = sanitizeHtml(req.params.profileId);
     let result;

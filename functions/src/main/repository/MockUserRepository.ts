@@ -56,6 +56,10 @@ export class ValidMockUserRepository implements UserRepository {
         });
     }
 
+    getProfiles(): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
+
 }
 
 export class InvalidMockUserRepository implements UserRepository {
@@ -70,6 +74,10 @@ export class InvalidMockUserRepository implements UserRepository {
     getProfileById(profile_id:string): Promise<any> {
         console.log("Entered Mock invalid getProfileById");
         return Promise.resolve(undefined);
+    }
+
+    getProfiles(): Promise<any> {
+        throw new Error("Method not implemented.");
     }
 
     addProfile(user_to_add: UserProfile): Promise<string> {

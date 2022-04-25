@@ -125,6 +125,31 @@ export class UserProfileDataService {
         }
     }
 
+    async getProfilesFromRepo(): Promise<any> {
+        const db_entries = await this.user_repository.getProfiles();
+
+        if (db_entries) {
+            let result: any[] = []
+            db_entries.map((entry: any) => {
+                result.push(UserProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
+
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository);
+            for (let i in result) {
+                await reference_converter.resolveProfileReferenceList(result[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(result[i].profileId, "matches", result[i].matches, resolution.unresolvedReferences);
+                        result[i].matches = resolution.result;
+                    });
+            }
+            return result;
+
+        } else {
+            throw new Error("Flat Profile not found!")
+        }
+    }
+
     async likeUser(user_id: string, like_id: string): Promise<string> {
         // Get Profile and Like
         const user_response = await this.user_repository.getProfileById(user_id)
