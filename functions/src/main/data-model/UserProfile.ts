@@ -108,13 +108,4 @@ export class UserProfile implements Profile{
     getMatches(): UserProfile[] {
         throw new Error("Method not implemented.");
     }
-
-    getMisMatches(): UserProfile[] {
-        throw new Error("Method not implemented.");
-    }
-
-    match(user: UserProfile): void {
-        throw new Error("Method not implemented.");
-    }
-
 }

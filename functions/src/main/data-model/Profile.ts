@@ -1,6 +1,5 @@
 import { Status } from "./Status";
 import { Tag } from "./Tag";
-import { UserProfile } from "./UserProfile";
 
 export interface Profile {
     profileId: string
@@ -15,8 +14,5 @@ export interface Profile {
     matches: string[]
 
     toJson(): any,
-    toDbEntry(): any,
-    // Todo: Remove getMatches() and match()
-    getMatches(): UserProfile[],
-    match(user: UserProfile): void
+    toDbEntry(): any
 }

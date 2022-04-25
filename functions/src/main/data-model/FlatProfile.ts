@@ -1,10 +1,7 @@
-// import { Address } from "./Address";
 import { Like } from "./Like";
 import { Profile } from "./Profile";
 import { Status } from "./Status";
 import { Tag } from "./Tag";
-import { UserProfile } from "./UserProfile";
-
 
 export class FlatProfile implements Profile {
     profileId: string;
@@ -19,7 +16,7 @@ export class FlatProfile implements Profile {
     moveInDate: Date;
     moveOutDate: Date;
     address: string;
-    rent: Number;
+    rent: number;
     permanent: boolean;
     numberOfRoommates: number;
     roomSize: number;
@@ -29,7 +26,7 @@ export class FlatProfile implements Profile {
 
     constructor(name: string, description: string, biography: string, tags: Tag[], pictureReference: string,
                 likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: any, moveOutDate: any,
-                address: string, rent: Number, permanent: boolean, numberOfRoommates: number, roomSize: number,
+                address: string, rent: number, permanent: boolean, numberOfRoommates: number, roomSize: number,
                 numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[]) {
         this.name = name;
         this.description = description;
@@ -98,13 +95,6 @@ export class FlatProfile implements Profile {
             roomMates: this.roomMates,
             matches: this.matches
         };
-    }
-
-    getMatches(): UserProfile[] {
-        throw new Error("Method not implemented.");
-    }
-    match(user: UserProfile): void {
-        throw new Error("Method not implemented.");
     }
     
 }
