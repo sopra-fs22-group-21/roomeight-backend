@@ -7,4 +7,11 @@ export class Like {
         this.likes = likesUserIds;
         this.likedUser = likedUserId;
     }
+
+    toJson(): any {
+        return {
+            likes: this.likes,
+            likedUser: this.likedUser
+        }
+    }
 }

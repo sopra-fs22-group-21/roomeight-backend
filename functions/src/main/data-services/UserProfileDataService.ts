@@ -196,7 +196,7 @@ export class UserProfileDataService {
 
         // Create new like object and add it if none exists
         if (!is_liked) {
-            new_flat_likes.push(new Like([user.profileId], liked_user.profileId));
+            new_flat_likes.push(new Like([user.profileId], liked_user.profileId).toJson());
             if (user_flat.numberOfRoommates <= 2) {
                 is_match = true;
                 // Check if match already exists else push new matches

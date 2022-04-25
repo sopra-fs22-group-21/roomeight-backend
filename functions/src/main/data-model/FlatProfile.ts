@@ -74,6 +74,8 @@ export class FlatProfile implements Profile {
     }
 
     toDbEntry(): any {
+        let json_likes: any[] = [];
+        this.likes.map((like) => json_likes.push(like.toJson()));
         return {
             profileId: this.profileId,
             name: this.name,
@@ -81,7 +83,7 @@ export class FlatProfile implements Profile {
             biography: this.biography,
             tags: this.tags,
             pictureReference: this.pictureReference,
-            likes: this.likes,
+            likes: json_likes,
             creationDate: this.creationDate,
             onlineStatus: this.onlineStatus,
             moveInDate: this.moveInDate,

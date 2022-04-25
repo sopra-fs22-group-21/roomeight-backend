@@ -1,5 +1,6 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
+import {Like} from "../data-model/Like";
 
 
 export class FlatProfileConverter{
@@ -60,9 +61,11 @@ export class FlatProfileConverter{
 
     // Dynamically converts DB entry to a valid FlatProfile
     static convertDBEntryToProfile(db_entry: any): FlatProfile {
+        let likes: Like[] = [];
+        db_entry.likes.map((like: any) => likes.push(new Like(like.likes, like.likedUser)));
         try {
             return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReference,
-                db_entry.likes, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
+                likes, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
                 db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent, db_entry.permanent,
                 db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths, db_entry.roomMates, db_entry.profileId, db_entry.matches);
 
