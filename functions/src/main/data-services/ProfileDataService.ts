@@ -59,24 +59,29 @@ export class ProfileDataService {
         }
     }
 
-    async matchProfile(profile_id: string, like_id: string): Promise<string> {
-        // Define repos for requests
-        // let profile_repo: ProfileRepository;
-        // let match_repo: ProfileRepository;
-        // if (profile_id.split("#")[0] == "flt" && like_id.split("#")[0] != "flt") {
-        //     profile_repo = this.flatRepo;
-        //     match_repo = this.userRepo;
-        // } else if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] == "flt") {
-        //     profile_repo = this.userRepo;
-        //     match_repo = this.flatRepo;
-        // } else {
-        //     throw new TypeError("You can only match a profile with a different Typ and both profiles must have type User or Flat" +
-        //                          "e.g. a User Profile can only match a Flat Profile")
-        // }
-        //
-        // // Get Profile and Match
-        // const profile = await profile_repo.getProfileById(profile_id);
-        // const match = await match_repo.getProfileById(profile_id);
+    async likeProfile(profile_id: string, like_id: string): Promise<string> {
+        // Define repo and converter for like
+        let like_repo: ProfileRepository;
+        let like_converter: any;
+        if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] == "flt") {
+            like_repo = this.userRepo;
+            like_converter = FlatProfileConverter;
+        } else if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] != "flt") {
+            like_repo = this.flatRepo;
+            like_converter = UserProfileConverter;
+        } else {
+            throw new TypeError("Only User likes User and User likes Flat possible")
+        }
+
+        // Get Profile and Match
+
+        await this.userRepo.getProfileById(profile_id).then((response) =>{
+            const profile = UserProfileConverter.convertDBEntryToProfile(response);
+        });
+        await like_repo.getProfileById(profile_id).then().then((response) => {
+           const liked_profile = like_converter.convertDBEntryToProfile(response);
+        });
+
 
         throw new Error("Not implemented")
     }

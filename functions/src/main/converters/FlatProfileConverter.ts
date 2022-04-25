@@ -1,10 +1,11 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
 
+
 export class FlatProfileConverter {
 
     // Dynamically converts a json body of a post user request to a userprofile object
-    static convertPostDto(json_body: any, uid: string): FlatProfile {
+    static convertPostDto(json_body: any): FlatProfile {
         let today = new Date();
         let dd = String(today.getDate()).padStart(2, '0');
         let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!

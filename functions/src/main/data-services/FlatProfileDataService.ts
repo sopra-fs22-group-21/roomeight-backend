@@ -30,7 +30,7 @@ export class FlatProfileDataService {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            let flat_to_add = FlatProfileConverter.convertPostDto(body, uid);
+            let flat_to_add = FlatProfileConverter.convertPostDto(body);
 
             flat_to_add.profileId = "flt#" + uuidv4();
             // After profile id is fetched from auth write flat into db

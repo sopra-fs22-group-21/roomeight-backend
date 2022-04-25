@@ -260,6 +260,6 @@ profile_app.get('/:profileId', async (req, res) => {
     res.status(200).send(result);
 });
 
-profile_app.post('/match', async (req, res) => {
+profile_app.post('/like', async (req, res) => {
     res.status(404).send();
 });
