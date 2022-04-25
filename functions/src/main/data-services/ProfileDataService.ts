@@ -2,7 +2,6 @@ import {ProfileRepository} from "../repository/ProfileRepository";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
-import {ProfileConverter} from "../converters/ProfileConverter";
 
 export class ProfileDataService {
 
@@ -18,20 +17,19 @@ export class ProfileDataService {
 
     async getProfileByIdFromRepo(profile_id: string): Promise<any> {
         let repo;
-        let converter;
         if(profile_id.split("#")[0] == "flt") {
             repo = this.flatRepo;
-            converter = new FlatProfileConverter();
         } else {
             repo = this.userRepo;
-            converter = new UserProfileConverter();
         }
         const db_entry = await repo.getProfileById(profile_id)
         // Convert references to actual profiles
-        const dto = converter.convertDBEntryToProfile(db_entry).toJson()
+        let dto: any;
 
         if (db_entry) {
             if(profile_id.split("#")[0] == "flt") {
+                dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
+
                 const reference_converter = new ReferenceController(this.userRepo);
                 await reference_converter.resolveProfileReferenceList(dto.matches)
                     .then((resolution) => {
@@ -45,6 +43,8 @@ export class ProfileDataService {
                     });
 
             } else {
+                dto = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson()
+
                 // Convert references to actual profiles
                 const reference_converter = new ReferenceController(this.userRepo);
                 await reference_converter.resolveProfileReferenceList(dto.matches)
