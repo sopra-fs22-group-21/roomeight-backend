@@ -1,18 +1,19 @@
 import {UserProfile} from "../data-model/UserProfile";
 import {Status} from "../data-model/Status";
 import {Gender} from "../data-model/Gender";
+import {ProfileConverter} from "./ProfileConverter";
 
-export class UserProfileConverter {
+
+export class UserProfileConverter implements ProfileConverter{
 
     // Dynamically converts a json body of a post user request to a userprofile object
-    static convertPostDto(json_body: any): UserProfile {
+    convertPostDto(json_body: any): UserProfile {
         let today = new Date();
         let dd = String(today.getDate()).padStart(2, '0');
         let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         let yyyy = today.getFullYear();
         let current_date = mm + '/' + dd + '/' + yyyy;
 
-        // Todo: Nullable dates
         // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.firstName, json_body.lastName, "", "", [],
                       "", [], new Date(current_date), Status.online, null,
@@ -56,7 +57,7 @@ export class UserProfileConverter {
     }
 
     // Dynamically converts DB entry to a valid UserProfile
-    static convertDBEntryToProfile(db_entry: any): UserProfile {
+    convertDBEntryToProfile(db_entry: any): UserProfile {
         try {
 
             return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography,

@@ -28,7 +28,7 @@ describe('ValidatorReport test', () => {
     };
 
     test('report should match the errormessage', () => {
-        let res = UserProfileConverter.convertPostDto(json_body);
+        let res = new UserProfileConverter().convertPostDto(json_body);
         // TODO: expect res to match predefined object
         expect(res).toBeDefined();
     })
