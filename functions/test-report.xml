@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ProfileDataservice.test.ts">
+    <testCase name="ProfileDataService Test 1 Test Valid GetById Request" duration="34"/>
+    <testCase name="ProfileDataService Test 2 Test Invalid GetById Request" duration="2"/>
+  </file>
+</testExecutions>
