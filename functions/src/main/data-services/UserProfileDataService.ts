@@ -9,6 +9,7 @@ import * as admin from 'firebase-admin';
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
 import {FlatRepository} from "../repository/FlatRepository";
+import {Like} from "../data-model/Like";
 
 export class UserProfileDataService {
 
@@ -124,43 +125,135 @@ export class UserProfileDataService {
         }
     }
 
-    async likeUser(profile_id: string, like_id: string): Promise<string> {
-        // Get Profile and Like
-        const profile_response = await this.user_repository.getProfileById(profile_id)
-            .catch((e) => {throw new Error("Profile not found")})
-        const profile = UserProfileConverter.convertDBEntryToProfile(profile_response)
+    async getProfilesFromRepo(): Promise<any> {
+        const db_entries = await this.user_repository.getProfiles();
 
-        const like_response = await this.user_repository.getProfileById(profile_id)
-            .catch((e) => {throw new Error("Liked Profile not found")});
-        const like = UserProfileConverter.convertDBEntryToProfile(like_response);
+        if (db_entries) {
+            let result: any[] = []
+            db_entries.map((entry: any) => {
+                result.push(UserProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
 
-        // Check if user is advertising a room and like is searching a room
-        if (profile.isAdvertisingRoom && like.isSearchingRoom) {
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository);
+            for (let i in result) {
+                await reference_converter.resolveProfileReferenceList(result[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(result[i].profileId, "matches", result[i].matches, resolution.unresolvedReferences);
+                        result[i].matches = resolution.result;
+                    });
+            }
+            return result;
 
         } else {
-            throw new Error("You can only like a User if isAdvertisingRoom is false or the user you liked is not searching")
+            throw new Error("Flat Profile not found!")
+        }
+    }
+
+    async likeUser(user_id: string, like_id: string): Promise<string> {
+        // Get Profile and Like
+        const user_response = await this.user_repository.getProfileById(user_id)
+            .catch((e) => {throw new Error("Profile not found")})
+        const user = UserProfileConverter.convertDBEntryToProfile(user_response)
+
+        const user_flat_response = await this.flat_repository.getProfileById(user.flatId)
+            .catch((e) => {throw new Error("The flat of the liking user could not be found. You can only like a user if you belong to a flat")});
+        const user_flat = FlatProfileConverter.convertDBEntryToProfile(user_flat_response);
+
+        const like_response = await this.user_repository.getProfileById(like_id)
+            .catch((e) => {throw new Error("Liked Profile not found")});
+        const liked_user = UserProfileConverter.convertDBEntryToProfile(like_response);
+
+        // Preconditions
+        if (!user.isAdvertisingRoom) {
+            throw new Error("You can only like a User if isAdvertisingRoom is true")
+        }
+        if (!liked_user.isSearchingRoom) {
+            throw new Error("You can only like a User which has set flag isSearchingRoom")
         }
 
-        throw new Error("Not implemented")
+        // Check if like of user already exists on flat
+        let is_liked = false;
+        let is_match = false;
+        let new_flat_likes = user_flat.likes;
+        let new_flat_matches = user_flat.matches;
+        for (let i in user_flat.likes) {
+            if (user_flat.likes[i].likedUser == liked_user.profileId) {
+                is_liked = true;
+                // Check if at min half of the roommates liked the user -> if yes: match
+                if ((user_flat.likes[i].likes.length + 1) >= (user_flat.numberOfRoommates/2)) {
+                    is_match = true;
+                    // Check if match already exists else push new matches
+                    if (user_flat.matches.indexOf(liked_user.profileId) == -1) {
+                        new_flat_matches.push(liked_user.profileId)
+                    }
+                }
+                // Push user id to likes
+                new_flat_likes[i].likes.push(user.profileId);
+                break;
+            }
+        }
+
+        // Create new like object and add it if none exists
+        if (!is_liked) {
+            new_flat_likes.push(new Like([user.profileId], liked_user.profileId));
+            if (user_flat.numberOfRoommates <= 2) {
+                is_match = true;
+                // Check if match already exists else push new matches
+                if (user_flat.matches.indexOf(liked_user.profileId) == -1) {
+                    new_flat_matches.push(liked_user.profileId)
+                }
+            }
+        }
+
+        // updates
+        let flat_update = {
+            likes: new_flat_likes,
+            matches: new_flat_matches
+        }
+
+        const new_viewes = user.viewed
+        new_viewes.push(liked_user.profileId);
+        const user_update = {
+            viewed: new_viewes
+        }
+
+        if (liked_user.likes.indexOf(user_flat.profileId) > -1 && user_flat.matches.indexOf(liked_user.profileId) == -1 ) {
+            // If liked user already liked flat and more than half of your flat liked the user and match does not already exist-> set match
+            if (is_match) {
+                // Update liked user matches
+                let new_liked_user_matches = liked_user.matches;
+                new_liked_user_matches.push(user_flat.profileId);
+                const liked_user_update = {
+                    matches: new_liked_user_matches
+                }
+                await this.user_repository.updateProfile(liked_user_update, liked_user.profileId);
+            }
+        }
+
+        await this.user_repository.updateProfile(user_update, user.profileId);
+        await this.flat_repository.updateProfile(flat_update, user_flat.profileId);
+
+        return "Successfully liked User " + liked_user.profileId;
     }
 
     async likeFlat(profile_id: string, like_id: string): Promise<string> {
         // Get Profile and Like
 
-        const profile_response = await this.user_repository.getProfileById(profile_id)
+        const user_response = await this.user_repository.getProfileById(profile_id)
             .catch((e) => {throw new Error("Profile not found")})
-        const profile = UserProfileConverter.convertDBEntryToProfile(profile_response)
+        const user = UserProfileConverter.convertDBEntryToProfile(user_response)
 
-        const like_response = await this.flat_repository.getProfileById(profile_id)
+        const like_response = await this.flat_repository.getProfileById(like_id)
             .catch((e) => {throw new Error("Liked Profile not found")});
-
         const like = FlatProfileConverter.convertDBEntryToProfile(like_response);
+
         let profile_is_liked = false;
             // Check if user is is searching room;
-            if (profile.isSearchingRoom) {
+            if (user.isSearchingRoom) {
                 // Check if flat liked the profile
                 for (let i in like.matches) {
-                    if (like.likes[i].likedUser == profile.profileId) {
+                    if (like.likes[i].likedUser == user.profileId) {
                         if (like.likes[i].likes.length >= (like.numberOfRoommates/2)) {
                             profile_is_liked = true;
                         }
@@ -169,38 +262,43 @@ export class UserProfileDataService {
                 }
 
                 // Update User Likes
-                const profile_likes = profile.likes;
+                const profile_likes = user.likes;
                 profile_likes.push(like.profileId);
+                const profile_viewed = user.viewed;
+                profile_viewed.push(like.profileId);
+                let user_update;
 
                 // Set match if both profiles liked each other else only set own like
                 if (profile_is_liked) {
                     // Update Flat
                     const flat_matches = like.matches;
-                    flat_matches.push(profile.profileId);
+                    flat_matches.push(user.profileId);
                     const flat_update = {
                         matches: flat_matches
                     }
-                    this.flat_repository.updateProfile(flat_update, like.profileId);
+                    await this.flat_repository.updateProfile(flat_update, like.profileId);
 
-                    // Update User
-                    const profile_matches = profile.matches;
+                    // Prepare user update
+                    const profile_matches = user.matches;
                     profile_matches.push(like.profileId);
-                    const user_update = {
+                    user_update = {
                         matches: profile_matches,
-                        likes: profile_likes
+                        likes: profile_likes,
+                        viewed: profile_viewed
                     }
-                    await this.user_repository.updateProfile(user_update, profile.profileId);
                 } else {
                     // If User is not yet liked by flat -> only set like on user profile
-                    const user_update = {
-                        likes: profile_likes
+                    user_update = {
+                        likes: profile_likes,
+                        viewed: profile_viewed
                     }
-                    await this.user_repository.updateProfile(user_update, profile.profileId);
                 }
-            } else {
-                throw new Error("You cannot like a flat if isSearchingRoom is false")
-            }
+                // Update user
+                await this.user_repository.updateProfile(user_update, user.profileId);
+                return "Successfully liked flat " + like.profileId;
 
-        throw new Error("Not implemented")
+            } else {
+                throw new Error("You cannot like a flat if your flag isSearchingRoom is false")
+            }
     }
 }
