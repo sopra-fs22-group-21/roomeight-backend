@@ -17,12 +17,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/userprofiles",
+							"raw": "{{URL_DEV}}/userprofiles/XEb3g8IulAbQjkqnET3kDoL3eiq2",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
-								"userprofiles"
+								"userprofiles",
+								"XEb3g8IulAbQjkqnET3kDoL3eiq2"
 							]
 						}
 					},
@@ -88,7 +89,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Lars\",\r\n  \"lastName\": \"Bösch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": \"test\",\r\n  \"pictureReference\": \"test\",\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars@uzh.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": \"true\",\r\n  \"isAdvertisingRoom\": \"false\",\r\n  \"moveInDate\": \"1999-06-22\",\r\n  \"moveOutDate\": \"1999-06-22\"\r\n}",
+							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Lars\",\r\n  \"lastName\": \"Bösch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": \"test\",\r\n  \"pictureReference\": \"test\",\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars.boesch@uzh.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": \"true\",\r\n  \"isAdvertisingRoom\": \"false\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -183,12 +184,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/profiles",
+							"raw": "{{URL_DEV}}/flatprofiles/flt$d74a68d5-17a3-46b3-8d2f-8826f141f969",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
-								"profiles"
+								"flatprofiles",
+								"flt$d74a68d5-17a3-46b3-8d2f-8826f141f969"
 							]
 						}
 					},
@@ -211,7 +213,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"langethal\",\n    \"address\": {\"street\": \"freiestrasse\", \"city\": \"zuerich\", \"province\": \"zuerich\", \"postalCode\": \"8032\", \"country\": \"switzerland\"}\n}",
+							"raw": "{\n    \"name\": \"fs221\",\n    \"address\": \"freiestrasse 221, 8032 Zuerich\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -246,15 +248,51 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/flatprofiles/flt#fede981b-6866-452e-94f7-300a1678d7cf",
+							"raw": "{{URL_DEV}}/flatprofiles/flt$fd4bbdeb-3fa2-486e-9ec3-efbc138fc180",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"flatprofiles",
-								"flt"
+								"flt$fd4bbdeb-3fa2-486e-9ec3-efbc138fc180"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flatprofiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"christoph\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_DEV}}/flatprofiles/flt$d74a68d5-17a3-46b3-8d2f-8826f141f969",
+							"host": [
+								"{{URL_DEV}}"
 							],
-							"hash": "fede981b-6866-452e-94f7-300a1678d7cf"
+							"path": [
+								"flatprofiles",
+								"flt$d74a68d5-17a3-46b3-8d2f-8826f141f969"
+							]
 						}
 					},
 					"response": []

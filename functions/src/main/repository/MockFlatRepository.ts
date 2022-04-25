@@ -16,6 +16,10 @@ export class ValidMockFlatRepository implements FlatRepository {
         throw new Error("Method not implemented.");
     }
 
+    getProfiles(): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
+
     deleteProfile(profile_id: string): Promise<string> {
         return Promise.resolve("");
     }
@@ -41,6 +45,10 @@ export class InvalidMockFlatRepository implements FlatRepository {
     getProfileById(profile_id:string): Promise<any> {
         console.log("Entered Mock invalid getProfileById");
         return Promise.resolve(undefined);
+    }
+
+    getProfiles(): Promise<any> {
+        throw new Error("Method not implemented.");
     }
 
     addProfile(flat_to_add: FlatProfile): Promise<string> {

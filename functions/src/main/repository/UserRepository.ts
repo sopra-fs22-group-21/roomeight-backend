@@ -16,10 +16,9 @@ export class UserRepository implements ProfileRepository {
 
     // Firestore User Operations
 
-    getProfileById(profile_id:string): Promise<string> {
+    getProfileById(profile_id:string): Promise<any> {
         return this.database.collection(this.collection_name).doc(profile_id).get()
             .then((response: any) => {
-                console.log(response.data())
                 return response.data();
             })
     }
