@@ -61,7 +61,7 @@ export class UserProfileConverter{
 
             return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography,
                 db_entry.tags, db_entry.pictureReference, db_entry.matches, db_entry.creationDate.toDate(),
-                db_entry.onlineStatus, db_entry.moveInDate.toDate(), db_entry.moveOutDate.toDate(),
+                db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null, db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null,
                 db_entry.birthday.toDate(), db_entry.email, db_entry.phoneNumber, db_entry.gender, db_entry.isSearchingRoom,
                 db_entry.isAdvertisingRoom, db_entry.viewed, db_entry.flatId, db_entry.likes, db_entry.profileId)
 

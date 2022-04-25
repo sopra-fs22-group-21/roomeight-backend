@@ -16,6 +16,13 @@ export class FlatRepository implements ProfileRepository {
         this.collection_name = "flat-profiles"
     }
 
+    getProfiles(): Promise<any> {
+        return this.database.collection(this.collection_name).get()
+            .then((response: any) => {
+                return response.docs.map((doc: any) => doc.data());
+            });
+    }
+
     getProfileById(profile_id:string): Promise<any> {
         return this.database.collection(this.collection_name).doc(profile_id).get()
             .then((response: any) => {
