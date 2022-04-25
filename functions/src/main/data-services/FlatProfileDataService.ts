@@ -7,15 +7,18 @@ import {v4 as uuidv4} from "uuid";
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
+import {ProfileDataService} from "./ProfileDataService";
 
 export class FlatProfileDataService {
 
     flat_repository: FlatRepository;
     user_repository: ProfileRepository;
+    profileDataService: ProfileDataService;
 
     constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
         this.user_repository = user_repo;
+        this.profileDataService = new ProfileDataService(user_repo, flat_repo);
         initializeApp(config);
     }
 
@@ -29,10 +32,10 @@ export class FlatProfileDataService {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            body["user_uid"] = user_uid;
+            body.user_uid = user_uid;
             let flat_to_add = FlatProfileConverter.convertPostDto(body);
 
-            flat_to_add.profileId = "flt#" + uuidv4();
+            flat_to_add.profileId = "flt$" + uuidv4();
             // After profile id is fetched from auth write flat into db
             const repo_response = await this.flat_repository.addProfile(flat_to_add)
                 .catch((repo_error) => {
@@ -65,16 +68,37 @@ export class FlatProfileDataService {
     }
 
 
-    async deleteFlat(profileId: string): Promise<string> {
-
+    async deleteFlat(profileId: string, user_uid: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
-        return (this.flat_repository.deleteProfile(profileId)
-            .then((response) => {
-                return response
-            })
-            .catch((error) => {
-                throw new Error('Error: User was deleted from auth but not from firestore: ' + error.message);
-            }))
+        return this.flat_repository.getProfileById(profileId)
+            .then(
+                (flat_toDelete) => {
+                    if (!flat_toDelete) {
+                        throw new Error('Flat Profile not found')
+                    }
+                    let roomMates = flat_toDelete.roomMates
+                    if (roomMates.includes(user_uid)) {
+                        // If uid of token matches the profileId continue with request processing
+                        return (this.flat_repository.deleteProfile(profileId)
+                            .then((response) => {
+                                return response
+                            })
+                            .catch((error) => {
+                                throw new Error('Error: Flat was not deleted from firestore: ' + error.message);
+                            }))
+                    } else {
+                        // Else return NotAuthorized-Exception
+                        throw new Error("User is not authorized to delete the selected flat!")
+                    }
+                }
+            )
+            .catch(
+                (e) => {
+                    functions.logger.debug(e, {structuredData: true})
+                    throw new Error(e.message);
+                    // res.status(404).send(e.message);
+                }
+            )
     }
 
 }

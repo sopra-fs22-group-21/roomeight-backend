@@ -205,39 +205,21 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
             .verifyIdToken(idToken)
             .then((decodedToken) => {
                 functions.logger.debug("Started Flat Delete Request", {structuredData: true});
-                functions.logger.log(req.params.profileId);
-                // ToDo verify if user is part of flat
-                const uid = decodedToken.uid;
-                profileDataService.getProfileByIdFromRepo(profile_id)
+                // ToDo get profile id via req.params
+                const user_uid = decodedToken.user_id;
+                flatProfileDataService.deleteFlat(profile_id, user_uid)
                     .then(
-                        (flat_toDelete) => {
-                            if (flat_toDelete.roomMates.indexOf(uid) > -1) {
-                                // If uid of token matches the profileId continue with request processing
-                                flatProfileDataService.deleteFlat(profile_id)
-                                    .then(
-                                        (data_service_response) => {
-                                            res.set('Access-Control-Allow-Origin', '*')
-                                            res.status(200).send(data_service_response);
-                                        }
-                                    )
-                                    .catch(
-                                        (e) => {
-                                            functions.logger.debug(e, {structuredData: true})
-                                            res.status(400).send(e.message);
-                                        }
-                                    );
-                            } else {
-                                // Else return NotAuthorized-Exception
-                                res.status(403).send("User is not authorized to delete the selected flat!");
-                            }
+                        (data_service_response) => {
+                            res.set('Access-Control-Allow-Origin', '*')
+                            res.status(200).send(data_service_response);
                         }
                     )
                     .catch(
                         (e) => {
-                            functions.logger.debug(e, {structuredData: true})
-                            res.status(404).send(e.message);
+                            // functions.logger.debug(e, {structuredData: true})
+                            res.status(400).send(e.message);
                         }
-                    )
+                    );
             })
             .catch((error) => {
                 res.status(401).send("Authorization failed: " + error);

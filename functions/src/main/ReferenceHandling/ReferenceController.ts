@@ -2,7 +2,6 @@ import {ProfileRepository} from "../repository/ProfileRepository";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
 import {Profile} from "../data-model/Profile";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
-import * as functions from "firebase-functions";
 
 
 /**
@@ -95,13 +94,11 @@ export class ReferenceController {
     **/
     cleanUpReferencesList(profile_id: string, field: string, current_references: string[], outdated_references: string[]): Promise<string> {
         const updated_reference_list = current_references.filter(reference => outdated_references.indexOf(reference))
-        functions.logger.info(updated_reference_list, {structuredData: true});
         let update: any = {}
         update[field] = updated_reference_list;
         return this.resolvingRepository.updateProfile(update, profile_id)
             .then(() => {return "Successfully removed outdated references"})
             .catch((e) => {
-                functions.logger.info(e, {structuredData: true});
                 return "Could not update References of profile " + profile_id + " due to: " + e.message;
             });
     }
