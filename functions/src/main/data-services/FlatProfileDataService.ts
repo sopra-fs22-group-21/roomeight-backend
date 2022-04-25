@@ -7,18 +7,15 @@ import {v4 as uuidv4} from "uuid";
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
-import {ProfileDataService} from "./ProfileDataService";
 
 export class FlatProfileDataService {
 
     flat_repository: FlatRepository;
     user_repository: ProfileRepository;
-    profileDataService: ProfileDataService;
 
     constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
         this.user_repository = user_repo;
-        this.profileDataService = new ProfileDataService(user_repo, flat_repo);
         initializeApp(config);
     }
 
@@ -127,4 +124,33 @@ export class FlatProfileDataService {
         }
     }
 
+    async getProfilesFromRepo(): Promise<any> {
+        const db_entries = await this.flat_repository.getProfiles();
+
+        if (db_entries) {
+            let result: any[] = []
+            db_entries.map((entry: any) => {
+                result.push(FlatProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
+
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository);
+            for (let i in result) {
+                await reference_converter.resolveProfileReferenceList(result[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(result[i].profileId, "matches", result[i].matches, resolution.unresolvedReferences);
+                        result[i].matches = resolution.result;
+                    });
+                await reference_converter.resolveProfileReferenceList(result[i].roomMates)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(result[i].profileId, "roomMates", result[i].roomMates, resolution.unresolvedReferences);
+                        result[i].roomMates = resolution.result;
+                    });
+            }
+            return result;
+
+        } else {
+            throw new Error("Flat Profile not found!")
+        }
+    }
 }

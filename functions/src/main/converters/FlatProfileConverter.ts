@@ -62,12 +62,12 @@ export class FlatProfileConverter{
     static convertDBEntryToProfile(db_entry: any): FlatProfile {
         try {
             return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReference,
-                db_entry.likes, db_entry.creationDate, db_entry.onlineStatus, db_entry.moveInDate, db_entry.moveOutDate,
-                db_entry.address, db_entry.rent, db_entry.permanent, db_entry.numberOfRoommates, db_entry.roomSize,
-                db_entry.numberOfBaths, db_entry.roomMates, db_entry.profileId, db_entry.matches);
+                db_entry.likes, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
+                db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent, db_entry.permanent,
+                db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths, db_entry.roomMates, db_entry.profileId, db_entry.matches);
 
         } catch (e) {
-            throw new TypeError("DB entry does not have expected format")
+            throw new TypeError("DB entry does not have expected format" + e)
         }
     }
 }
