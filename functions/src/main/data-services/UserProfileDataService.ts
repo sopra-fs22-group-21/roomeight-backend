@@ -151,10 +151,16 @@ export class UserProfileDataService {
     }
 
     async likeUser(user_id: string, like_id: string): Promise<string> {
+
         // Get Profile and Like
         const user_response = await this.user_repository.getProfileById(user_id)
             .catch((e) => {throw new Error("Profile not found")})
         const user = UserProfileConverter.convertDBEntryToProfile(user_response)
+
+        // Check if flat id is set
+        if(user.flatId == "") {
+            throw new Error("Flat id of liking user is not set. You can only like a user if you belong to a flat")
+        }
 
         const user_flat_response = await this.flat_repository.getProfileById(user.flatId)
             .catch((e) => {throw new Error("The flat of the liking user could not be found. You can only like a user if you belong to a flat")});
@@ -254,7 +260,7 @@ export class UserProfileDataService {
         }
 
         let profile_is_liked = false;
-            // Check if user is is searching room;
+            // Check if user is searching room;
             if (user.isSearchingRoom) {
                 // Check if flat liked the profile
                 for (let i in like.matches) {

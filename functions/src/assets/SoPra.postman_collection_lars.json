@@ -9,7 +9,7 @@
 			"name": "Userprofiles",
 			"item": [
 				{
-					"name": "userprofiles",
+					"name": "userprofiles/:id",
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -27,50 +27,7 @@
 							]
 						}
 					},
-					"response": [
-						{
-							"name": "userprofiles/jordi",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL_DEV}}/userprofiles/mU23TeGPlobCllASeLnf3koCE5t2",
-									"host": [
-										"{{URL_DEV}}"
-									],
-									"path": [
-										"userprofiles",
-										"mU23TeGPlobCllASeLnf3koCE5t2"
-									]
-								}
-							},
-							"_postman_previewlanguage": "json",
-							"header": null,
-							"cookie": [],
-							"body": "{\n    \"firstName\": \"Jordi\",\n    \"lastName\": \"Küffer\",\n    \"isComplete\": true,\n    \"description\": \"looking for a room in a shared flat with cool peeps. Match me if you're cool\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"STUDENT\",\n        \"WINE\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/id/237/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\"\n    ],\n    \"creationDate\": \"2022-04-19\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"2000-01-07\",\n    \"email\": \"remixd12@gmail.com\",\n    \"phoneNumber\": \"0799240740\",\n    \"gender\": \"Male\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-20\",\n    \"moveOutDate\": \"\"\n}"
-						},
-						{
-							"name": "userprofiles/luisa",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL_DEV}}/userprofiles/e8nbijO28UTIQz1kdHikuZJBQTl2 ",
-									"host": [
-										"{{URL_DEV}}"
-									],
-									"path": [
-										"userprofiles",
-										"e8nbijO28UTIQz1kdHikuZJBQTl2 "
-									]
-								}
-							},
-							"_postman_previewlanguage": "json",
-							"header": null,
-							"cookie": [],
-							"body": "{\n    \"firstName\": \"Luisa\",\n    \"lastName\": \"Stückelberger\",\n    \"isComplete\": true,\n    \"description\": \"Im currently homeless looking for a room in the zurich area. 22 and also quite funny\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"SPORTS\",\n        \"INSTRUMENTS\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#823rsadhfae323\"\n    ],\n    \"creationDate\": \"2022-04-20\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"1999-04-15\",\n    \"email\": \"luisa@test.com\",\n    \"phoneNumber\": \"0764335622\",\n    \"gender\": \"Female\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-21\",\n    \"moveOutDate\": \"\"\n}"
-						}
-					]
+					"response": []
 				},
 				{
 					"name": "userprofiles",
@@ -89,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Lars\",\r\n  \"lastName\": \"Bösch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": \"test\",\r\n  \"pictureReference\": \"test\",\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars.boesch@uzh.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": \"true\",\r\n  \"isAdvertisingRoom\": \"false\"\r\n}",
+							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Lars\",\r\n  \"lastName\": \"Bösch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": \"test\",\r\n  \"pictureReference\": \"test\",\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars@uzh.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": true,\r\n  \"isAdvertisingRoom\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -172,6 +129,81 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "userprofiles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "likeFlat",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles/likeFlat/flt$af796d20-54eb-4e20-8734-01e6cbcaa91e",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles",
+								"likeFlat",
+								"flt$af796d20-54eb-4e20-8734-01e6cbcaa91e"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "likeUser",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles/likeUser/CEajXj4fhIQM9KZLpJEPliJVMOp2",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles",
+								"likeUser",
+								"CEajXj4fhIQM9KZLpJEPliJVMOp2"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -179,7 +211,7 @@
 			"name": "Flatprofiles",
 			"item": [
 				{
-					"name": "flatprofiles",
+					"name": "flatprofiles/:id",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -296,49 +328,23 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Discover",
-			"item": [
+				},
 				{
-					"name": "discover",
+					"name": "userprofiles",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/discover",
+							"raw": "{{URL_DEV}}/flatprofiles",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
-								"discover"
+								"flatprofiles"
 							]
 						}
 					},
-					"response": [
-						{
-							"name": "discover",
-							"originalRequest": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "{{URL_DEV}}/discover",
-									"host": [
-										"{{URL_DEV}}"
-									],
-									"path": [
-										"discover"
-									]
-								}
-							},
-							"_postman_previewlanguage": "json",
-							"header": null,
-							"cookie": [],
-							"body": "[\n   {\n    \"firstName\": \"Jordi\",\n    \"lastName\": \"Küffer\",\n    \"isComplete\": true,\n    \"description\": \"looking for a room in a shared flat with cool peeps. Match me if you're cool\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"STUDENT\",\n        \"WINE\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/id/1011/200/300\",\n        \"https://picsum.photos/id/237/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\"\n    ],\n    \"creationDate\": \"2022-04-19\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"2000-01-07\",\n    \"email\": \"remixd12@gmail.com\",\n    \"phoneNumber\": \"0799240740\",\n    \"gender\": \"Male\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-20\",\n    \"moveOutDate\": \"\"\n},\n{\n    \"firstName\": \"Luisa\",\n    \"lastName\": \"Stückelberger\",\n    \"isComplete\": true,\n    \"description\": \"Im currently homeless looking for a room in the zurich area. 22 and also quite funny\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"SPORTS\",\n        \"INSTRUMENTS\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#823rsadhfae323\"\n    ],\n    \"creationDate\": \"2022-04-20\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"1999-04-15\",\n    \"email\": \"luisa@test.com\",\n    \"phoneNumber\": \"0764335622\",\n    \"gender\": \"Female\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-21\",\n    \"moveOutDate\": \"\"\n}\n]"
-						}
-					]
+					"response": []
 				}
 			]
 		},
