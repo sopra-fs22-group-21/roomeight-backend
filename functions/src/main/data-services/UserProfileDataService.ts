@@ -2,21 +2,19 @@ import {UserRepository} from "../repository/UserRepository";
 import {createUserWithEmailAndPassword, deleteUser, getAuth} from "firebase/auth";
 import {UserValidator} from "../validation/UserValidator";
 import * as functions from "firebase-functions";
-import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 import * as admin from 'firebase-admin';
+import {UserProfileConverter} from "../converters/UserProfileConverter";
 
 export class UserProfileDataService {
 
     private repository: UserRepository;
-    private user_converter: UserProfileConverter;
     private app: any;
 
     constructor(repo: UserRepository, app: any) {
         this.repository = repo;
-        this.user_converter = new UserProfileConverter();
         this.app = app;
         initializeApp(config);
     }
@@ -33,7 +31,7 @@ export class UserProfileDataService {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            let user_to_add = this.user_converter.convertPostDto(body);
+            let user_to_add = UserProfileConverter.convertPostDto(body);
 
             // As soon as the user object is posted into the database precede with auth user profile creation
             const userCredential = await createUserWithEmailAndPassword(auth, user_to_add.email, body.password)

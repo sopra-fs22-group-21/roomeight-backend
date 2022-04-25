@@ -41,9 +41,9 @@ export class ReferenceController {
         // If the referenced profile exists convert it to a Profile Entity
         if (db_entry) {
             if(reference_id.split("#")[0] == "flt") {
-                resolved_reference = new FlatProfileConverter().convertDBEntryToProfile(db_entry).toJson();
+                resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             } else {
-                resolved_reference = new UserProfileConverter().convertDBEntryToProfile(db_entry).toJson();
+                resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             }
         } else {
             // If the referenced profile does not exist write an empty dict into the field and mark the reference as unresolved
@@ -73,9 +73,9 @@ export class ReferenceController {
             db_entry = await this.resolvingRepository.getProfileById(reference_id_list[key]);
             if (db_entry) {
                 if(reference_id_list[key].split("#")[0] == "flt") {
-                    temp_resolved_reference = new FlatProfileConverter().convertDBEntryToProfile(db_entry);
+                    temp_resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry);
                 } else {
-                    temp_resolved_reference = new UserProfileConverter().convertDBEntryToProfile(db_entry);
+                    temp_resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry);
                 }
                 profile_list.push(temp_resolved_reference.toJson());
             } else {
