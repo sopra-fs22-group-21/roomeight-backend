@@ -19,18 +19,18 @@ export class FlatProfileDataService {
         initializeApp(config);
     }
 
-    async addFlatProfile(body: any, uid: string): Promise<string> {
+    async addFlatProfile(body: any, user_uid: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
 
-
-        // Validate user which should be added
-        let validation_results = FlatValidator.validatePostUser(body);
+        // Validate flat which should be added
+        let validation_results = FlatValidator.validatePostFlat(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            let flat_to_add = FlatProfileConverter.convertPostDto(body);
+            body["user_uid"] = user_uid;
+            let flat_to_add = new FlatProfileConverter().convertPostDto(body);
 
             flat_to_add.profileId = "flt#" + uuidv4();
             // After profile id is fetched from auth write flat into db

@@ -31,7 +31,7 @@ export class UserProfileDataService {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            let user_to_add = UserProfileConverter.convertPostDto(body);
+            let user_to_add = new UserProfileConverter().convertPostDto(body);
 
             // As soon as the user object is posted into the database precede with auth user profile creation
             const userCredential = await createUserWithEmailAndPassword(auth, user_to_add.email, body.password)
