@@ -254,6 +254,11 @@ export class UserProfileDataService {
             .catch((e) => {throw new Error("Liked Profile not found")});
         const like = FlatProfileConverter.convertDBEntryToProfile(like_response);
 
+        // Precondition
+        if (user.likes.indexOf(like.profileId) > -1) {
+            throw new Error("Flat already liked");
+        }
+
         let profile_is_liked = false;
             // Check if user is searching room;
             if (user.isSearchingRoom) {
