@@ -23,8 +23,8 @@ describe('Validate PostUser', () => {
     "email": "test@test.ch",
     "phoneNumber": "+41795233087",
     "gender": "MALE",
-    "isSearchingRoom": "true",
-    "isAdvertisingRoom": "false",
+    "isSearchingRoom": true,
+    "isAdvertisingRoom": false,
     "moveInDate": "1999-06-22",
     "moveOutDate": "1999-06-22"
   }
@@ -80,8 +80,8 @@ describe('Validate PostUser', () => {
     "email": "test@test.ch",
     "phoneNumber": "+41795233087",
     "gender": "MALE",
-    "isSearchingRoom": "true",
-    "isAdvertisingRoom": "false",
+    "isSearchingRoom": true,
+    "isAdvertisingRoom": false,
     "moveInDate": "1999-06-23",
     "moveOutDate": "1999-06-22"
   }
@@ -161,8 +161,8 @@ describe('Validate PatchUser', () => {
     "email": "test@test.ch",
     "phoneNumber": "+41795233087",
     "gender": "MALE",
-    "isSearchingRoom": "true",
-    "isAdvertisingRoom": "false",
+    "isSearchingRoom": true,
+    "isAdvertisingRoom": false,
     "moveInDate": "1999-06-22",
     "moveOutDate": "1999-06-22",
     "flatId": "18-921-981"
