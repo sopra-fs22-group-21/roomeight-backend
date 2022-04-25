@@ -205,9 +205,8 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
             .verifyIdToken(idToken)
             .then((decodedToken) => {
                 functions.logger.debug("Started Flat Delete Request", {structuredData: true});
-                functions.logger.log(req.params.profileId);
-                // ToDo verify if user is part of flat
-                const user_uid = decodedToken.uid;
+                // ToDo get profile id via req.params
+                const user_uid = decodedToken.user_id;
                 flatProfileDataService.deleteFlat(profile_id, user_uid)
                     .then(
                         (data_service_response) => {
@@ -217,7 +216,7 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
                     )
                     .catch(
                         (e) => {
-                            functions.logger.debug(e, {structuredData: true})
+                            // functions.logger.debug(e, {structuredData: true})
                             res.status(400).send(e.message);
                         }
                     );
