@@ -28,7 +28,7 @@ export class FlatProfile implements Profile {
     matches: string[];
 
     constructor(name: string, description: string, biography: string, tags: Tag[], pictureReference: string,
-                likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: Date, moveOutDate: Date,
+                likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: any, moveOutDate: any,
                 address: string, rent: Number, permanent: boolean, numberOfRoommates: number, roomSize: number,
                 numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[]) {
         this.name = name;

@@ -13,7 +13,6 @@ export class ProfileDataService {
         this.flatRepo = flat_repo;
     }
 
-    // Todo: Clean up unresolved references
     async getProfileByIdFromRepo(profile_id: string): Promise<string> {
         let repo;
         if(profile_id.split("#")[0] == "flt") {
@@ -58,5 +57,27 @@ export class ProfileDataService {
         } else {
             throw new Error("Profile not found!")
         }
+    }
+
+    async matchProfile(profile_id: string, like_id: string): Promise<string> {
+        // Define repos for requests
+        // let profile_repo: ProfileRepository;
+        // let match_repo: ProfileRepository;
+        // if (profile_id.split("#")[0] == "flt" && like_id.split("#")[0] != "flt") {
+        //     profile_repo = this.flatRepo;
+        //     match_repo = this.userRepo;
+        // } else if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] == "flt") {
+        //     profile_repo = this.userRepo;
+        //     match_repo = this.flatRepo;
+        // } else {
+        //     throw new TypeError("You can only match a profile with a different Typ and both profiles must have type User or Flat" +
+        //                          "e.g. a User Profile can only match a Flat Profile")
+        // }
+        //
+        // // Get Profile and Match
+        // const profile = await profile_repo.getProfileById(profile_id);
+        // const match = await match_repo.getProfileById(profile_id);
+
+        throw new Error("Not implemented")
     }
 }

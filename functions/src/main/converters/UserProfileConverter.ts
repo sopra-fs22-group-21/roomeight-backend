@@ -46,10 +46,10 @@ export class UserProfileConverter {
             user.moveOutDate = new Date(Date.parse(json_body.moveOutDate));
         }
         if (json_body.hasOwnProperty("isSearchingRoom")) {
-            user.isSearchingRoom = json_body.isSearchingRoom == "True";
+            user.isSearchingRoom = json_body.isSearchingRoom;
         }
         if (json_body.hasOwnProperty("isAdvertisingRoom")) {
-            user.isAdvertisingRoom = json_body.isAdvertisingRoom == "True";
+            user.isAdvertisingRoom = json_body.isAdvertisingRoom;
         }
 
         return user;
@@ -59,7 +59,11 @@ export class UserProfileConverter {
     static convertDBEntryToProfile(db_entry: any): UserProfile {
         try {
 
-            return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReference, db_entry.matches, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate.toDate(), db_entry.moveOutDate.toDate(), db_entry.birthday.toDate(), db_entry.email, db_entry.phoneNumber, db_entry.gender, db_entry.isSearchingRoom, db_entry.isAdvertisingRoom, db_entry.viewed, db_entry.flatId, db_entry.likes, db_entry.profileId)
+            return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography,
+                db_entry.tags, db_entry.pictureReference, db_entry.matches, db_entry.creationDate.toDate(),
+                db_entry.onlineStatus, db_entry.moveInDate.toDate(), db_entry.moveOutDate.toDate(),
+                db_entry.birthday.toDate(), db_entry.email, db_entry.phoneNumber, db_entry.gender, db_entry.isSearchingRoom,
+                db_entry.isAdvertisingRoom, db_entry.viewed, db_entry.flatId, db_entry.likes, db_entry.profileId)
 
         } catch (e) {
             throw new TypeError("DB entry does not have expected format: " + e)
