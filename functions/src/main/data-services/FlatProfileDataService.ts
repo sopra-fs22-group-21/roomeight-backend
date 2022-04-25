@@ -101,4 +101,30 @@ export class FlatProfileDataService {
             )
     }
 
+    async getProfileByIdFromRepo(profile_id: string): Promise<any> {
+        const db_entry = await this.flat_repository.getProfileById(profile_id)
+        // Convert references to actual profiles
+
+        if (db_entry) {
+            const dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
+
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository);
+            await reference_converter.resolveProfileReferenceList(dto.matches)
+                .then((resolution) => {
+                    reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
+                    dto.matches = resolution.result;
+                });
+            await reference_converter.resolveProfileReferenceList(dto.roomMates)
+                .then((resolution) => {
+                    reference_converter.cleanUpReferencesList(profile_id, "roomMates", dto.roomMates, resolution.unresolvedReferences);
+                    dto.roomMates = resolution.result;
+                });
+            return dto;
+
+        } else {
+            throw new Error("Flat Profile not found!")
+        }
+    }
+
 }

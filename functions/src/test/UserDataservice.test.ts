@@ -1,5 +1,6 @@
 import {UserProfileDataService} from "../main/data-services/UserProfileDataService";
 import {InvalidMockUserRepository, ValidMockUserRepository} from "../main/repository/MockUserRepository";
+import {InvalidMockFlatRepository, ValidMockFlatRepository} from "../main/repository/MockFlatRepository";
 
 
 // Declaring mocks
@@ -154,8 +155,9 @@ describe("UserProfileDataService Test", () => {
             flatId: ""
         }
 
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody()).then(
             (response) => {
@@ -176,8 +178,9 @@ describe("UserProfileDataService Test", () => {
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
 
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.addUserProfile(invalid_input)
             .then(
@@ -196,8 +199,9 @@ describe("UserProfileDataService Test", () => {
     test('3 Test UserAlreadyExists Error Add UserProfile Request', () => {
         const expected_response = "Firebase: Error (auth/email-already-in-use)."
 
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -218,8 +222,9 @@ describe("UserProfileDataService Test", () => {
     test('4 Test Cannot access Repo Add UserProfile Request', async () =>  {
         const expected_response = "Could not post user due to: Could not post User"
 
-        const repo = new InvalidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -240,8 +245,9 @@ describe("UserProfileDataService Test", () => {
     test('5 Test Valid Patch  UserProfile Request', () => {
         const expected_response = "Successfully updated user 123"
 
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123").then(
             (response) => {
@@ -263,8 +269,9 @@ describe("UserProfileDataService Test", () => {
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
 
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.updateUser(invalid_input, "123")
             .then(
@@ -283,8 +290,9 @@ describe("UserProfileDataService Test", () => {
     test('7 Test Cannot access Repo Patch UserProfile Request', async () =>  {
         const expected_response = "Could not update User"
 
-        const repo = new InvalidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123")
             .then(
@@ -305,8 +313,9 @@ describe("UserProfileDataService Test", () => {
     test('8 Test Valid Delete UserProfile Request', () => {
         const expected_response = "Successfully deleted user 123"
 
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.deleteUser("123").then(
             (response) => {
@@ -318,8 +327,9 @@ describe("UserProfileDataService Test", () => {
 
     test('9 Test Cannot access Auth Delete UserProfile Request', async () =>  {
         const expected_response = "Could not delete auth User"
-        const repo = new ValidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.deleteUser("123")
             .then(
@@ -338,8 +348,9 @@ describe("UserProfileDataService Test", () => {
     test('10 Test Cannot access Repo Delete UserProfile Request', async () =>  {
         const expected_response = "Error: User was deleted from auth but not from firestore: Could not delete User"
 
-        const repo = new InvalidMockUserRepository();
-        const ds = new UserProfileDataService(repo, jest.fn());
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.deleteUser("123")
             .then(
@@ -353,6 +364,55 @@ describe("UserProfileDataService Test", () => {
                     expect(error).toEqual(new Error(expected_response));
                 }
             )
+    });
+
+    // GetById Tests
+
+    test('1 Test Valid GetById Request', () => {
+        const expected_response = {
+            profileId: '',
+            firstName: 'Mock first_name',
+            lastName: 'Mock last_name',
+            description: '',
+            biography: '',
+            tags: [],
+            pictureReference: '',
+            matches: [],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: 'ONLINE',
+            birthday: "1970-01-01T00:00:00.000Z",
+            email: 'test@test.com',
+            phoneNumber: '0795556677',
+            gender: 'NOT SET',
+            isSearchingRoom: false,
+            isAdvertisingRoom: false,
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate:  "1970-01-01T00:00:00.000Z",
+            flatId: ''
+        };
+        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+
+        return ds.getProfileByIdFromRepo("123").then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+            }
+        );
+    });
+
+    test('2 Test Invalid GetById Request', () => {
+        const expected_response = "User Profile not found!"
+        const ds = new UserProfileDataService(new InvalidMockUserRepository(), new InvalidMockFlatRepository(), jest.fn());
+
+        return ds.getProfileByIdFromRepo("123")
+            .then(
+                (response) => {
+                    console.log(response);
+                    throw new Error("Expected Not found exception")
+                })
+            .catch((e) => {
+                expect(e.message).toEqual(expected_response);
+            })
     });
 
 });
