@@ -2,15 +2,18 @@ import {ProfileRepository} from "../repository/ProfileRepository";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
+import {ProfileConverter} from "../converters/ProfileConverter";
 
 export class ProfileDataService {
 
     userRepo;
     flatRepo;
+    user_converter;
 
     constructor(user_repo: ProfileRepository, flat_repo: ProfileRepository) {
         this.userRepo = user_repo;
         this.flatRepo = flat_repo;
+        this.user_converter = new UserProfileConverter();
     }
 
     async getProfileByIdFromRepo(profile_id: string): Promise<any> {
@@ -59,26 +62,26 @@ export class ProfileDataService {
 
     async likeProfile(profile_id: string, like_id: string): Promise<string> {
         // Define repo and converter for like
-        let like_repo: ProfileRepository;
-        let like_converter: any;
-        if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] == "flt") {
-            like_repo = this.userRepo;
-            like_converter = FlatProfileConverter;
-        } else if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] != "flt") {
-            like_repo = this.flatRepo;
-            like_converter = UserProfileConverter;
-        } else {
-            throw new TypeError("Only User likes User and User likes Flat possible")
-        }
-
-        // Get Profile and Match
-
-        await this.userRepo.getProfileById(profile_id).then((response) =>{
-            const profile = UserProfileConverter.convertDBEntryToProfile(response);
-        });
-        await like_repo.getProfileById(profile_id).then().then((response) => {
-           const liked_profile = like_converter.convertDBEntryToProfile(response);
-        });
+        // let like_repo: ProfileRepository;
+        // let like_converter: ProfileConverter;
+        // if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] == "flt") {
+        //     like_repo = this.userRepo;
+        //     like_converter = new FlatProfileConverter();
+        // } else if (profile_id.split("#")[0] != "flt" && like_id.split("#")[0] != "flt") {
+        //     like_repo = this.flatRepo;
+        //     like_converter = new UserProfileConverter();
+        // } else {
+        //     throw new TypeError("Only User likes User and User likes Flat possible")
+        // }
+        //
+        // // Get Profile and Match
+        //
+        // await this.userRepo.getProfileById(profile_id).then((response) =>{
+        //     const profile = this.user_converter.convertDBEntryToProfile(response);
+        // });
+        // await like_repo.getProfileById(profile_id).then().then((response) => {
+        //    const liked_profile = like_converter.convertDBEntryToProfile(response);
+        // });
 
 
         throw new Error("Not implemented")

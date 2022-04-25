@@ -12,10 +12,12 @@ export class FlatProfileDataService {
 
     flat_repository: FlatRepository;
     user_repository: ProfileRepository;
+    flat_converter: FlatProfileConverter;
 
     constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
         this.user_repository = user_repo;
+        this.flat_converter = new FlatProfileConverter();
         initializeApp(config);
     }
 
@@ -30,7 +32,7 @@ export class FlatProfileDataService {
 
             // Precede if validation found no errors
             body["user_uid"] = user_uid;
-            let flat_to_add = new FlatProfileConverter().convertPostDto(body);
+            let flat_to_add = this.flat_converter.convertPostDto(body);
 
             flat_to_add.profileId = "flt#" + uuidv4();
             // After profile id is fetched from auth write flat into db
