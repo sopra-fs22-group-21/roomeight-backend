@@ -153,4 +153,37 @@ export class FlatProfileDataService {
             throw new Error("Flat Profile not found!")
         }
     }
+
+    async updateFlat(body: any, flat_id: string, user_uid: string): Promise<string> {
+        functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
+        return this.flat_repository.getProfileById(flat_id)
+            .then(
+                (flat_toUpdate) => {
+                    if (!flat_toUpdate) {
+                        throw new Error('Flat Profile not found')
+                    }
+                    let roomMates = flat_toUpdate.roomMates
+                    if (roomMates.includes(user_uid)) {
+                        // If uid of token matches the profileId continue with request processing
+                        return (this.flat_repository.updateProfile(body, flat_id)
+                            .then((response) => {
+                                return response
+                            })
+                            .catch((error) => {
+                                throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+                            }))
+                    } else {
+                        // Else return NotAuthorized-Exception
+                        throw new Error("User is not authorized to delete the selected flat!")
+                    }
+                }
+            )
+            .catch(
+                (e) => {
+                    functions.logger.debug(e, {structuredData: true})
+                    throw new Error(e.message);
+                    // res.status(404).send(e.message);
+                }
+            )
+    }
 }

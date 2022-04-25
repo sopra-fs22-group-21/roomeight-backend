@@ -1,0 +1,427 @@
+{
+	"info": {
+		"_postman_id": "27682bf4-07b1-4ac9-a58e-7c4f8aacdcb1",
+		"name": "SoPra",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Userprofiles",
+			"item": [
+				{
+					"name": "userprofiles",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles/XEb3g8IulAbQjkqnET3kDoL3eiq2",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles",
+								"XEb3g8IulAbQjkqnET3kDoL3eiq2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "userprofiles/jordi",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL_DEV}}/userprofiles/mU23TeGPlobCllASeLnf3koCE5t2",
+									"host": [
+										"{{URL_DEV}}"
+									],
+									"path": [
+										"userprofiles",
+										"mU23TeGPlobCllASeLnf3koCE5t2"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"firstName\": \"Jordi\",\n    \"lastName\": \"Küffer\",\n    \"isComplete\": true,\n    \"description\": \"looking for a room in a shared flat with cool peeps. Match me if you're cool\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"STUDENT\",\n        \"WINE\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/id/237/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\"\n    ],\n    \"creationDate\": \"2022-04-19\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"2000-01-07\",\n    \"email\": \"remixd12@gmail.com\",\n    \"phoneNumber\": \"0799240740\",\n    \"gender\": \"Male\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-20\",\n    \"moveOutDate\": \"\"\n}"
+						},
+						{
+							"name": "userprofiles/luisa",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL_DEV}}/userprofiles/e8nbijO28UTIQz1kdHikuZJBQTl2 ",
+									"host": [
+										"{{URL_DEV}}"
+									],
+									"path": [
+										"userprofiles",
+										"e8nbijO28UTIQz1kdHikuZJBQTl2 "
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"firstName\": \"Luisa\",\n    \"lastName\": \"Stückelberger\",\n    \"isComplete\": true,\n    \"description\": \"Im currently homeless looking for a room in the zurich area. 22 and also quite funny\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"SPORTS\",\n        \"INSTRUMENTS\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#823rsadhfae323\"\n    ],\n    \"creationDate\": \"2022-04-20\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"1999-04-15\",\n    \"email\": \"luisa@test.com\",\n    \"phoneNumber\": \"0764335622\",\n    \"gender\": \"Female\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-21\",\n    \"moveOutDate\": \"\"\n}"
+						}
+					]
+				},
+				{
+					"name": "userprofiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Lars\",\r\n  \"lastName\": \"Bösch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": \"test\",\r\n  \"pictureReference\": \"test\",\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars.boesch@uzh.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": \"true\",\r\n  \"isAdvertisingRoom\": \"false\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userprofiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"updatedName\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles/QSktsoEdWvNfCWQi6sG0wezojyE3",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles",
+								"QSktsoEdWvNfCWQi6sG0wezojyE3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userprofile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/userprofiles/0lzkOJngviQ8npWrPO9fOCa1OC43",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"userprofiles",
+								"0lzkOJngviQ8npWrPO9fOCa1OC43"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Flatprofiles",
+			"item": [
+				{
+					"name": "flatprofiles",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/flatprofiles/flt$d74a68d5-17a3-46b3-8d2f-8826f141f969",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"flatprofiles",
+								"flt$d74a68d5-17a3-46b3-8d2f-8826f141f969"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flatprofiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"fs221\",\n    \"address\": \"freiestrasse 221, 8032 Zuerich\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_DEV}}/flatprofiles",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"flatprofiles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flatprofile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/flatprofiles/flt$fd4bbdeb-3fa2-486e-9ec3-efbc138fc180",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"flatprofiles",
+								"flt$fd4bbdeb-3fa2-486e-9ec3-efbc138fc180"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "flatprofiles",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"christoph\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{URL_DEV}}/flatprofiles/flt$d74a68d5-17a3-46b3-8d2f-8826f141f969",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"flatprofiles",
+								"flt$d74a68d5-17a3-46b3-8d2f-8826f141f969"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Discover",
+			"item": [
+				{
+					"name": "discover",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/discover",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"discover"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "discover",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{URL_DEV}}/discover",
+									"host": [
+										"{{URL_DEV}}"
+									],
+									"path": [
+										"discover"
+									]
+								}
+							},
+							"_postman_previewlanguage": "json",
+							"header": null,
+							"cookie": [],
+							"body": "[\n   {\n    \"firstName\": \"Jordi\",\n    \"lastName\": \"Küffer\",\n    \"isComplete\": true,\n    \"description\": \"looking for a room in a shared flat with cool peeps. Match me if you're cool\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"STUDENT\",\n        \"WINE\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/id/1011/200/300\",\n        \"https://picsum.photos/id/237/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\",\n        \"FLAT#23jsadf323\"\n    ],\n    \"creationDate\": \"2022-04-19\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"2000-01-07\",\n    \"email\": \"remixd12@gmail.com\",\n    \"phoneNumber\": \"0799240740\",\n    \"gender\": \"Male\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-20\",\n    \"moveOutDate\": \"\"\n},\n{\n    \"firstName\": \"Luisa\",\n    \"lastName\": \"Stückelberger\",\n    \"isComplete\": true,\n    \"description\": \"Im currently homeless looking for a room in the zurich area. 22 and also quite funny\",\n    \"biography\": \"22 y/o student @UZH\",\n    \"tags\": [\n        \"COOKING\",\n        \"SPORTS\",\n        \"INSTRUMENTS\",\n        \"JUWO\"\n    ],\n    \"pictureReference\": [\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\",\n        \"https://picsum.photos/200/300\"\n    ],\n    \"matches\": [\n        \"FLAT#823rsadhfae323\"\n    ],\n    \"creationDate\": \"2022-04-20\",\n    \"onlineStatus\": \"Online\",\n    \"birthday\": \"1999-04-15\",\n    \"email\": \"luisa@test.com\",\n    \"phoneNumber\": \"0764335622\",\n    \"gender\": \"Female\",\n    \"isSearchingRoom\": \"true\",\n    \"isAdvertisingRoom\": \"false\",\n    \"moveInDate\": \"2022-04-21\",\n    \"moveOutDate\": \"\"\n}\n]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "GetUserToken",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"remixd12@gmail.com\",\r\n    \"password\": \"testpassword\",\r\n    \"returnSecureToken\":true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={{API_KEY}}",
+					"protocol": "https",
+					"host": [
+						"identitytoolkit",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"v1",
+						"accounts:signUp"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "{{API_KEY}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "URL_DEV",
+			"value": "http://localhost:5001/roomeight-9cd94/us-central1",
+			"type": "string"
+		},
+		{
+			"key": "URL_PROD",
+			"value": "https://us-central1-roomeight-9cd94.cloudfunctions.net",
+			"type": "string"
+		},
+		{
+			"key": "API_KEY",
+			"value": "AIzaSyAositsGqxjNyb3MU2d9AcoDzpScSYuRCU",
+			"type": "string"
+		},
+		{
+			"key": "TOKEN",
+			"value": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjZhNGY4N2ZmNWQ5M2ZhNmVhMDNlNWM2ZTg4ZWVhMGFjZDJhMjMyYTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vcm9vbWVpZ2h0LTljZDk0IiwiYXVkIjoicm9vbWVpZ2h0LTljZDk0IiwiYXV0aF90aW1lIjoxNjQ5NTkwNjI2LCJ1c2VyX2lkIjoiUVNrdHNvRWRXdk5mQ1dRaTZzRzB3ZXpvanlFMyIsInN1YiI6IlFTa3Rzb0VkV3ZOZkNXUWk2c0cwd2V6b2p5RTMiLCJpYXQiOjE2NDk1OTA2MjYsImV4cCI6MTY0OTU5NDIyNiwiZW1haWwiOiJ0ZXN0QHRlc3QuY2giLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsidGVzdEB0ZXN0LmNoIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.GMJzh3OwfRvxq2kNDtVFU6YZQnA-I0oC4ltRms-_zcn18uRbjp8qhs3lbkps34Bfvz5JGn9sSrlCVnUzY5l04-GRg-7fXKA4SpDSl1Qw7VkKfZ83z6yblM8hH6e9LOaWLEVxQx0MkK7-7pZo6Op2CEYIzATJhEtK7obM3JN0FbNf2pdXJ6_6Ne79EYJhHwWptKRBDaHyIl4TJPwtawOqlCJ5Gn9sZbdC1SCMiUcL1rrRrQgqBWzzvEvhYdFkCSXGBEx1fGiLDPbKseuvvtI79KDw-sAh2SlY2eaP-K4E3LrVIhbaqzM-o0RNr-qXqUXSbzrLtGFIyTl2ZtnoSGmzuw",
+			"type": "string"
+		}
+	]
+}
