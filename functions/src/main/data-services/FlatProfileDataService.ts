@@ -39,6 +39,12 @@ export class FlatProfileDataService {
                     functions.logger.debug(repo_error, {structuredData: true})
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
+            const update_fields = {
+                "isSearchingRoom": false,
+                "isAdvertisingRoom": true,
+                "flatId": flat_to_add.profileId
+            }
+            await this.user_repository.updateProfile(update_fields, user_uid);
             functions.logger.debug(repo_response, {structuredData: true});
 
             // Convert references

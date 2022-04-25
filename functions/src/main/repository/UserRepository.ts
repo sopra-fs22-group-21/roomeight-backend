@@ -17,7 +17,7 @@ export class UserRepository implements ProfileRepository {
     // Firestore User Operations
 
     getProfiles(): Promise<any> {
-        return this.database.collection(this.collection_name).get()
+        return this.database.collection(this.collection_name).where("isSearchingRoom", "==", true).get()
             .then((response: any) => {
                 return response.docs.map((doc: any) => doc.data());
             });
