@@ -1,47 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\Validator.test.ts">
-    <testCase name="Validate PostUser test valid input for all fields" duration="16"/>
+  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/Validator.test.ts">
+    <testCase name="Validate PostUser test valid input for all fields" duration="6">
+      <failure message="Error: expect(received).toBe(expected) // Object.is equality"><![CDATA[Error: expect(received).toBe(expected) // Object.is equality
+
+Expected: false
+Received: true
+    at Object.<anonymous> (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/Validator.test.ts:100:41)
+    at Promise.then.completed (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+    at _runTest (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:25:3)]]></failure>
+    </testCase>
     <testCase name="Validate PostUser test valid input for mandatory fields" duration="1"/>
-    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input fields" duration="0"/>
     <testCase name="Validate PostUser test invalid input with missing fields" duration="1"/>
     <testCase name="Validate PostUser test invalid input with unexpected fields" duration="0"/>
-    <testCase name="Validate PostUser test invalid date range" duration="0"/>
+    <testCase name="Validate PostUser test invalid date range" duration="4">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+- Expected  - 0
++ Received  + 2
+
+  Errors:
++ invalid isSearchingRoom, has to be true or false (boolean),
++ invalid isAdvertisingRoom, has to be true or false (boolean),
+  moveInDate must be before moveOutDate
+  Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password
+  Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate
+    at Object.<anonymous> (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/Validator.test.ts:137:28)
+    at Promise.then.completed (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+    at _runTest (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:25:3)]]></failure>
+    </testCase>
     <testCase name="Validate PostUser test json with null value" duration="1"/>
-    <testCase name="Validate PatchUser test valid input for all fields" duration="1"/>
-    <testCase name="Validate PatchUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input fields" duration="0"/>
     <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfile.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="3"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ValidationReport.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="3"/>
-    <testCase name="ValidatorReport test report should match the errormessage" duration="1"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfileConverter.test.ts">
-    <testCase name="ValidatorReport test report should match the errormessage" duration="2"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ReferenceHandling.test.ts">
-    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="44"/>
-    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="2"/>
-    <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="1"/>
-    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="0"/>
-    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="2"/>
-    <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="2"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts">
-    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="37"/>
-    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="17"/>
-    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 1 Test Valid GetById Request" duration="14"/>
-    <testCase name="UserProfileDataService Test 2 Test Invalid GetById Request" duration="1"/>
   </file>
 </testExecutions>
