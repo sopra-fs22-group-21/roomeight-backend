@@ -4,7 +4,7 @@ import {Status} from "../data-model/Status";
 export class FlatProfileConverter {
 
     // Dynamically converts a json body of a post user request to a userprofile object
-    static convertPostDto(json_body: any, uid: string): FlatProfile {
+    static convertPostDto(json_body: any): FlatProfile {
         let today = new Date();
         let dd = String(today.getDate()).padStart(2, '0');
         let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -14,7 +14,7 @@ export class FlatProfileConverter {
         // Create Template userprofile with default values and mandatory fields
         let flat = new FlatProfile(json_body.name, "", "", [], "",
             [], new Date(current_date), Status.online, null, null,
-            json_body.address, NaN, false, NaN,  NaN, NaN, [uid], "", [])
+            json_body.address, NaN, false, NaN,  NaN, NaN, [json_body.user_uid], "", [])
 
         // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("description")) {

@@ -13,7 +13,7 @@ export class ProfileDataService {
         this.flatRepo = flat_repo;
     }
 
-    async getProfileByIdFromRepo(profile_id: string): Promise<string> {
+    async getProfileByIdFromRepo(profile_id: string): Promise<any> {
         let repo;
         if(profile_id.split("#")[0] == "flt") {
             repo = this.flatRepo;
