@@ -114,12 +114,12 @@ export class UserValidator {
                     }
                     break;
                 case "isSearchingRoom":
-                    if (typeof user_json_body[key] == "boolean") {
+                    if (!(typeof user_json_body[key] == "boolean")) {
                         report.setErrors("invalid isSearchingRoom, has to be true or false (boolean)");
                     }
                     break;
                 case "isAdvertisingRoom":
-                    if (typeof user_json_body[key] == "boolean") {
+                    if (!(typeof user_json_body[key] == "boolean")) {
                         report.setErrors("invalid isAdvertisingRoom, has to be true or false (boolean)");
                     }
                     break;
