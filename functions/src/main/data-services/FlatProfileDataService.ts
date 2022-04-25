@@ -19,20 +19,20 @@ export class FlatProfileDataService {
         initializeApp(config);
     }
 
-    async addFlatProfile(body: any, uid: string): Promise<string> {
+    async addFlatProfile(body: any, user_uid: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
 
-
-        // Validate user which should be added
-        let validation_results = FlatValidator.validatePostUser(body);
+        // Validate flat which should be added
+        let validation_results = FlatValidator.validatePostFlat(body);
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
 
             // Precede if validation found no errors
-            let flat_to_add = FlatProfileConverter.convertPostDto(body, uid);
+            body.user_uid = user_uid;
+            let flat_to_add = FlatProfileConverter.convertPostDto(body);
 
-            flat_to_add.profileId = "flt#" + uuidv4();
+            flat_to_add.profileId = "flt$" + uuidv4();
             // After profile id is fetched from auth write flat into db
             const repo_response = await this.flat_repository.addProfile(flat_to_add)
                 .catch((repo_error) => {
@@ -65,16 +65,92 @@ export class FlatProfileDataService {
     }
 
 
-    async deleteFlat(profileId: string): Promise<string> {
-
+    async deleteFlat(profileId: string, user_uid: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
-        return (this.flat_repository.deleteProfile(profileId)
-            .then((response) => {
-                return response
-            })
-            .catch((error) => {
-                throw new Error('Error: User was deleted from auth but not from firestore: ' + error.message);
-            }))
+        return this.flat_repository.getProfileById(profileId)
+            .then(
+                (flat_toDelete) => {
+                    if (!flat_toDelete) {
+                        throw new Error('Flat Profile not found')
+                    }
+                    let roomMates = flat_toDelete.roomMates
+                    if (roomMates.includes(user_uid)) {
+                        // If uid of token matches the profileId continue with request processing
+                        return (this.flat_repository.deleteProfile(profileId)
+                            .then((response) => {
+                                return response
+                            })
+                            .catch((error) => {
+                                throw new Error('Error: Flat was not deleted from firestore: ' + error.message);
+                            }))
+                    } else {
+                        // Else return NotAuthorized-Exception
+                        throw new Error("User is not authorized to delete the selected flat!")
+                    }
+                }
+            )
+            .catch(
+                (e) => {
+                    functions.logger.debug(e, {structuredData: true})
+                    throw new Error(e.message);
+                    // res.status(404).send(e.message);
+                }
+            )
     }
 
+    async getProfileByIdFromRepo(profile_id: string): Promise<any> {
+        const db_entry = await this.flat_repository.getProfileById(profile_id)
+        // Convert references to actual profiles
+
+        if (db_entry) {
+            const dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
+
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository);
+            await reference_converter.resolveProfileReferenceList(dto.matches)
+                .then((resolution) => {
+                    reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
+                    dto.matches = resolution.result;
+                });
+            await reference_converter.resolveProfileReferenceList(dto.roomMates)
+                .then((resolution) => {
+                    reference_converter.cleanUpReferencesList(profile_id, "roomMates", dto.roomMates, resolution.unresolvedReferences);
+                    dto.roomMates = resolution.result;
+                });
+            return dto;
+
+        } else {
+            throw new Error("Flat Profile not found!")
+        }
+    }
+
+    async getProfilesFromRepo(): Promise<any> {
+        const db_entries = await this.flat_repository.getProfiles();
+
+        if (db_entries) {
+            let result: any[] = []
+            db_entries.map((entry: any) => {
+                result.push(FlatProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
+
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository);
+            for (let i in result) {
+                await reference_converter.resolveProfileReferenceList(result[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(result[i].profileId, "matches", result[i].matches, resolution.unresolvedReferences);
+                        result[i].matches = resolution.result;
+                    });
+                await reference_converter.resolveProfileReferenceList(result[i].roomMates)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(result[i].profileId, "roomMates", result[i].roomMates, resolution.unresolvedReferences);
+                        result[i].roomMates = resolution.result;
+                    });
+            }
+            return result;
+
+        } else {
+            throw new Error("Flat Profile not found!")
+        }
+    }
 }

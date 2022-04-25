@@ -16,6 +16,7 @@ export interface Profile {
 
     toJson(): any,
     toDbEntry(): any,
+    // Todo: Remove getMatches() and match()
     getMatches(): UserProfile[],
     match(user: UserProfile): void
 }

@@ -114,13 +114,13 @@ export class UserValidator {
                     }
                     break;
                 case "isSearchingRoom":
-                    if (!this.validateBoolean(user_json_body[key])) {
-                        report.setErrors("invalid isSearchingRoom, has to be true or false (string)");
+                    if (typeof user_json_body[key] == "boolean") {
+                        report.setErrors("invalid isSearchingRoom, has to be true or false (boolean)");
                     }
                     break;
                 case "isAdvertisingRoom":
-                    if (!this.validateBoolean(user_json_body[key])) {
-                        report.setErrors("invalid isAdvertisingRoom, has to be true or false (string)");
+                    if (typeof user_json_body[key] == "boolean") {
+                        report.setErrors("invalid isAdvertisingRoom, has to be true or false (boolean)");
                     }
                     break;
                 case "moveInDate":
@@ -161,9 +161,6 @@ export class UserValidator {
     }
     private static validateGender(gender: string, allowedGenders: string[]): boolean {
         return (allowedGenders.includes(gender) || gender === "");
-    }
-    private static validateBoolean(bool: string): boolean {
-        return (bool === "true" || bool === "false" || bool === "");
     }
     private static validatePhone(phone: string): boolean {
         const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');

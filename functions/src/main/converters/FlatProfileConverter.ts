@@ -1,26 +1,21 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
-import {Tag} from "../data-model/Tag";
-import {Like} from "../data-model/Like";
 
-export class FlatProfileConverter {
+
+export class FlatProfileConverter{
 
     // Dynamically converts a json body of a post user request to a userprofile object
-    static convertPostDto(json_body: any, uid: string): FlatProfile {
+    static convertPostDto(json_body: any): FlatProfile {
         let today = new Date();
         let dd = String(today.getDate()).padStart(2, '0');
         let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         let yyyy = today.getFullYear();
         let current_date = mm + '/' + dd + '/' + yyyy;
-        // let address = new Address(json_body.address.street, json_body.address.city, json_body.address.province,
-        //     json_body.address.postalCode, json_body.address.country);
-        let address = JSON.stringify(json_body.address);
-
 
         // Create Template userprofile with default values and mandatory fields
         let flat = new FlatProfile(json_body.name, "", "", [], "",
-            [], new Date(current_date), Status.online, new Date(), new Date(),
-            address, NaN, false, NaN,  NaN, NaN, [uid], "", [])
+            [], new Date(current_date), Status.online, null, null,
+            json_body.address, NaN, false, NaN,  NaN, NaN, [json_body.user_uid], "", [])
 
         // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("description")) {
@@ -66,36 +61,13 @@ export class FlatProfileConverter {
     // Dynamically converts DB entry to a valid FlatProfile
     static convertDBEntryToProfile(db_entry: any): FlatProfile {
         try {
-            // Define Vars
-            const fields = db_entry._fieldsProto;
-            let tags: Tag[] = [];
-            let matches: string[] = [];
-            let room_mates: string[] = [];
-            let likes: Like[] = [];
-
-            let temp_likes: string[];
-
-            // Build arrays
-            fields.tags.arrayValue.values.map((tag: any) => {tags.push(tag.stringValue)});
-            fields.roomMates.arrayValue.values.map((mate: any) => {room_mates.push(mate.stringValue)});
-            fields.likes.arrayValue.values.map((like: any) => {
-                temp_likes = [];
-                like.likesUserIds.arrayValue.values.map((user_id: any) =>{
-                    temp_likes.push(user_id.stringValue);
-                });
-                likes.push(new Like(temp_likes, like.likedUserId.stringValue))
-            });
-            fields.matches.arrayValue.values.map((match: any) => {matches.push(match.stringValue)});
-
-            return new FlatProfile(fields.name.stringValue, fields.description.stringValue, fields.biography.stringValue,
-                tags, fields.pictureReference.stringValue, likes, new Date(fields.creationDate.timestampValue.seconds),
-                fields.onlineStatus.stringValue, new Date(fields.moveInDate.timestampValue.seconds),
-                new Date(fields.moveOutDate.timestampValue.seconds), fields.address.stringValue, fields.rent.stringValue,
-                fields.permanent.booleanValue, fields.numberOfRoommates.numberValue, fields.roomSize.numberValue,
-                fields.numberOfBaths.numberValue, room_mates, fields.profileId.stringValue, matches)
+            return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReference,
+                db_entry.likes, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
+                db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent, db_entry.permanent,
+                db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths, db_entry.roomMates, db_entry.profileId, db_entry.matches);
 
         } catch (e) {
-            throw new TypeError("DB entry does not have expected format")
+            throw new TypeError("DB entry does not have expected format" + e)
         }
     }
 }

@@ -6,7 +6,6 @@ import {config} from "../firebase_config";
 import {UserRepository} from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
 import {FlatRepository} from "./main/repository/FlatRepository";
-import {ProfileDataService} from "./main/data-services/ProfileDataService";
 import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
 
 
@@ -22,7 +21,6 @@ const app = admin.initializeApp(config);
 // Required instances
 const userprofile_app = express();
 const flatprofile_app = express();
-const profile_app = express();
 const cors = require('cors');
 
 // Repository Initialization
@@ -30,20 +28,46 @@ const userRepo = new UserRepository(app);
 const flatRepo = new FlatRepository(app)
 
 // Data Service Initialization
-const userProfileDataService = new UserProfileDataService(userRepo, app);
+const userProfileDataService = new UserProfileDataService(userRepo, flatRepo, app);
 const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
-const profileDataService = new ProfileDataService(userRepo, flatRepo);
 
 // Export functions and set allowed origins
 exports.userprofiles = functions.https.onRequest(userprofile_app);
 userprofile_app.use(cors({ origin: "*" }));
 exports.flatprofiles = functions.https.onRequest(flatprofile_app);
 flatprofile_app.use(cors({ origin: "*" }));
-exports.profiles = functions.https.onRequest(profile_app);
-profile_app.use(cors({ origin: "*" }));
 
 
 // User Operations
+
+// Get User Profiles
+userprofile_app.get('/', async (req, res) => {
+    let result;
+
+    result = await userProfileDataService.getProfilesFromRepo()
+        .catch((error) => {
+            res.status(400).send(error.message)
+        })
+    res.status(200).send(result);
+});
+
+// Get specific User Profile
+userprofile_app.get('/:profileId', async (req, res) => {
+    const profile_id = sanitizeHtml(req.params.profileId);
+    let result;
+
+    result = await userProfileDataService.getProfileByIdFromRepo(profile_id)
+        .catch((error) => {
+            if (error.message == "DB entry does not have expected format") {
+                res.status(500).send(error.message)
+            } else if(error.message == "User Profile not found!"){
+                res.status(404).send("User Profile with id " + profile_id + " not found!")
+            } else  {
+                res.status(400).send(error.message)
+            }
+        })
+    res.status(200).send(result);
+});
 
 // Create User
 userprofile_app.post('/', async (req, res) => {
@@ -68,7 +92,7 @@ userprofile_app.post('/', async (req, res) => {
 
 // Update User
 userprofile_app.patch('/:profileId', async (req, res) => {
-    functions.logger.debug("Started Patch Request", {structuredData: true});
+    functions.logger.debug("Started User Patch Request", {structuredData: true});
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         // Get Profile Id and Token from request
         const idToken = req.headers.authorization.split('Bearer ')[1]
@@ -148,8 +172,91 @@ userprofile_app.delete('/:profileId', async (req, res) => {
     }
 });
 
+userprofile_app.post('/likeUser/:likedUserId', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const like_profile_id = sanitizeHtml(req.params.likedUserId);
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                const uid = decodedToken.uid;
+                userProfileDataService.likeUser(uid, like_profile_id)
+                    .then(
+                        (response) => res.status(200).send(response)
+                    )
+                    .catch((error) => {
+                        res.status(400).send(error.message);
+                    })
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
+
+
+userprofile_app.post('/likeFlat/:likedFlatId', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const liked_flat_id = sanitizeHtml(req.params.likedFlatId);
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                const uid = decodedToken.uid;
+                userProfileDataService.likeFlat(uid, liked_flat_id)
+                    .then(
+                        (response) => res.status(200).send(response)
+                    )
+                    .catch((error) => {
+                        res.status(400).send(error.message);
+                    })
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
 
 // Flat Operation
+
+// Get Flat Profiles
+flatprofile_app.get('/', async (req, res) => {
+    let result;
+
+    result = await flatProfileDataService.getProfilesFromRepo()
+        .catch((error) => {
+                res.status(400).send(error.message)
+        })
+    res.status(200).send(result);
+});
+
+// Get specific Flat Profile
+flatprofile_app.get('/:profileId', async (req, res) => {
+    const profile_id = sanitizeHtml(req.params.profileId);
+    let result;
+
+    result = await flatProfileDataService.getProfileByIdFromRepo(profile_id)
+        .catch((error) => {
+            if (error.message == "DB entry does not have expected format") {
+                res.status(500).send(error.message)
+            } else if(error.message == "Flat Profile not found!"){
+                res.status(404).send("Flat Profile with id " + profile_id + " not found!")
+            } else  {
+                res.status(400).send(error.message)
+            }
+        })
+    res.status(200).send(result);
+});
 
 // Create Flat
 flatprofile_app.post('/', async (req, res) => {
@@ -159,7 +266,6 @@ flatprofile_app.post('/', async (req, res) => {
             .verifyIdToken(idToken)
             .then((decodedToken) => {
                 functions.logger.debug("Started Flat Post Request", {structuredData: true});
-                functions.logger.log(req.body);
                 return flatProfileDataService.addFlatProfile(req.body, decodedToken.uid)
                     .then((data_service_response) => {
                             res.set('Access-Control-Allow-Origin', '*')
@@ -191,9 +297,46 @@ flatprofile_app.post('/roommate/:mate_id', async (req, res) => {
 });
 
 // Update Flat
-flatprofile_app.patch('/', async (req, res) => {
-    res.status(404).send();
-});
+// flatprofile_app.patch('/:profileId', async (req, res) => {
+//     functions.logger.debug("Started Flat Patch Request", {structuredData: true});
+//     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+//         // Get Profile Id and Token from request
+//         const idToken = req.headers.authorization.split('Bearer ')[1]
+//         const profile_id = sanitizeHtml(req.params.profileId);
+//
+//         getAuth()
+//             .verifyIdToken(idToken)
+//             .then((decodedToken) => {
+//                 functions.logger.debug("Started Flat Post Request", {structuredData: true});
+//                 if (uid == profile_id) {
+//                     // If uid of token matches the profileId continue with request processing
+//                     userProfileDataService.updateUser(req.body, profile_id)
+//                         .then(
+//                             (data_service_response) => {
+//                                 res.set('Access-Control-Allow-Origin', '*')
+//                                 res.status(200).send(data_service_response);
+//                             }
+//                         )
+//                         .catch(
+//                             (e) => {
+//                                 // Return HTTP Code 400 if error occurred
+//                                 functions.logger.debug(e, {structuredData: true})
+//                                 res.status(400).send(e.message);
+//                             }
+//                         );
+//                 } else {
+//                     // Else return NotAuthorized-Exception
+//                     res.status(403).send("Not authorized to update the selected user!");
+//                 }
+//             })
+//             .catch((error) => {
+//                 res.status(401).send("Authorization failed: " + error);
+//             });
+//
+//     } else {
+//         res.status(401).send("Authorization failed: No authorization header present");
+//     }
+// });
 
 // Delete Flat
 flatprofile_app.delete('/:profileId', async (req, res) => {
@@ -205,30 +348,22 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
         getAuth()
             .verifyIdToken(idToken)
             .then((decodedToken) => {
-
                 functions.logger.debug("Started Flat Delete Request", {structuredData: true});
-                functions.logger.log(req.params.profileId);
-                // ToDo verify if user is part of flat
-                // const uid = decodedToken.uid;
-                if (true) {
-                    // If uid of token matches the profileId continue with request processing
-                    flatProfileDataService.deleteFlat(profile_id)
-                        .then(
-                            (data_service_response) => {
-                                res.set('Access-Control-Allow-Origin', '*')
-                                res.status(200).send(data_service_response);
-                            }
-                        )
-                        .catch(
-                            (e) => {
-                                functions.logger.debug(e, {structuredData: true})
-                                res.status(400).send(e.message);
-                            }
-                        );
-                } else {
-                    // Else return NotAuthorized-Exception
-                    res.status(403).send("Not authorized to delete the selected user!");
-                }
+                // ToDo get profile id via req.params
+                const user_uid = decodedToken.user_id;
+                flatProfileDataService.deleteFlat(profile_id, user_uid)
+                    .then(
+                        (data_service_response) => {
+                            res.set('Access-Control-Allow-Origin', '*')
+                            res.status(200).send(data_service_response);
+                        }
+                    )
+                    .catch(
+                        (e) => {
+                            // functions.logger.debug(e, {structuredData: true})
+                            res.status(400).send(e.message);
+                        }
+                    );
             })
             .catch((error) => {
                 res.status(401).send("Authorization failed: " + error);
@@ -239,27 +374,7 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
     }
 });
 
-
-// General Profile Operations
-
-// Get specific Profile
-profile_app.get('/:profileId', async (req, res) => {
-    const profile_id = sanitizeHtml(req.params.profileId);
-    let result;
-
-    result = await profileDataService.getProfileByIdFromRepo(profile_id)
-        .catch((error) => {
-            if (error.message == "DB entry does not have expected format") {
-                res.status(500).send(error.message)
-            } else if(error.message == "Profile not found!"){
-                res.status(404).send("Profile with id " + profile_id + " not found!")
-            } else  {
-                res.status(400).send(error.message)
-            }
-        })
-    res.status(200).send(result);
-});
-
-profile_app.post('/match', async (req, res) => {
+flatprofile_app.post('/like', async (req, res) => {
     res.status(404).send();
 });
+
