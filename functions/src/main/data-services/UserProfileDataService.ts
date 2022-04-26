@@ -79,6 +79,16 @@ export class UserProfileDataService {
 
         if (!validation_results.validationFoundErrors()) {
             // If no errors were found in the validation initialize the update in the repo
+            if (update_fields.hasOwnProperty("moveInDate")) {
+                update_fields.moveInDate = new Date(update_fields.moveInDate);
+            }
+            if (update_fields.hasOwnProperty("moveOutDate")) {
+                update_fields.moveOutDate = new Date(update_fields.moveOutDate);
+            }
+            if (update_fields.hasOwnProperty("birthday")) {
+                update_fields.birthday = new Date(update_fields.birthday);
+            }
+            functions.logger.info(update_fields);
             return this.user_repository.updateProfile(update_fields, profile_id);
         } else {
             // Throw value error with list of errors which were found if validation failed

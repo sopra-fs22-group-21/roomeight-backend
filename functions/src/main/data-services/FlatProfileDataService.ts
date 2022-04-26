@@ -170,6 +170,12 @@ export class FlatProfileDataService {
                     }
                     let roomMates = flat_toUpdate.roomMates
                     if (roomMates.includes(user_uid)) {
+                        if (body.hasOwnProperty("moveInDate")) {
+                            body.moveInDate = new Date(body.moveInDate);
+                        }
+                        if (body.hasOwnProperty("moveOutDate")) {
+                            body.moveOutDate = new Date(body.moveOutDate);
+                        }
                         // If uid of token matches the profileId continue with request processing
                         return (this.flat_repository.updateProfile(body, flat_id)
                             .then((response) => {
