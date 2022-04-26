@@ -10,6 +10,13 @@ export class FlatValidator {
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 
+    static validatePatchFlat(update_fields: any) {
+        let mandatoryFields: string[] = [];
+        let optionalFields = ["description", "biography", "tags", "pictureReference", "roomSize",
+            "rent", "permanent", "numberOfRoommates", "numberOfBaths", "moveInDate", "moveOutDate", "name", "address"];
+        return this.validateFields(update_fields, mandatoryFields, optionalFields);
+    }
+
     private static validateFields(user_json_body: any, mandatoryFields: string[], optionalFields: string[]): ValidationReport {
         let report = new ValidationReport(mandatoryFields, optionalFields);
 
@@ -40,29 +47,71 @@ export class FlatValidator {
                         report.setErrors("invalid address");
                     }
                     break;
+                case "description":
+                    if (!this.validateString(user_json_body[key])) {
+                        report.setErrors("invalid description");
+                    }
+                    break;
+                case "biography":
+                    if (!this.validateString(user_json_body[key])) {
+                        report.setErrors("invalid biography");
+                    }
+                    break;
+                case "tags":
+                    if (!this.validateTags(user_json_body[key])) {
+                        report.setErrors("invalid tags");
+                    }
+                    break;
+                case "pictureReference":
+                    if (!this.validateString(user_json_body[key])) {
+                        report.setErrors("invalid pictureReference");
+                    }
+                    break;
+                case "permanent":
+                    if (!(typeof user_json_body[key] == "boolean")) {
+                        report.setErrors("invalid isSearchingRoom, has to be true or false (boolean)");
+                    }
+                    break;
+                case "moveInDate":
+                    if (!this.validateDate(user_json_body[key])) {
+                        report.setErrors("invalid moveInDate, Expected Format: 1999-06-22");
+                    }
+                    break;
+                case "moveOutDate":
+                    if (!this.validateDate(user_json_body[key])) {
+                        report.setErrors("invalid moveOutDate, Expected Format: 1999-06-22");
+                    } else {
+                        // Todo: improve field validation -> MoveIn date not always in body
+                        if (!user_json_body.hasOwnProperty("moveInDate")) {
+                            break;
+                        }
+                        if (this.validateDate(user_json_body["moveInDate"])) {
+                            let moveOutDate = new Date(user_json_body["moveOutDate"]);
+                            let moveInDate = new Date(user_json_body["moveInDate"]);
+                            if (moveInDate > moveOutDate) {
+                                report.setErrors("moveInDate must be before moveOutDate");
+                            }
+                        }
+                    }
+                    break;
+                default:
+                    report.setErrors("Unknown Field: " + key);
+                    break;
             }
         }
         return report;
     }
 
+    private static validateDate(date: string): boolean {
+        return (!isNaN(Date.parse(date)) || date === "");
+    }
     private static validateString(name: string): boolean {
         return (name.length >= 0 && name.length < 300);
     }
-
-    // private static validateAddress(address: any): boolean {
-    //     let fields = ["street", "city", "province", "postalCode", "country"];
-    //     for (let i in fields) {
-    //         if(!address.hasOwnProperty(fields[i])) {
-    //             return false;
-    //         }
-    //     }
-    //     for (let key in address) {
-    //         if (!this.validateString(address[key])) {
-    //             return false
-    //         }
-    //     }
-    //     return true;
-    // }
+    // Todo: validate allowed tags
+    private static validateTags(name: string): boolean {
+        return (name.length >= 0 && name.length < 100000);
+    }
 }
 
 
