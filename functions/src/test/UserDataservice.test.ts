@@ -140,7 +140,7 @@ describe("UserProfileDataService Test", () => {
             description: "",
             biography: "",
             tags: [],
-            pictureReference: "",
+            pictureReferences: [],
             matches: [],
             creationDate: new Date(StubInputs.getCurrentDateStr()),
             onlineStatus: "ONLINE",
@@ -174,7 +174,7 @@ describe("UserProfileDataService Test", () => {
 
         const expected_response = "Errors:\ninvalid email\n" +
             "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-            "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
+            "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
 
@@ -264,7 +264,7 @@ describe("UserProfileDataService Test", () => {
 
         const expected_response = "Errors:\ninvalid phoneNumber\n" +
             "Mandatory fields are: \n" +
-            "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom," +
+            "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom," +
                                     "moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
@@ -376,7 +376,7 @@ describe("UserProfileDataService Test", () => {
             description: '',
             biography: '',
             tags: [],
-            pictureReference: '',
+            pictureReferences: [],
             matches: [],
             creationDate: "1970-01-01T00:00:00.000Z",
             onlineStatus: 'ONLINE',

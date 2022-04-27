@@ -18,7 +18,7 @@ describe('Validate PostUser', () => {
     "description": "test",
     "biography": "test",
     "tags": "test",
-    "pictureReference": "test",
+    "pictureReferences": ["test"],
     "birthday": "2019-06-22",
     "email": "test@test.ch",
     "phoneNumber": "+41795233087",
@@ -75,7 +75,7 @@ describe('Validate PostUser', () => {
     "description": "test",
     "biography": "test",
     "tags": "test",
-    "pictureReference": "test",
+    "pictureReferences": ["test"],
     "birthday": "2019-06-22",
     "email": "test@test.ch",
     "phoneNumber": "+41795233087",
@@ -114,7 +114,7 @@ describe('Validate PostUser', () => {
     let res = UserValidator.validatePostUser(missingMandatory);
     let expected = "Errors:\nJSON object does not contain required field: lastName,\nJSON object does not contain required field: phoneNumber\n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
+        "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
@@ -123,7 +123,7 @@ describe('Validate PostUser', () => {
     let res = UserValidator.validatePostUser(unexpectedField);
     let expected = "Errors:\nUnknown Field: hometown\n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
+        "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
@@ -132,7 +132,7 @@ describe('Validate PostUser', () => {
     let res = UserValidator.validatePostUser(invalidDateRange);
     let expected = "Errors:\nmoveInDate must be before moveOutDate\n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
+        "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
@@ -141,7 +141,7 @@ describe('Validate PostUser', () => {
     let res = UserValidator.validatePostUser(containingNull);
     let expected = "Errors:\nfirstName is null\n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
+        "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })
@@ -156,7 +156,7 @@ describe('Validate PatchUser', () => {
     "description": "test",
     "biography": "test",
     "tags": "test",
-    "pictureReference": "test",
+    "pictureReferences": ["test"],
     "birthday": "2019-06-22",
     "email": "test@test.ch",
     "phoneNumber": "+41795233087",
@@ -204,7 +204,7 @@ describe('Validate PatchUser', () => {
     let res = UserValidator.validatePatchUser(unexpectedField);
     let expected = "Errors:\nUnknown Field: password\n" +
         "Mandatory fields are: \n" +
-        "Optional fields are: description,biography,tags,pictureReference,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
+        "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })

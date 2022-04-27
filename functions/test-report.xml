@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/UserProfile.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="2"/>
+  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/Validator.test.ts">
+    <testCase name="Validate PostUser test valid input for all fields" duration="2"/>
+    <testCase name="Validate PostUser test valid input for mandatory fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input with missing fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid date range" duration="0"/>
+    <testCase name="Validate PostUser test json with null value" duration="0"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
   </file>
 </testExecutions>
