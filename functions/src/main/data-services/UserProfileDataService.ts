@@ -191,7 +191,8 @@ export class UserProfileDataService {
         // Check if like of user already exists on flat
         let is_liked = false;
         let is_match = false;
-        let new_flat_likes = user_flat.likes;
+        let new_flat_likes: any[] = [];
+        user_flat.likes.map((like) => {new_flat_likes.push(like.toJson())});
         let new_flat_matches = user_flat.matches;
         for (let i in user_flat.likes) {
             if (user_flat.likes[i].likedUser == liked_user.profileId) {
