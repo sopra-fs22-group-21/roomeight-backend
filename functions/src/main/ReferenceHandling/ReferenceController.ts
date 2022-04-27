@@ -28,7 +28,6 @@ export class ReferenceController {
         // Initialize vars
         let unresolved_references: string[] = [];
         let resolved_reference: any;
-        let result: any = {};
 
         // Check if reference is empty
         if (reference_id == "") {
@@ -45,12 +44,12 @@ export class ReferenceController {
             } else {
                 resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             }
-            result.resolved_reference.profileId = resolved_reference;
         } else {
             // If the referenced profile does not exist write an empty dict into the field and mark the reference as unresolved
+            resolved_reference = {};
             unresolved_references.push(reference_id)
         }
-        return new ReferenceResolution(result, unresolved_references);
+        return new ReferenceResolution(resolved_reference, unresolved_references);
     }
 
     /**
@@ -63,7 +62,7 @@ export class ReferenceController {
      */
     async resolveProfileReferenceList(reference_id_list: string[]): Promise<ReferenceResolution> {
         // Initialize vars
-        let profile_list: any = {};
+        let profile_list: string[] = [];
         let temp_resolved_reference: Profile;
         let unresolved_references: string[] = [];
         let db_entry;
@@ -77,7 +76,7 @@ export class ReferenceController {
                 } else {
                     temp_resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry);
                 }
-                profile_list.temp_resolved_refrence.profileId = temp_resolved_reference.toJson();
+                profile_list.push(temp_resolved_reference.toJson());
             } else {
                 unresolved_references.push(reference_id_list[key])
             }
@@ -92,7 +91,7 @@ export class ReferenceController {
      * @Input field: Field in which the references that should be cleaned are stored
      * @Input current_references: Array of the current references
      * @Input outdated_references: References that should be removed
-    **/
+     **/
     cleanUpReferencesList(profile_id: string, field: string, current_references: string[], outdated_references: string[]): Promise<string> {
         const updated_reference_list = current_references.filter(reference => outdated_references.indexOf(reference))
         let update: any = {}

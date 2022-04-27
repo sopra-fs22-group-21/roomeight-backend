@@ -16,7 +16,7 @@ describe('ValidatorReport test', () => {
         "description": "test",
         "biography": "test",
         "tags": "test",
-        "pictureReference": "test",
+        "pictureReferences": ["test"],
         "birthday": "1999-06-22",
         "emailAddress": "test@test.ch",
         "phoneNumber": "+41795233087",

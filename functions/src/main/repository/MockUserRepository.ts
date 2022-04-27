@@ -43,7 +43,7 @@ export class ValidMockUserRepository implements UserRepository {
           biography: '',
           profileId: '',
           gender: 'NOT SET',
-          pictureReference: '',
+          pictureReferences: [],
           birthday:  new Timestamp(0, 0),
           description: '',
           lastName: 'Mock last_name',

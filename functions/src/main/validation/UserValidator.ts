@@ -4,7 +4,7 @@ export class UserValidator {
     static validatePostUser(user_json_body: any) {
 
         let mandatoryFields = ["firstName", "lastName", "birthday", "email", "phoneNumber", "password"];
-        let optionalFields = ["description", "biography", "tags", "pictureReference", "gender", "isSearchingRoom",
+        let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender", "isSearchingRoom",
                              "isAdvertisingRoom", "moveInDate", "moveOutDate"];
         
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
@@ -12,7 +12,7 @@ export class UserValidator {
 
     static validatePatchUser(update_fields: any) {
         let mandatoryFields: string[] = [];
-        let optionalFields = ["description", "biography", "tags", "pictureReference", "gender", "isSearchingRoom",
+        let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender", "isSearchingRoom",
                               "isAdvertisingRoom", "moveInDate", "moveOutDate", "firstName", "lastName", "birthday",
                               "phoneNumber", "email", "flatId"];
         return this.validateFields(update_fields, mandatoryFields, optionalFields);
@@ -93,9 +93,9 @@ export class UserValidator {
                         report.setErrors("invalid tags");
                     }
                     break;
-                case "pictureReference":
-                    if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid pictureReference");
+                case "pictureReferences":
+                    if (!this.validateStringArray(user_json_body[key])) {
+                        report.setErrors("invalid pictureReferences");
                     }
                     break;
                 case "matches":
@@ -191,6 +191,15 @@ export class UserValidator {
     }
     private static validateMismatches(name: string): boolean {
         return (name.length >= 0 && name.length < 100000);
+    }
+    private static validateStringArray(references: string[]): boolean {
+        let bool = true;
+        for (let reference of references) {
+            if (!this.validateString(reference)) {
+                bool = false;
+            }
+        }
+        return bool;
     }
 }
 

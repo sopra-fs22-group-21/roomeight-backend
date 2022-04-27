@@ -1,83 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfile.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="7"/>
-  </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ValidationReport.test.ts">
     <testCase name="ValidatorReport test new report should not contain errors" duration="3"/>
-    <testCase name="ValidatorReport test report should match the errormessage" duration="4"/>
+    <testCase name="ValidatorReport test report should match the errormessage" duration="2"/>
+  </file>
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfile.test.ts">
+    <testCase name="ValidatorReport test new report should not contain errors" duration="4"/>
   </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfileConverter.test.ts">
     <testCase name="ValidatorReport test report should match the errormessage" duration="15"/>
   </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\Validator.test.ts">
-    <testCase name="Validate PostUser test valid input for all fields" duration="3"/>
+    <testCase name="Validate PostUser test valid input for all fields" duration="5"/>
     <testCase name="Validate PostUser test valid input for mandatory fields" duration="1"/>
     <testCase name="Validate PostUser test invalid input fields" duration="1"/>
-    <testCase name="Validate PostUser test invalid input with missing fields" duration="6"/>
-    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="2"/>
-    <testCase name="Validate PostUser test invalid date range" duration="2"/>
+    <testCase name="Validate PostUser test invalid input with missing fields" duration="3"/>
+    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid date range" duration="1"/>
     <testCase name="Validate PostUser test json with null value" duration="1"/>
-    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="1"/>
     <testCase name="Validate PatchUser test invalid input fields" duration="0"/>
     <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="1"/>
   </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ReferenceHandling.test.ts">
-    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="50">
-      <failure message="TypeError: Cannot set property &apos;profileId&apos; of undefined"><![CDATA[TypeError: Cannot set property 'profileId' of undefined
-    at ReferenceController.resolveProfileReferenceList (C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\main\ReferenceHandling\ReferenceController.ts:80:17)
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)]]></failure>
-    </testCase>
-    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="10">
-      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
-
-Expected: "[]"
-Received: "{}"
-    at C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ReferenceHandling.test.ts:50:53
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)]]></failure>
-    </testCase>
+    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="53"/>
+    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="3"/>
     <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="1"/>
-    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="0"/>
-    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="2">
-      <failure message="TypeError: Cannot set property &apos;profileId&apos; of undefined"><![CDATA[TypeError: Cannot set property 'profileId' of undefined
-    at ReferenceController.resolveSingleProfileReference (C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\main\ReferenceHandling\ReferenceController.ts:48:13)
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)]]></failure>
-    </testCase>
-    <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="3">
-      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
-
-Expected: "[]"
-Received: "{}"
-    at C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ReferenceHandling.test.ts:121:53
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)]]></failure>
-    </testCase>
+    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="1"/>
+    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="6"/>
+    <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="3"/>
   </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts">
-    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="45">
-      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
-
-Expected: "{\"profileId\":\"123\",\"firstName\":\"test\",\"lastName\":\"test\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReference\":\"\",\"matches\":[],\"creationDate\":\"2022-04-26T22:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1999-06-22T00:00:00.000Z\",\"email\":\"test@test.ch\",\"phoneNumber\":\"0795553030\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":null,\"moveOutDate\":null,\"flatId\":\"\"}"
-Received: "{\"profileId\":\"123\",\"firstName\":\"test\",\"lastName\":\"test\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReference\":\"\",\"matches\":{},\"creationDate\":\"2022-04-26T22:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1999-06-22T00:00:00.000Z\",\"email\":\"test@test.ch\",\"phoneNumber\":\"0795553030\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":null,\"moveOutDate\":null,\"flatId\":\"\"}"
-    at C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts:165:50
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)]]></failure>
-    </testCase>
-    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="24"/>
-    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 1 Test Valid GetById Request" duration="5">
-      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
-
-Expected: "{\"profileId\":\"\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReference\":\"\",\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":false,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\"}"
-Received: "{\"profileId\":\"\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReference\":\"\",\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":false,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\"}"
-    at C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts:398:50
-    at processTicksAndRejections (internal/process/task_queues.js:93:5)]]></failure>
-    </testCase>
-    <testCase name="UserProfileDataService Test 2 Test Invalid GetById Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="63"/>
+    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="5"/>
+    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="4"/>
+    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="34"/>
+    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="9"/>
+    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="3"/>
+    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="4"/>
+    <testCase name="UserProfileDataService Test 1 Test Valid GetById Request" duration="9"/>
+    <testCase name="UserProfileDataService Test 2 Test Invalid GetById Request" duration="3"/>
   </file>
 </testExecutions>

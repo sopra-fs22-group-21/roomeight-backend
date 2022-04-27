@@ -11,7 +11,7 @@ export class UserProfile implements Profile{
     description: string;
     biography: string;
     tags: Tag[];
-    pictureReference: string;
+    pictureReferences: string[];
     matches: string[];
     viewed: string[];
     likes: string[];
@@ -28,7 +28,7 @@ export class UserProfile implements Profile{
     flatId: string;
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
-                pictureReference: string, matches: string[], creationDate: Date, onlineStatus: Status,
+                pictureReferences: string[], matches: string[], creationDate: Date, onlineStatus: Status,
                 moveInDate: any, moveOutDate: any, birthday: Date, email: string, phoneNumber: string,
                 gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
                 likes: string[], profile_id: string) {
@@ -37,7 +37,7 @@ export class UserProfile implements Profile{
         this.description = description;
         this.biography = biography;
         this.tags = tags;
-        this.pictureReference = pictureReference;
+        this.pictureReferences = pictureReferences;
         this.matches = matches;
         this.creationDate = creationDate;
         this.onlineStatus = onlineStatus;
@@ -63,7 +63,7 @@ export class UserProfile implements Profile{
             description: this.description,
             biography: this.biography,
             tags: this.tags,
-            pictureReference: this.pictureReference,
+            pictureReferences: this.pictureReferences,
             matches: this.matches,
             creationDate: this.creationDate,
             onlineStatus: this.onlineStatus,
@@ -87,7 +87,7 @@ export class UserProfile implements Profile{
             description: this.description,
             biography: this.biography,
             tags: this.tags,
-            pictureReference: this.pictureReference,
+            pictureReferences: this.pictureReferences,
             matches: this.matches,
             viewed: this.viewed,
             likes: this.likes,

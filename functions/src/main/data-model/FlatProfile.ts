@@ -9,7 +9,7 @@ export class FlatProfile implements Profile {
     description: string;
     biography: string;
     tags: Tag[];
-    pictureReference: string;
+    pictureReferences: string[];
     likes: Like[];
     creationDate: Date;
     onlineStatus: Status;
@@ -24,7 +24,7 @@ export class FlatProfile implements Profile {
     roomMates: string[];
     matches: string[];
 
-    constructor(name: string, description: string, biography: string, tags: Tag[], pictureReference: string,
+    constructor(name: string, description: string, biography: string, tags: Tag[], pictureReferences: string[],
                 likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: any, moveOutDate: any,
                 address: string, rent: number, permanent: boolean, numberOfRoommates: number, roomSize: number,
                 numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[]) {
@@ -32,7 +32,7 @@ export class FlatProfile implements Profile {
         this.description = description;
         this.biography = biography;
         this.tags = tags;
-        this.pictureReference = pictureReference;
+        this.pictureReferences = pictureReferences;
         this.likes = likes;
         this.creationDate = creationDate;
         this.onlineStatus = onlineStatus;
@@ -56,7 +56,7 @@ export class FlatProfile implements Profile {
             description: this.description,
             biography: this.biography,
             tags: this.tags,
-            pictureReference: this.pictureReference,
+            pictureReferences: this.pictureReferences,
             likes: this.likes,
             creationDate: this.creationDate,
             onlineStatus: this.onlineStatus,
@@ -82,7 +82,7 @@ export class FlatProfile implements Profile {
             description: this.description,
             biography: this.biography,
             tags: this.tags,
-            pictureReference: this.pictureReference,
+            pictureReferences: this.pictureReferences,
             likes: json_likes,
             creationDate: this.creationDate,
             onlineStatus: this.onlineStatus,
