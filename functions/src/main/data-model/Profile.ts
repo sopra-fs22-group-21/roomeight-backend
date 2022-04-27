@@ -6,7 +6,7 @@ export interface Profile {
     description: string,
     biography: string,
     tags: Tag[],
-    pictureReference: string,
+    pictureReferences: string[],
     creationDate: Date,
     onlineStatus: Status,
     moveInDate: Date,

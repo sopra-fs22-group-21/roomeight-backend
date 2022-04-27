@@ -14,7 +14,7 @@ export class FlatProfileConverter{
         let current_date = mm + '/' + dd + '/' + yyyy;
 
         // Create Template userprofile with default values and mandatory fields
-        let flat = new FlatProfile(json_body.name, "", "", [], "",
+        let flat = new FlatProfile(json_body.name, "", "", [], [],
             [], new Date(current_date), Status.online, null, null,
             json_body.address, NaN, false, 1,  NaN, NaN, [json_body.user_uid], "", [])
 
@@ -31,8 +31,8 @@ export class FlatProfileConverter{
         if (json_body.hasOwnProperty("description")) {
             flat.description = json_body.description;
         }
-        if (json_body.hasOwnProperty("pictureReference")) {
-            flat.pictureReference = json_body.pictureReference;
+        if (json_body.hasOwnProperty("pictureReferences")) {
+            flat.pictureReferences = json_body.pictureReferences;
         }
         if (json_body.hasOwnProperty("moveInDate")) {
             flat.moveInDate = new Date(Date.parse(json_body.moveInDate));
@@ -64,7 +64,7 @@ export class FlatProfileConverter{
         let likes: Like[] = [];
         db_entry.likes.map((like: any) => likes.push(new Like(like.likes, like.likedUser)));
         try {
-            return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReference,
+            return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReferences,
                 likes, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
                 db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent, db_entry.permanent,
                 db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths, db_entry.roomMates, db_entry.profileId, db_entry.matches);

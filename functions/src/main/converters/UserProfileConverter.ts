@@ -15,7 +15,7 @@ export class UserProfileConverter{
 
         // Create Template userprofile with default values and mandatory fields
         let user = new UserProfile(json_body.firstName, json_body.lastName, "", "", [],
-                      "", [], new Date(current_date), Status.online, null,
+                      [], [], new Date(current_date), Status.online, null,
                                     null, new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
                             "")
@@ -33,8 +33,8 @@ export class UserProfileConverter{
         if (json_body.hasOwnProperty("description")) {
             user.description = json_body.description;
         }
-        if (json_body.hasOwnProperty("pictureReference")) {
-            user.pictureReference = json_body.pictureReference;
+        if (json_body.hasOwnProperty("pictureReferences")) {
+            user.pictureReferences = json_body.pictureReferences;
         }
         if (json_body.hasOwnProperty("gender")) {
             user.gender = json_body.gender;
@@ -60,7 +60,7 @@ export class UserProfileConverter{
         try {
 
             return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography,
-                db_entry.tags, db_entry.pictureReference, db_entry.matches, db_entry.creationDate.toDate(),
+                db_entry.tags, db_entry.pictureReferences, db_entry.matches, db_entry.creationDate.toDate(),
                 db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null, db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null,
                 db_entry.birthday.toDate(), db_entry.email, db_entry.phoneNumber, db_entry.gender, db_entry.isSearchingRoom,
                 db_entry.isAdvertisingRoom, db_entry.viewed, db_entry.flatId, db_entry.likes, db_entry.profileId)
