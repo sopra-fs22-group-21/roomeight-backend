@@ -58,7 +58,8 @@ export class FlatValidator {
                     }
                     break;
                 case "tags":
-                    if (!this.validateTags(user_json_body[key])) {
+                    // ToDo validate allowed tags
+                    if (!this.validateStringArray(user_json_body[key])) {
                         report.setErrors("invalid tags");
                     }
                     break;
@@ -109,9 +110,9 @@ export class FlatValidator {
         return (name.length >= 0 && name.length < 300);
     }
     // Todo: validate allowed tags
-    private static validateTags(name: string): boolean {
-        return (name.length >= 0 && name.length < 100000);
-    }
+    // private static validateTags(name: string): boolean {
+    //     return (name.length >= 0 && name.length < 100000);
+    // }
     private static validateStringArray(references: string[]): boolean {
         let bool = true;
         for (let reference of references) {

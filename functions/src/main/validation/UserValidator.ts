@@ -89,7 +89,8 @@ export class UserValidator {
                     }
                     break;
                 case "tags":
-                    if (!this.validateTags(user_json_body[key])) {
+                    // ToDo validate allowed tags
+                    if (!this.validateStringArray(user_json_body[key])) {
                         report.setErrors("invalid tags");
                     }
                     break;
@@ -183,9 +184,9 @@ export class UserValidator {
         return (password.length > 5 && password.length < 50);
     }
     // Todo: validate allowed tags
-    private static validateTags(name: string): boolean {
-        return (name.length >= 0 && name.length < 100000);
-    }
+    // private static validateTags(name: string): boolean {
+    //     return (name.length >= 0 && name.length < 100000);
+    // }
     private static validateMatches(name: string): boolean {
         return (name.length >= 0 && name.length < 100000);
     }
