@@ -53,7 +53,7 @@ export class UserProfileDataService {
             let dto = user_to_add.toJson();
 
             // Convert references to actual profiles
-            const reference_converter = new ReferenceController(this.user_repository);
+            const reference_converter = new ReferenceController(this.flat_repository);
 
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
@@ -122,7 +122,7 @@ export class UserProfileDataService {
             let dto = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
 
             // Resolve References and clean up outdated references
-            const reference_converter = new ReferenceController(this.user_repository);
+            const reference_converter = new ReferenceController(this.flat_repository);
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
                     reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
@@ -145,7 +145,7 @@ export class UserProfileDataService {
             })
 
             // Resolve References and clean up outdated References
-            const reference_converter = new ReferenceController(this.user_repository);
+            const reference_converter = new ReferenceController(this.flat_repository);
             for (let i in result) {
                 await reference_converter.resolveProfileReferenceList(result[i].matches)
                     .then((resolution) => {
