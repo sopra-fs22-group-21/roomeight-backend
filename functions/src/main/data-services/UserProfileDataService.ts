@@ -160,7 +160,7 @@ export class UserProfileDataService {
         }
     }
 
-    async likeUser(user_id: string, like_id: string): Promise<string> {
+    async likeUser(user_id: string, like_id: string): Promise<any> {
 
         // Get Profile and Like
         const user_response = await this.user_repository.getProfileById(user_id)
@@ -191,7 +191,8 @@ export class UserProfileDataService {
         // Check if like of user already exists on flat
         let is_liked = false;
         let is_match = false;
-        let new_flat_likes = user_flat.likes;
+        let new_flat_likes: any[] = [];
+        user_flat.likes.map((like) => {new_flat_likes.push(like.toJson())});
         let new_flat_matches = user_flat.matches;
         for (let i in user_flat.likes) {
             if (user_flat.likes[i].likedUser == liked_user.profileId) {
@@ -249,11 +250,15 @@ export class UserProfileDataService {
 
         await this.user_repository.updateProfile(user_update, user.profileId);
         await this.flat_repository.updateProfile(flat_update, user_flat.profileId);
+        user_flat.matches = new_flat_matches;
 
-        return "Successfully liked User " + liked_user.profileId;
+        return {
+            isMatch: is_match,
+            updatedFlatProfile: user_flat.toJson()
+        }
     }
 
-    async likeFlat(profile_id: string, like_id: string): Promise<string> {
+    async likeFlat(profile_id: string, like_id: string): Promise<any> {
         // Get Profile and Like
 
         const user_response = await this.user_repository.getProfileById(profile_id)
@@ -269,14 +274,14 @@ export class UserProfileDataService {
             throw new Error("Flat already liked");
         }
 
-        let profile_is_liked = false;
+        let is_match = false;
             // Check if user is searching room;
             if (user.isSearchingRoom) {
                 // Check if flat liked the profile
                 for (let i in like.matches) {
                     if (like.likes[i].likedUser == user.profileId) {
                         if (like.likes[i].likes.length >= (like.numberOfRoommates/2)) {
-                            profile_is_liked = true;
+                            is_match = true;
                         }
                         break;
                     }
@@ -290,7 +295,9 @@ export class UserProfileDataService {
                 let user_update;
 
                 // Set match if both profiles liked each other else only set own like
-                if (profile_is_liked) {
+                const profile_matches = user.matches;
+
+                if (is_match) {
                     // Update Flat
                     const flat_matches = like.matches;
                     flat_matches.push(user.profileId);
@@ -300,7 +307,6 @@ export class UserProfileDataService {
                     await this.flat_repository.updateProfile(flat_update, like.profileId);
 
                     // Prepare user update
-                    const profile_matches = user.matches;
                     profile_matches.push(like.profileId);
                     user_update = {
                         matches: profile_matches,
@@ -316,7 +322,12 @@ export class UserProfileDataService {
                 }
                 // Update user
                 await this.user_repository.updateProfile(user_update, user.profileId);
-                return "Successfully liked flat " + like.profileId;
+                user.matches = profile_matches
+
+                return {
+                    isMatch: is_match,
+                    updatedFlatProfile: user.toJson()
+                }
 
             } else {
                 throw new Error("You cannot like a flat if your flag isSearchingRoom is false")
