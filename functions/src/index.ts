@@ -32,9 +32,22 @@ const userProfileDataService = new UserProfileDataService(userRepo, flatRepo, ap
 const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
 
 // Export functions and set allowed origins
-exports.userprofiles = functions.https.onRequest(userprofile_app);
+exports.userprofiles = functions
+                        .region("europe-west1")
+                        .runWith({
+                            maxInstances: 5,
+                            timeoutSeconds: 10
+                        })
+                        .https.onRequest(userprofile_app);
 userprofile_app.use(cors({ origin: "*" }));
-exports.flatprofiles = functions.https.onRequest(flatprofile_app);
+
+exports.flatprofiles = functions
+                        .region("europe-west1")
+                        .runWith({
+                            maxInstances: 5,
+                            timeoutSeconds: 10
+                        })
+                        .https.onRequest(flatprofile_app);
 flatprofile_app.use(cors({ origin: "*" }));
 
 
