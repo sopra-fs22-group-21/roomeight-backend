@@ -326,7 +326,7 @@ export class UserProfileDataService {
 
                 return {
                     isMatch: is_match,
-                    updatedFlatProfile: user.toJson()
+                    updatedUserProfile: user.toJson()
                 }
 
             } else {
