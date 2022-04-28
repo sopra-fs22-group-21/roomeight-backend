@@ -26,7 +26,7 @@ export class FlatProfileConverter{
             flat.biography = json_body.biography;
         }
         if (json_body.hasOwnProperty("tags")) {
-            flat.tags = json_body.tags.split(",");
+            flat.tags = json_body.tags;
         }
         if (json_body.hasOwnProperty("description")) {
             flat.description = json_body.description;

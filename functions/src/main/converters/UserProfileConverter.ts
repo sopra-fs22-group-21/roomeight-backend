@@ -28,7 +28,7 @@ export class UserProfileConverter{
             user.biography = json_body.biography;
         }
         if (json_body.hasOwnProperty("tags")) {
-            user.tags = json_body.tags.split(",");
+            user.tags = json_body.tags;
         }
         if (json_body.hasOwnProperty("description")) {
             user.description = json_body.description;
