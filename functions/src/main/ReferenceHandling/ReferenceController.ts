@@ -40,7 +40,7 @@ export class ReferenceController {
 
         // If the referenced profile exists convert it to a Profile Entity
         if (db_entry) {
-            if(reference_id.split("#")[0] == "flt") {
+            if(reference_id.split("$")[0] == "flt") {
                 resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             } else {
                 resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
@@ -72,7 +72,7 @@ export class ReferenceController {
         for (let key in reference_id_list) {
             db_entry = await this.resolvingRepository.getProfileById(reference_id_list[key]);
             if (db_entry) {
-                if(reference_id_list[key].split("#")[0] == "flt") {
+                if(reference_id_list[key].split("$")[0] == "flt") {
                     temp_resolved_reference = FlatProfileConverter.convertDBEntryToProfile(db_entry);
                 } else {
                     temp_resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry);
