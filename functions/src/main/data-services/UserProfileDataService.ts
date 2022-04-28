@@ -216,10 +216,6 @@ export class UserProfileDataService {
             new_flat_likes.push(new Like([user.profileId], liked_user.profileId).toJson());
             if (user_flat.numberOfRoommates <= 2) {
                 is_match = true;
-                // Check if match already exists else push new matches
-                if (user_flat.matches.indexOf(liked_user.profileId) == -1) {
-                    new_flat_matches.push(liked_user.profileId)
-                }
             }
         }
 
@@ -241,6 +237,7 @@ export class UserProfileDataService {
                 // Update liked user matches
                 let new_liked_user_matches = liked_user.matches;
                 new_liked_user_matches.push(user_flat.profileId);
+                new_flat_matches.push(liked_user.profileId);
                 const liked_user_update = {
                     matches: new_liked_user_matches
                 }
