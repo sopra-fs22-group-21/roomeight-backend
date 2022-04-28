@@ -88,6 +88,14 @@ export class FlatProfileDataService {
                         throw new Error('Flat Profile not found')
                     }
                     let roomMates = flat_toDelete.roomMates
+                    const update_fields = {
+                        "flatId": "",
+                        "isAdvertisingRoom": false,
+                        "isSearchingRoom": true
+                    }
+                    for (let roomMate of roomMates) {
+                        this.user_repository.updateProfile(update_fields, roomMate);
+                    }
                     if (roomMates.includes(user_uid)) {
                         // If uid of token matches the profileId continue with request processing
                         return (this.flat_repository.deleteProfile(profileId)
