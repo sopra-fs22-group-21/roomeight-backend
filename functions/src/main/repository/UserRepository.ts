@@ -30,6 +30,14 @@ export class UserRepository implements ProfileRepository {
             })
     }
 
+    getProfileByEmail(email: string): Promise<any> {
+        return this.database.collection(this.collection_name).where("email", "==", email).get()
+            .then((response: any) => {
+                response = response.docs.map((doc: any) => doc.data());
+                return response[0];
+            });
+    }
+
     addProfile(user_to_add: UserProfile): Promise<string>  {
         // Add user to database with set unique profile id
         functions.logger.debug(user_to_add.toDbEntry(), {structuredData: true})

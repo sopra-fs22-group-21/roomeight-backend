@@ -304,9 +304,31 @@ flatprofile_app.post('/', async (req, res) => {
 });
 
 // Add Room Mate
-// Todo: Add reference to the room mate array
-flatprofile_app.post('/roommate/:mate_id', async (req, res) => {
-    res.status(404).send();
+flatprofile_app.post('/roommate/:mate_email', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const mate_email = sanitizeHtml(req.params.mate_email);
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                functions.logger.debug("Started add roommate Post Request", {structuredData: true});
+                return flatProfileDataService.addUserToFlat(decodedToken.uid, mate_email)
+                    .then((data_service_response) => {
+                            res.set('Access-Control-Allow-Origin', '*')
+                            res.status(200).send("Successfully added the User " + mate_email + " to the flat");
+                        }
+                    )
+                    .catch ((e) => {
+                        functions.logger.debug(e, {structuredData: true})
+                        res.status(400).send(e.message);
+                    });
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
 });
 
 // Update Flat
