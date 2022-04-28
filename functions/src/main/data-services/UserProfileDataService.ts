@@ -272,62 +272,62 @@ export class UserProfileDataService {
         }
 
         let is_match = false;
-            // Check if user is searching room;
-            if (user.isSearchingRoom) {
-                // Check if flat liked the profile
-                for (let i in like.matches) {
-                    if (like.likes[i].likedUser == user.profileId) {
-                        if (like.likes[i].likes.length >= (like.numberOfRoommates/2)) {
-                            is_match = true;
-                        }
-                        break;
+        // Check if user is searching room;
+        if (user.isSearchingRoom) {
+            // Check if flat liked the profile
+            for (let i in like.likes) {
+                if (like.likes[i].likedUser == user.profileId) {
+                    if (like.likes[i].likes.length >= (like.numberOfRoommates/2)) {
+                        is_match = true;
                     }
+                    break;
                 }
-
-                // Update User Likes
-                const profile_likes = user.likes;
-                profile_likes.push(like.profileId);
-                const profile_viewed = user.viewed;
-                profile_viewed.push(like.profileId);
-                let user_update;
-
-                // Set match if both profiles liked each other else only set own like
-                const profile_matches = user.matches;
-
-                if (is_match) {
-                    // Update Flat
-                    const flat_matches = like.matches;
-                    flat_matches.push(user.profileId);
-                    const flat_update = {
-                        matches: flat_matches
-                    }
-                    await this.flat_repository.updateProfile(flat_update, like.profileId);
-
-                    // Prepare user update
-                    profile_matches.push(like.profileId);
-                    user_update = {
-                        matches: profile_matches,
-                        likes: profile_likes,
-                        viewed: profile_viewed
-                    }
-                } else {
-                    // If User is not yet liked by flat -> only set like on user profile
-                    user_update = {
-                        likes: profile_likes,
-                        viewed: profile_viewed
-                    }
-                }
-                // Update user
-                await this.user_repository.updateProfile(user_update, user.profileId);
-                user.matches = profile_matches
-
-                return {
-                    isMatch: is_match,
-                    updatedUserProfile: user.toJson()
-                }
-
-            } else {
-                throw new Error("You cannot like a flat if your flag isSearchingRoom is false")
             }
+
+            // Update User Likes
+            const profile_likes = user.likes;
+            profile_likes.push(like.profileId);
+            const profile_viewed = user.viewed;
+            profile_viewed.push(like.profileId);
+            let user_update;
+
+            // Set match if both profiles liked each other else only set own like
+            const profile_matches = user.matches;
+
+            if (is_match) {
+                // Update Flat
+                const flat_matches = like.matches;
+                flat_matches.push(user.profileId);
+                const flat_update = {
+                    matches: flat_matches
+                }
+                await this.flat_repository.updateProfile(flat_update, like.profileId);
+
+                // Prepare user update
+                profile_matches.push(like.profileId);
+                user_update = {
+                    matches: profile_matches,
+                    likes: profile_likes,
+                    viewed: profile_viewed
+                }
+            } else {
+                // If User is not yet liked by flat -> only set like on user profile
+                user_update = {
+                    likes: profile_likes,
+                    viewed: profile_viewed
+                }
+            }
+            // Update user
+            await this.user_repository.updateProfile(user_update, user.profileId);
+            user.matches = profile_matches
+
+            return {
+                isMatch: is_match,
+                updatedUserProfile: user.toJson()
+            }
+
+        } else {
+            throw new Error("You cannot like a flat if your flag isSearchingRoom is false")
+        }
     }
 }
