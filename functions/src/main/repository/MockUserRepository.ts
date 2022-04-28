@@ -60,6 +60,32 @@ export class ValidMockUserRepository implements UserRepository {
         throw new Error("Method not implemented.");
     }
 
+    getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve({
+            firstName: 'Mock first_name',
+            moveInDate: new Timestamp(0, 0),
+            likes: [],
+            phoneNumber: '0795556677',
+            flatId: '',
+            tags: [],
+            isSearchingRoom: false,
+            isAdvertisingRoom: false,
+            biography: '',
+            profileId: '',
+            gender: 'NOT SET',
+            pictureReferences: [],
+            birthday:  new Timestamp(0, 0),
+            description: '',
+            lastName: 'Mock last_name',
+            onlineStatus: 'ONLINE',
+            viewed: [],
+            creationDate:  new Timestamp(0, 0),
+            moveOutDate:  new Timestamp(0, 0),
+            matches: [],
+            email: 'test@test.com'
+    });
+    }
+
 }
 
 export class InvalidMockUserRepository implements UserRepository {
@@ -92,6 +118,10 @@ export class InvalidMockUserRepository implements UserRepository {
 
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
         return Promise.reject(new Error("Could not update User"));
+    }
+
+    getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve(undefined);
     }
 
 }

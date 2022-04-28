@@ -31,6 +31,10 @@ export class ValidMockFlatRepository implements FlatRepository {
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
         return Promise.resolve("");
     }
+
+    getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve("");
+    }
 }
 
 export class InvalidMockFlatRepository implements FlatRepository {
@@ -63,5 +67,9 @@ export class InvalidMockFlatRepository implements FlatRepository {
 
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
         return Promise.reject(new Error("Could not update Flat"));
+    }
+
+    getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve(undefined);
     }
 }

@@ -24,6 +24,14 @@ export class FlatProfileDataService {
 
         // Validate flat which should be added
         let validation_results = FlatValidator.validatePostFlat(body);
+        const req_user = await this.user_repository.getProfileById(user_uid)
+            .catch((repo_error) => {
+                functions.logger.debug(repo_error, {structuredData: true})
+                throw new Error("Could not find user which started the request: " + repo_error.message);
+            })
+        if (req_user.flatId != "") {
+            throw new Error ("User is already part of a flat");
+        }
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Post Request: Passed validation", {structuredData: true});
@@ -80,6 +88,14 @@ export class FlatProfileDataService {
                         throw new Error('Flat Profile not found')
                     }
                     let roomMates = flat_toDelete.roomMates
+                    const update_fields = {
+                        "flatId": "",
+                        "isAdvertisingRoom": false,
+                        "isSearchingRoom": true
+                    }
+                    for (let roomMate of roomMates) {
+                        this.user_repository.updateProfile(update_fields, roomMate);
+                    }
                     if (roomMates.includes(user_uid)) {
                         // If uid of token matches the profileId continue with request processing
                         return (this.flat_repository.deleteProfile(profileId)
@@ -207,5 +223,47 @@ export class FlatProfileDataService {
             functions.logger.debug(validation_results.toString(), {structuredData: true});
             throw new Error(validation_results.toString());
         }
+    }
+
+    async addUserToFlat(user_uid: string, mate_email: string): Promise<string> {
+        functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
+        let user = await this.user_repository.getProfileById(user_uid)
+            .catch(
+                (e) => {
+                    functions.logger.debug(e, {structuredData: true})
+                    throw new Error(e.message);
+                }
+            )
+
+        const flatId = user.flatId;
+        const mate = await this.user_repository.getProfileByEmail(mate_email)
+            .catch((e) => {throw new Error("The User you wanted to add to your flat does not exist! " + e)});
+        if (mate.flatId != "") {
+            throw new Error ("User is already part of a flat");
+        }
+        const flat = await this.flat_repository.getProfileById(flatId)
+            .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
+        let roomMates = flat.roomMates;
+        roomMates.push(mate.profileId)
+        const update_flat = {
+            "roomMates": roomMates
+        }
+
+        await this.flat_repository.updateProfile(update_flat, flatId)
+            .catch((error) => {
+                throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+            })
+
+        const update_roomMate = {
+            "flatId": flatId,
+            "isSearchingRoom": false,
+            "isAdvertisingRoom": true
+        }
+
+        return this.user_repository.updateProfile(update_roomMate, mate.profileId)
+            .catch((error) => {
+                throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
+            })
     }
 }

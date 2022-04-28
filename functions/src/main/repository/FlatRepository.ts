@@ -54,4 +54,8 @@ export class FlatRepository implements ProfileRepository {
                 return "Successfully deleted Flat with id: " + profile_id;
             });
     }
+
+    getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve(undefined);
+    }
 }
