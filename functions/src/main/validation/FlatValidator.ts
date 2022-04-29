@@ -4,7 +4,7 @@ import * as functions from "firebase-functions";
 export class FlatValidator {
     static validatePostFlat(user_json_body: any) {
         let mandatoryFields = ["name", "address"];
-        let optionalFields = ["description", "biography", "tags", "pictureReferences", "likes", "creationDate", "onlineStatus", "moveInDate",
+        let optionalFields = ["description", "biography", "tags", "pictureReferences", "likes", "onlineStatus", "moveInDate",
             "moveOutDate", "address", "rent", "permanent", "roomSize", "numberOfBaths", "roomMates", "matches"]
         functions.logger.log(user_json_body);
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
@@ -13,7 +13,7 @@ export class FlatValidator {
     static validatePatchFlat(update_fields: any) {
         let mandatoryFields: string[] = [];
         let optionalFields = ["description", "biography", "tags", "pictureReferences", "roomSize",
-            "rent", "permanent", "numberOfRoommates", "numberOfBaths", "moveInDate", "moveOutDate", "name", "address"];
+            "rent", "permanent", "numberOfRoommates", "numberOfBaths", "moveInDate", "moveOutDate", "name", "address", "roomMates", "matches", "onlineStatus"];
         return this.validateFields(update_fields, mandatoryFields, optionalFields);
     }
 
@@ -94,9 +94,6 @@ export class FlatValidator {
                             }
                         }
                     }
-                    break;
-                default:
-                    report.setErrors("Unknown Field: " + key);
                     break;
             }
         }
