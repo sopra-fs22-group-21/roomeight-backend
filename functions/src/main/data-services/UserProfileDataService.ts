@@ -188,16 +188,19 @@ export class UserProfileDataService {
             throw new Error("You can only like a User which has set flag isSearchingRoom")
         }
 
-        // Check if like of user already exists on flat
+        // Defining Vars
         let is_liked = false;
         let is_match = false;
         let new_flat_likes = user_flat.likes.map((like) =>like.toJson());
         let new_flat_matches = user_flat.matches;
+        let nr_of_roommates = user_flat.roomMates.length;
+
+        // Check if like of user already exists on flat
         for (let i in user_flat.likes) {
             if (user_flat.likes[i].likedUser == liked_user.profileId) {
                 is_liked = true;
                 // Check if at min half of the roommates liked the user -> if yes: match
-                if ((user_flat.likes[i].likes.length + 1) >= (user_flat.numberOfRoommates/2)) {
+                if ((user_flat.likes[i].likes.length + 1) >= (nr_of_roommates/2)) {
                     is_match = true;
                     // Check if match already exists else push new matches
                     if (user_flat.matches.indexOf(liked_user.profileId) == -1) {
@@ -213,7 +216,7 @@ export class UserProfileDataService {
         // Create new like object and add it if none exists
         if (!is_liked) {
             new_flat_likes.push(new Like([user.profileId], liked_user.profileId).toJson());
-            if (user_flat.numberOfRoommates <= 2) {
+            if (nr_of_roommates <= 2) {
                 is_match = true;
             }
         }
