@@ -1,5 +1,7 @@
 import {FlatRepository} from "./FlatRepository";
 import { FlatProfile } from "../data-model/FlatProfile";
+import firebase from "firebase/compat";
+import Timestamp = firebase.firestore.Timestamp;
 
 
 export class ValidMockFlatRepository implements FlatRepository {
@@ -21,19 +23,40 @@ export class ValidMockFlatRepository implements FlatRepository {
     }
 
     deleteProfile(profile_id: string): Promise<string> {
-        return Promise.resolve("");
+        console.log("Entered Mock deleteUserProfile");
+        return Promise.resolve("Successfully deleted user " + profile_id);
     }
 
     getProfileById(profile_id: string): any {
-        return Promise.resolve("");
+        console.log("Entered Mock updateUserProfile");
+        return Promise.resolve({
+            name: "test",
+            address: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            moveInDate: new Timestamp(0, 0),
+            moveOutDate: new Timestamp(0, 0),
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: [],
+            likes: [],
+            matches: [],
+            flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            creationDate: new Timestamp(0, 0)
+        })
     }
 
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
-        return Promise.resolve("");
+        console.log("Entered Mock updateUserProfile");
+        return Promise.resolve("Successfully updated user " + profile_id);
     }
 
     getProfileByEmail(email: string): Promise<any> {
-        return Promise.resolve("");
+        throw new Error("Method not implemented.");
     }
 }
 
