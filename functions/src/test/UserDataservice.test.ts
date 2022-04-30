@@ -369,7 +369,7 @@ describe("UserProfileDataService Test", () => {
 
     // GetById Tests
 
-    test('1 Test Valid GetById Request', () => {
+    test('11 Test Valid GetById Request', () => {
         const expected_response = {
             profileId: '',
             firstName: 'Mock first_name',
@@ -401,7 +401,7 @@ describe("UserProfileDataService Test", () => {
         );
     });
 
-    test('2 Test Invalid GetById Request', () => {
+    test('12 Test Invalid GetById Request', () => {
         const expected_response = "User Profile not found!"
         const ds = new UserProfileDataService(new InvalidMockUserRepository(), new InvalidMockFlatRepository(), jest.fn());
 
@@ -415,5 +415,13 @@ describe("UserProfileDataService Test", () => {
                 expect(e.message).toEqual(expected_response);
             })
     });
+
+    // test('13 Test valid LikeUser Request', () => {
+    //     const expected_response = {}
+    //     const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+    //
+    //     return ds.likeUser("123", "456")
+    //         .then()
+    // });
 
 });
