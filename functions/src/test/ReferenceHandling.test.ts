@@ -9,8 +9,8 @@ describe("ReferenceController Test", () => {
 
     test('1 Test Resolving of Reference List containing single element', () => {
         const expected_answer = {
-            "": {
-                profileId: '',
+            "123": {
+                profileId: '123',
                 firstName: 'Mock first_name',
                 lastName: 'Mock last_name',
                 description: '',
@@ -24,7 +24,7 @@ describe("ReferenceController Test", () => {
                 email: 'test@test.com',
                 phoneNumber: '0795556677',
                 gender: 'NOT SET',
-                isSearchingRoom: false,
+                isSearchingRoom: true,
                 isAdvertisingRoom: false,
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
@@ -83,8 +83,8 @@ describe("ReferenceController Test", () => {
     // Resolve Single Reference
     test('5 Test Resolving of Single Reference', () => {
         const expected_answer = {
-            "": {
-                profileId: '',
+            "123": {
+                profileId: '123',
                 firstName: 'Mock first_name',
                 lastName: 'Mock last_name',
                 description: '',
@@ -98,7 +98,7 @@ describe("ReferenceController Test", () => {
                 email: 'test@test.com',
                 phoneNumber: '0795556677',
                 gender: 'NOT SET',
-                isSearchingRoom: false,
+                isSearchingRoom: true,
                 isAdvertisingRoom: false,
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate:  "1970-01-01T00:00:00.000Z",

@@ -245,6 +245,8 @@ export class UserProfileDataService {
                 }
                 await this.user_repository.updateProfile(liked_user_update, liked_user.profileId);
             }
+        } else {
+            is_match = false;
         }
 
         await this.user_repository.updateProfile(user_update, user.profileId);

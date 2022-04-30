@@ -31,6 +31,31 @@ export class ValidMockUserRepository implements UserRepository {
 
     getProfileById(profile_id:string): Promise<any> {
         console.log("Entered Mock updateUserProfile");
+        if (profile_id == "123-advertising") {
+            return Promise.resolve({
+                firstName: 'Mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556677',
+                flatId: '123',
+                tags: [],
+                isSearchingRoom: false,
+                isAdvertisingRoom: true,
+                biography: '',
+                profileId: '123-advertising',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: [],
+                email: 'test@test.com'
+            });
+        }
         return Promise.resolve({
           firstName: 'Mock first_name',
           moveInDate: new Timestamp(0, 0),
@@ -38,10 +63,10 @@ export class ValidMockUserRepository implements UserRepository {
           phoneNumber: '0795556677',
           flatId: '',
           tags: [],
-          isSearchingRoom: false,
+          isSearchingRoom: true,
           isAdvertisingRoom: false,
           biography: '',
-          profileId: '',
+          profileId: '123',
           gender: 'NOT SET',
           pictureReferences: [],
           birthday:  new Timestamp(0, 0),
