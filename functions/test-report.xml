@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserValidator.test.ts">
-    <testCase name="Validate PostUser test valid input for all fields" duration="68"/>
-    <testCase name="Validate PostUser test valid input for mandatory fields" duration="2"/>
-    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
-    <testCase name="Validate PostUser test invalid input with missing fields" duration="2"/>
-    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="3"/>
-    <testCase name="Validate PostUser test invalid date range" duration="18"/>
-    <testCase name="Validate PostUser test json with null value" duration="46"/>
-    <testCase name="Validate PatchUser test valid input for all fields" duration="2"/>
-    <testCase name="Validate PatchUser test invalid input fields" duration="1"/>
-    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="1"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfileConverter.test.ts">
-    <testCase name="ValidatorReport test report should match the errormessage" duration="22"/>
-  </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ValidationReport.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="7"/>
-    <testCase name="ValidatorReport test report should match the errormessage" duration="3"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfile.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="14"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatProfile.test.ts">
     <testCase name="ValidatorReport test new report should not contain errors" duration="4"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatValidator.test.ts">
-    <testCase name="Validate PostFlat test valid input for all fields" duration="47"/>
-    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="2"/>
-    <testCase name="Validate PostFlat test invalid input fields" duration="2"/>
-    <testCase name="Validate PostFlat test invalid input with missing fields" duration="3"/>
-    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="2"/>
-    <testCase name="Validate PostFlat test invalid date range" duration="6"/>
-    <testCase name="Validate PostFlat test json with null value" duration="6"/>
-    <testCase name="Validate PatchUser test valid input for all fields" duration="1"/>
-    <testCase name="Validate PatchUser test invalid input fields" duration="2"/>
-    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="1"/>
+    <testCase name="ValidatorReport test report should match the errormessage" duration="16"/>
   </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatProfileConverter.test.ts">
-    <testCase name="ValidatorReport test report should match the errormessage" duration="7"/>
+    <testCase name="ValidatorReport test report should match the errormessage" duration="6"/>
+  </file>
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfile.test.ts">
+    <testCase name="ValidatorReport test new report should not contain errors" duration="6"/>
+  </file>
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfileConverter.test.ts">
+    <testCase name="ValidatorReport test report should match the errormessage" duration="13"/>
+  </file>
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatProfile.test.ts">
+    <testCase name="ValidatorReport test new report should not contain errors" duration="3"/>
   </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ReferenceHandling.test.ts">
-    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="91"/>
-    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="2"/>
+    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="143"/>
+    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="9"/>
     <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="2"/>
-    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="0"/>
-    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="8"/>
+    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="1"/>
+    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="12"/>
     <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="7"/>
   </file>
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatValidator.test.ts">
+    <testCase name="Validate PostFlat test valid input for all fields" duration="31"/>
+    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="5"/>
+    <testCase name="Validate PostFlat test invalid input fields" duration="5"/>
+    <testCase name="Validate PostFlat test invalid input with missing fields" duration="4"/>
+    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="4"/>
+    <testCase name="Validate PostFlat test invalid date range" duration="4"/>
+    <testCase name="Validate PostFlat test json with null value" duration="5"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="2"/>
+    <testCase name="Validate PatchUser test invalid input fields" duration="2"/>
+    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="3"/>
+  </file>
+  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserValidator.test.ts">
+    <testCase name="Validate PostUser test valid input for all fields" duration="5"/>
+    <testCase name="Validate PostUser test valid input for mandatory fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input with missing fields" duration="3"/>
+    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="2"/>
+    <testCase name="Validate PostUser test invalid date range" duration="1"/>
+    <testCase name="Validate PostUser test json with null value" duration="0"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
+  </file>
   <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts">
-    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="58"/>
-    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="9"/>
+    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="62"/>
+    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="10"/>
     <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="7"/>
-    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="41"/>
-    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="4"/>
-    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 1 Test Valid GetById Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 2 Test Invalid GetById Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="31"/>
+    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="14"/>
+    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="5"/>
+    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="8"/>
+    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="4"/>
+    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 1 Test Valid GetById Request" duration="5"/>
+    <testCase name="UserProfileDataService Test 2 Test Invalid GetById Request" duration="2"/>
   </file>
 </testExecutions>
