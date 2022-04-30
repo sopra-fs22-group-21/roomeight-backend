@@ -4,17 +4,17 @@ export class UserValidator {
     static validatePostUser(user_json_body: any) {
 
         let mandatoryFields = ["firstName", "lastName", "birthday", "email", "phoneNumber", "password"];
-        let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender", "isSearchingRoom",
-                             "isAdvertisingRoom", "moveInDate", "moveOutDate"];
+        let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender",
+                              "moveInDate", "moveOutDate", "isComplete"];
         
         return this.validateFields(user_json_body, mandatoryFields, optionalFields);
     }
 
     static validatePatchUser(update_fields: any) {
         let mandatoryFields: string[] = [];
-        let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender", "isSearchingRoom",
-                              "isAdvertisingRoom", "moveInDate", "moveOutDate", "firstName", "lastName", "birthday",
-                              "phoneNumber", "email", "flatId"];
+        let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender",
+                              "moveInDate", "moveOutDate", "firstName", "lastName", "birthday",
+                              "phoneNumber", "email", "flatId", "isComplete"];
         return this.validateFields(update_fields, mandatoryFields, optionalFields);
     }
 
@@ -114,14 +114,9 @@ export class UserValidator {
                         report.setErrors("invalid gender, must be MALE/FEMALE or OTHERS");
                     }
                     break;
-                case "isSearchingRoom":
+                case "isComplete":
                     if (!(typeof user_json_body[key] == "boolean")) {
-                        report.setErrors("invalid isSearchingRoom, has to be true or false (boolean)");
-                    }
-                    break;
-                case "isAdvertisingRoom":
-                    if (!(typeof user_json_body[key] == "boolean")) {
-                        report.setErrors("invalid isAdvertisingRoom, has to be true or false (boolean)");
+                        report.setErrors("invalid isComplete, has to be true or false (boolean)");
                     }
                     break;
                 case "moveInDate":
@@ -133,7 +128,6 @@ export class UserValidator {
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid moveOutDate, Expected Format: 1999-06-22");
                     } else {
-                        // Todo: improve field validation -> MoveIn date not always in body
                         if (!user_json_body.hasOwnProperty("moveInDate")) {
                             break;
                         }

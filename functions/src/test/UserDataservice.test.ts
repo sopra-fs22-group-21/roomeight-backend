@@ -152,7 +152,8 @@ describe("UserProfileDataService Test", () => {
             isAdvertisingRoom: false,
             moveInDate: new Date(NaN),
             moveOutDate: new Date(NaN),
-            flatId: ""
+            flatId: "",
+            isComplete: false
         }
 
         const user_repo = new ValidMockUserRepository();
@@ -174,7 +175,7 @@ describe("UserProfileDataService Test", () => {
 
         const expected_response = "Errors:\ninvalid email\n" +
             "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-            "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"
+            "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate,isComplete"
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
 
@@ -264,8 +265,8 @@ describe("UserProfileDataService Test", () => {
 
         const expected_response = "Errors:\ninvalid phoneNumber\n" +
             "Mandatory fields are: \n" +
-            "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom," +
-                                    "moveInDate,moveOutDate,firstName,lastName,birthday,phoneNumber,email,flatId"
+            "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate," +
+                                 "firstName,lastName,birthday,phoneNumber,email,flatId,isComplete"
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
 

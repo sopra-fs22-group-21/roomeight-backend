@@ -6,7 +6,7 @@ describe('ValidatorReport test', () => {
     let userProfile: UserProfile;
 
     beforeEach(() => {
-        userProfile = new UserProfile("test", "test", "", "", [], [], [], new Date(0), Status.online, new Date(0), new Date(0), new Date(0), "lars.boesch@uzh.ch", "+41799127396", Gender.notSet, true, false, [], "", [], "");
+        userProfile = new UserProfile("test", "test", "", "", [], [], [], new Date(0), Status.online, new Date(0), new Date(0), new Date(0), "lars.boesch@uzh.ch", "+41799127396", Gender.notSet, true, false, [], "", [], "", false);
     });
 
     test('new report should not contain errors', () => {
@@ -28,7 +28,8 @@ describe('ValidatorReport test', () => {
             "\"isAdvertisingRoom\":false," +
             "\"moveInDate\":\"1970-01-01T00:00:00.000Z\"," +
             "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"flatId\":\"\"}"
+            "\"flatId\":\"\"," +
+            "\"isComplete\":false}"
 
         expect(JSON.stringify(userProfile.toJson())).toEqual(expected);
     })

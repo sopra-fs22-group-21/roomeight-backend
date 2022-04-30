@@ -17,13 +17,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/userprofiles/XEb3g8IulAbQjkqnET3kDoL3eiq2",
+							"raw": "{{URL_DEV}}/userprofiles/osXegbGHiYcw8m3SHfBz3HtL0pp1",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"userprofiles",
-								"XEb3g8IulAbQjkqnET3kDoL3eiq2"
+								"osXegbGHiYcw8m3SHfBz3HtL0pp1"
 							]
 						}
 					},
@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Lars\",\r\n  \"lastName\": \"Bösch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": \"test\",\r\n  \"pictureReference\": \"test\",\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars@uzh.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": true,\r\n  \"isAdvertisingRoom\": false\r\n}",
+							"raw": "{\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Larry\",\r\n  \"lastName\": \"Boesch\",\r\n  \"description\": \"test\",\r\n  \"biography\": \"test\",\r\n  \"tags\": [\"test\"],\r\n  \"pictureReferences\": [\"test\"],\r\n  \"birthday\": \"1998-08-30\",\r\n  \"email\": \"lars@gmail.ch\",\r\n  \"phoneNumber\": \"+41795233087\",\r\n  \"gender\": \"MALE\",\r\n  \"isSearchingRoom\": true,\r\n  \"isAdvertisingRoom\": false\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,7 +82,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"updatedName\"\r\n}",
+							"raw": "{\r\n    \"firstName\": \"lars\",\r\n    \"lastName\": \"larry\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -90,13 +90,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL_DEV}}/userprofiles/QSktsoEdWvNfCWQi6sG0wezojyE3",
+							"raw": "{{URL_DEV}}/userprofiles/osXegbGHiYcw8m3SHfBz3HtL0pp1",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"userprofiles",
-								"QSktsoEdWvNfCWQi6sG0wezojyE3"
+								"osXegbGHiYcw8m3SHfBz3HtL0pp1"
 							]
 						}
 					},
@@ -118,13 +118,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/userprofiles/0lzkOJngviQ8npWrPO9fOCa1OC43",
+							"raw": "{{URL_DEV}}/userprofiles/PL9kBsnLZ0TflfTAtKSDOlR3R9W2",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"userprofiles",
-								"0lzkOJngviQ8npWrPO9fOCa1OC43"
+								"PL9kBsnLZ0TflfTAtKSDOlR3R9W2"
 							]
 						}
 					},
@@ -163,14 +163,14 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/userprofiles/likeFlat/flt$af796d20-54eb-4e20-8734-01e6cbcaa91e",
+							"raw": "{{URL_DEV}}/userprofiles/likeFlat/flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"userprofiles",
 								"likeFlat",
-								"flt$af796d20-54eb-4e20-8734-01e6cbcaa91e"
+								"flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"
 							]
 						}
 					},
@@ -192,14 +192,14 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/userprofiles/likeUser/CEajXj4fhIQM9KZLpJEPliJVMOp2",
+							"raw": "{{URL_DEV}}/userprofiles/likeUser/991Kh9xOnrdI6CRs1C6HX36tum63",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"userprofiles",
 								"likeUser",
-								"CEajXj4fhIQM9KZLpJEPliJVMOp2"
+								"991Kh9xOnrdI6CRs1C6HX36tum63"
 							]
 						}
 					},
@@ -216,13 +216,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/flatprofiles/flt$d74a68d5-17a3-46b3-8d2f-8826f141f969",
+							"raw": "{{URL_DEV}}/flatprofiles/flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"flatprofiles",
-								"flt$d74a68d5-17a3-46b3-8d2f-8826f141f969"
+								"flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"
 							]
 						}
 					},
@@ -245,7 +245,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"fs221\",\n    \"address\": \"freiestrasse 221, 8032 Zuerich\"\n}",
+							"raw": "{\n    \"name\": \"langethal\",\n    \"address\": \"freiestrasse 221, 8032 Zuerich\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -280,13 +280,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{URL_DEV}}/flatprofiles/flt$fd4bbdeb-3fa2-486e-9ec3-efbc138fc180",
+							"raw": "{{URL_DEV}}/flatprofiles/flt$b56fe5f5-34ad-4db8-9fe8-d0a86626f66b",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"flatprofiles",
-								"flt$fd4bbdeb-3fa2-486e-9ec3-efbc138fc180"
+								"flt$b56fe5f5-34ad-4db8-9fe8-d0a86626f66b"
 							]
 						}
 					},
@@ -309,7 +309,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"christoph\"\n}",
+							"raw": "{\n    \"name\": \"quokkas\",\n    \"moveInDate\": \"2022-08-06\",\n    \"moveOutDate\": \"2022-08-07\",\n    \"pictureReferences\": []\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -317,20 +317,20 @@
 							}
 						},
 						"url": {
-							"raw": "{{URL_DEV}}/flatprofiles/flt$d74a68d5-17a3-46b3-8d2f-8826f141f969",
+							"raw": "{{URL_DEV}}/flatprofiles/flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
 							"host": [
 								"{{URL_DEV}}"
 							],
 							"path": [
 								"flatprofiles",
-								"flt$d74a68d5-17a3-46b3-8d2f-8826f141f969"
+								"flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "userprofiles",
+					"name": "flatprofiles",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -345,47 +345,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "roommate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{URL_DEV}}/flatprofiles/roommate/asdf@gmail.com",
+							"host": [
+								"{{URL_DEV}}"
+							],
+							"path": [
+								"flatprofiles",
+								"roommate",
+								"asdf@gmail.com"
+							]
+						}
+					},
+					"response": []
 				}
 			]
-		},
-		{
-			"name": "GetUserToken",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\": \"remixd12@gmail.com\",\r\n    \"password\": \"testpassword\",\r\n    \"returnSecureToken\":true\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key={{API_KEY}}",
-					"protocol": "https",
-					"host": [
-						"identitytoolkit",
-						"googleapis",
-						"com"
-					],
-					"path": [
-						"v1",
-						"accounts:signUp"
-					],
-					"query": [
-						{
-							"key": "key",
-							"value": "{{API_KEY}}"
-						}
-					]
-				}
-			},
-			"response": []
 		}
 	],
 	"event": [
@@ -411,7 +401,7 @@
 	"variable": [
 		{
 			"key": "URL_DEV",
-			"value": "http://localhost:5001/roomeight-9cd94/us-central1",
+			"value": "http://localhost:5001/roomeight-9cd94/europe-west1",
 			"type": "string"
 		},
 		{

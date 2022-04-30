@@ -26,12 +26,13 @@ export class UserProfile implements Profile{
     isSearchingRoom: boolean;
     isAdvertisingRoom: boolean;
     flatId: string;
+    isComplete: boolean;
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
                 pictureReferences: string[], matches: string[], creationDate: Date, onlineStatus: Status,
                 moveInDate: any, moveOutDate: any, birthday: Date, email: string, phoneNumber: string,
                 gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
-                likes: string[], profile_id: string) {
+                likes: string[], profile_id: string, isComplete: boolean) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.description = description;
@@ -53,6 +54,7 @@ export class UserProfile implements Profile{
         this.flatId = flatId;
         this.likes = likes;
         this.profileId = profile_id;
+        this.isComplete = isComplete;
     }
 
     toJson(): any {
@@ -75,7 +77,8 @@ export class UserProfile implements Profile{
             isAdvertisingRoom: this.isAdvertisingRoom,
             moveInDate: this.moveInDate,
             moveOutDate: this.moveOutDate,
-            flatId: this.flatId
+            flatId: this.flatId,
+            isComplete: this.isComplete
         };
     }
 
@@ -101,11 +104,8 @@ export class UserProfile implements Profile{
             isAdvertisingRoom: this.isAdvertisingRoom,
             moveInDate: this.moveInDate,
             moveOutDate: this.moveOutDate,
-            flatId: this.flatId
+            flatId: this.flatId,
+            isComplete: this.isComplete
         };
-    }
-
-    getMatches(): UserProfile[] {
-        throw new Error("Method not implemented.");
     }
 }
