@@ -119,16 +119,6 @@ export class FieldValidator {
                         report.setErrors("invalid phoneNumber");
                     }
                     break;
-                case "matches":
-                    if (!this.validateMatches(user_json_body[key])) {
-                        report.setErrors("invalid matches");
-                    }
-                    break;
-                case "mismatches":
-                    if (!this.validateMismatches(user_json_body[key])) {
-                        report.setErrors("invalid mismatches");
-                    }
-                    break;
                 case "gender":
                     if (!this.validateGender(user_json_body[key], allowedGenders)) {
                         report.setErrors("invalid gender, must be MALE/FEMALE or OTHERS");
@@ -176,12 +166,6 @@ export class FieldValidator {
     }
     private static validateName(name: string): boolean {
         return (name.length > 0 && name.length < 50);
-    }
-    private static validateMatches(name: string): boolean {
-        return (name.length >= 0 && name.length < 100000);
-    }
-    private static validateMismatches(name: string): boolean {
-        return (name.length >= 0 && name.length < 100000);
     }
     private static validateGender(gender: string, allowedGenders: string[]): boolean {
         return (allowedGenders.includes(gender) || gender === "");
