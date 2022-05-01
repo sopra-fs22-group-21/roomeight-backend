@@ -202,10 +202,6 @@ export class UserProfileDataService {
                 // Check if at min half of the roommates liked the user -> if yes: match
                 if ((user_flat.likes[i].likes.length + 1) >= (nr_of_roommates/2)) {
                     is_match = true;
-                    // Check if match already exists else push new matches
-                    if (user_flat.matches.indexOf(liked_user.profileId) == -1) {
-                        new_flat_matches.push(liked_user.profileId)
-                    }
                 }
                 // Push user id to likes
                 new_flat_likes[i].likes.push(user.profileId);
