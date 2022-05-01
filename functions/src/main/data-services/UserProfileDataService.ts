@@ -272,12 +272,14 @@ export class UserProfileDataService {
         }
 
         let is_match = false;
+        let nr_of_roommates = like.roomMates.length;
+
         // Check if user is searching room;
         if (user.isSearchingRoom) {
             // Check if flat liked the profile
             for (let i in like.likes) {
                 if (like.likes[i].likedUser == user.profileId) {
-                    if (like.likes[i].likes.length >= (like.numberOfRoommates/2)) {
+                    if (like.likes[i].likes.length >= (nr_of_roommates/2)) {
                         is_match = true;
                     }
                     break;
