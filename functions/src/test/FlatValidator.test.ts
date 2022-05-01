@@ -127,8 +127,7 @@ describe('Validate PatchUser', () => {
         "permanent": false,
         "roomSize": 18,
         "numberOfBaths": 1,
-        "roomMates": [],
-        "matches": []
+        "numberOfRoommates": 3
     }
 
     let invalidFields = {
@@ -155,7 +154,7 @@ describe('Validate PatchUser', () => {
         let res = FlatValidator.validatePatchFlat(unexpectedField);
         let expected = "Errors:\nUnknown Field: hometown\n" +
             "Mandatory fields are: \n" +
-            "Optional fields are: description,biography,tags,pictureReferences,roomSize,rent,permanent,numberOfRoommates,numberOfBaths,moveInDate,moveOutDate,name,address,roomMates,matches,onlineStatus"
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,name,address"
         expect(res.validationFoundErrors()).toBe(true);
         expect(res.toString()).toEqual(expected);
     })
