@@ -331,6 +331,34 @@ flatprofile_app.post('/roommate/:mate_email', async (req, res) => {
     }
 });
 
+// Leave flat
+flatprofile_app.post('/leaveFlat', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                functions.logger.debug("Started Flat Post Request", {structuredData: true});
+                return flatProfileDataService.deleteUserFromFlat(req.body, decodedToken.uid)
+                    .then((data_service_response) => {
+                            res.set('Access-Control-Allow-Origin', '*')
+                            res.status(200).send(data_service_response);
+                        }
+                    )
+                    .catch ((e) => {
+                        functions.logger.debug(e, {structuredData: true})
+                        res.status(400).send(e.message);
+                    });
+
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
+
 // Update Flat
 flatprofile_app.patch('/:profileId', async (req, res) => {
     functions.logger.debug("Started Flat Patch Request", {structuredData: true});

@@ -81,36 +81,7 @@ export class FlatProfileDataService {
 
     async deleteFlat(profileId: string, user_uid: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
-        return this.flat_repository.getProfileById(profileId)
-            .then(
-                (flat_toDelete) => {
-                    if (!flat_toDelete) {
-                        throw new Error('Flat Profile not found')
-                    }
-                    let roomMates = flat_toDelete.roomMates
-                    const update_fields = {
-                        "flatId": "",
-                        "isAdvertisingRoom": false,
-                        "isSearchingRoom": true
-                    }
-                    for (let roomMate of roomMates) {
-                        this.user_repository.updateProfile(update_fields, roomMate);
-                    }
-                    if (roomMates.includes(user_uid)) {
-                        // If uid of token matches the profileId continue with request processing
-                        return (this.flat_repository.deleteProfile(profileId)
-                            .then((response) => {
-                                return response
-                            })
-                            .catch((error) => {
-                                throw new Error('Error: Flat was not deleted from firestore: ' + error.message);
-                            }))
-                    } else {
-                        // Else return NotAuthorized-Exception
-                        throw new Error("User is not authorized to delete the selected flat!")
-                    }
-                }
-            )
+        let flat_toDelete = await this.flat_repository.getProfileById(profileId)
             .catch(
                 (e) => {
                     functions.logger.debug(e, {structuredData: true})
@@ -118,6 +89,53 @@ export class FlatProfileDataService {
                     // res.status(404).send(e.message);
                 }
             )
+
+            if (!flat_toDelete) {
+                throw new Error('Flat Profile not found')
+            }
+            let roomMates = flat_toDelete.roomMates
+            const update_fields = {
+                "flatId": "",
+                "isAdvertisingRoom": false,
+                "isSearchingRoom": true
+            }
+            if (roomMates.includes(user_uid)) {
+                // If uid of token matches the profileId continue with request processing
+                for (let roomMate of roomMates) {
+                    await this.user_repository.updateProfile(update_fields, roomMate);
+                }
+
+                // delete matches on matched users
+                let matches = flat_toDelete.matches;
+                for (let match of matches) {
+                    const user_toUpdate = await this.user_repository.getProfileById(match)
+                        .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
+                    let userMatches = user_toUpdate.matches;
+                    const index = userMatches.indexOf(match, 0);
+                    if (index > -1) {
+                        userMatches.splice(index, 1);
+                    }
+                    const updatedMatches = {
+                        "matches": userMatches
+                    }
+
+                    await this.flat_repository.updateProfile(updatedMatches, user_toUpdate.profileId)
+                        .catch((error) => {
+                            throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+                        })
+
+                }
+
+                return (this.flat_repository.deleteProfile(profileId)
+                    .catch((error) => {
+                        throw new Error('Error: Flat was not deleted from firestore: ' + error.message);
+                    }))
+            } else {
+                // Else return NotAuthorized-Exception
+                throw new Error("User is not authorized to delete the selected flat!")
+            }
+
     }
 
     async getProfileByIdFromRepo(profile_id: string): Promise<any> {
@@ -236,13 +254,37 @@ export class FlatProfileDataService {
             )
 
         const flatId = user.flatId;
+        const flat = await this.flat_repository.getProfileById(flatId)
+            .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
         const mate = await this.user_repository.getProfileByEmail(mate_email)
             .catch((e) => {throw new Error("The User you wanted to add to your flat does not exist! " + e)});
         if (mate.flatId != "") {
             throw new Error ("User is already part of a flat");
         }
-        const flat = await this.flat_repository.getProfileById(flatId)
-            .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
+        // delete the match on all matched flats
+        let matches = mate.matches;
+        for (let match of matches) {
+            const flat_toUpdate = await this.flat_repository.getProfileById(match)
+                .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
+            let flatMatches = flat_toUpdate.matches;
+            const index = flatMatches.indexOf(match, 0);
+            if (index > -1) {
+                flatMatches.splice(index, 1);
+            }
+            const updatedMatches = {
+                "matches": flatMatches
+            }
+
+            await this.flat_repository.updateProfile(updatedMatches, flat_toUpdate.profileId)
+                .catch((error) => {
+                    throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+                })
+
+        }
+
 
         let roomMates = flat.roomMates;
         roomMates.push(mate.profileId)
@@ -258,10 +300,55 @@ export class FlatProfileDataService {
         const update_roomMate = {
             "flatId": flatId,
             "isSearchingRoom": false,
-            "isAdvertisingRoom": true
+            "isAdvertisingRoom": true,
+            "matches": [],
+            "viewed": [],
+            "likes": []
         }
 
         return this.user_repository.updateProfile(update_roomMate, mate.profileId)
+            .catch((error) => {
+                throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
+            })
+    }
+
+    async deleteUserFromFlat(body: any, user_uid: string): Promise<string> {
+        // get the user object
+        let user = await this.user_repository.getProfileById(user_uid)
+            .catch(
+                (e) => {
+                    functions.logger.debug(e, {structuredData: true})
+                    throw new Error(e.message);
+                }
+            )
+
+        // get the associated flat
+        const flatId = user.flatId;
+        const flat = await this.flat_repository.getProfileById(flatId)
+            .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
+        // delete user from roomMates array
+        let roomMates = flat.roomMates
+        const index = roomMates.indexOf(user_uid, 0);
+        if (index > -1) {
+            roomMates.splice(index, 1);
+        }
+        let updatedRoomMates = {
+            "roomMates": roomMates
+        }
+        await this.flat_repository.updateProfile(updatedRoomMates, flatId)
+            .catch((error) => {
+                throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+            })
+
+        // update the user
+        let update_fields = {
+            "flatId": "",
+            "viewed": [],
+            "isAdvertisingRoom": false,
+            "isSearchingRoom": true
+        }
+        return this.user_repository.updateProfile(update_fields, user_uid)
             .catch((error) => {
                 throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
             })
