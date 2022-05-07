@@ -370,9 +370,9 @@ describe("UserProfileDataService Test", () => {
 
     // GetById Tests
 
-    test('1 Test Valid GetById Request', () => {
+    test('11 Test Valid GetById Request', () => {
         const expected_response = {
-            profileId: '',
+            profileId: '123',
             firstName: 'Mock first_name',
             lastName: 'Mock last_name',
             description: '',
@@ -386,7 +386,7 @@ describe("UserProfileDataService Test", () => {
             email: 'test@test.com',
             phoneNumber: '0795556677',
             gender: 'NOT SET',
-            isSearchingRoom: false,
+            isSearchingRoom: true,
             isAdvertisingRoom: false,
             moveInDate: "1970-01-01T00:00:00.000Z",
             moveOutDate:  "1970-01-01T00:00:00.000Z",
@@ -402,7 +402,7 @@ describe("UserProfileDataService Test", () => {
         );
     });
 
-    test('2 Test Invalid GetById Request', () => {
+    test('12 Test Invalid GetById Request', () => {
         const expected_response = "User Profile not found!"
         const ds = new UserProfileDataService(new InvalidMockUserRepository(), new InvalidMockFlatRepository(), jest.fn());
 
@@ -415,6 +415,74 @@ describe("UserProfileDataService Test", () => {
             .catch((e) => {
                 expect(e.message).toEqual(expected_response);
             })
+    });
+
+    test('13 Test valid LikeUser Request', () => {
+        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        const expected_response = {
+            isMatch: false,
+            updatedFlatProfile: {
+                profileId: undefined,
+                name: 'test',
+                description: 'test',
+                biography: 'test',
+                tags: [ 'test' ],
+                pictureReferences: [ 'test' ],
+                likes: [],
+                creationDate: "1970-01-01T00:00:00.000Z",
+                onlineStatus: undefined,
+                moveInDate: "1970-01-01T00:00:00.000Z",
+                moveOutDate: "1970-01-01T00:00:00.000Z",
+                address: 'test',
+                rent: 500,
+                permanent: false,
+                numberOfRoommates: undefined,
+                roomSize: 18,
+                numberOfBaths: 1,
+                roomMates: [],
+                matches: []
+        }
+    }
+
+        return ds.likeUser("123-advertising", "456")
+            .then((response) => {
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+            });
+    });
+
+    test('14 Test valid LikeFlat Request', () => {
+        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        const expected_response = {
+            isMatch: false,
+            updatedUserProfile: {
+                profileId: '123',
+                firstName: 'Mock first_name',
+                lastName: 'Mock last_name',
+                description: '',
+                biography: '',
+                tags: [],
+                pictureReferences: [],
+                matches: [],
+                creationDate: "1970-01-01T00:00:00.000Z",
+                onlineStatus: 'ONLINE',
+                birthday: "1970-01-01T00:00:00.000Z",
+                email: 'test@test.com',
+                phoneNumber: '0795556677',
+                gender: 'NOT SET',
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                moveInDate: "1970-01-01T00:00:00.000Z",
+                moveOutDate: "1970-01-01T00:00:00.000Z",
+                flatId: '',
+                isComplete: undefined
+        }
+    }
+
+        return ds.likeFlat("123", "456")
+            .then((response) => {
+                console.log(response)
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+            });
     });
 
 });
