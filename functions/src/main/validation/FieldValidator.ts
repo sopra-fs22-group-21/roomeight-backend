@@ -1,4 +1,5 @@
 import {ValidationReport} from "./ValidationReport";
+import {Tag} from "../data-model/Tag";
 
 
 export class FieldValidator {
@@ -45,9 +46,14 @@ export class FieldValidator {
                     }
                     break;
                 case "tags":
-                    // ToDo validate allowed tags
                     if (!this.validateStringArray(user_json_body[key])) {
-                        report.setErrors("invalid tags");
+                        report.setErrors("Invalid tags: Should be a string array ");
+                    } else {
+                        for(let tag of user_json_body[key]) {
+                            if (!this.validateTag(tag)) {
+                                report.setErrors("Invalid tag: " + tag + " is not a valid tag")
+                            }
+                        }
                     }
                     break;
                 case "pictureReferences":
@@ -69,7 +75,6 @@ export class FieldValidator {
                     if (!this.validateDate(user_json_body[key])) {
                         report.setErrors("invalid moveOutDate, Expected Format: 1999-06-22");
                     } else {
-                        // Todo: improve field validation -> MoveIn date not always in body
                         if (!user_json_body.hasOwnProperty("moveInDate")) {
                             break;
                         }
@@ -142,20 +147,23 @@ export class FieldValidator {
     private static validateDate(date: string): boolean {
         return (!isNaN(Date.parse(date)) || date === "");
     }
+
     private static validateBirthday(birthday: string): boolean {
         return (!isNaN(Date.parse(birthday)));
     }
+
     private static validateString(name: string): boolean {
         return (name.length >= 0 && name.length < 300);
     }
-    // Todo: validate allowed tags
-    // private static validateTags(name: string): boolean {
-    //     return (name.length >= 0 && name.length < 100000);
-    // }
-    private static validateStringArray(references: string[]): boolean {
+
+    private static validateTag(tag: string): boolean {
+        return Object.values(Tag).includes(tag as Tag);
+    }
+
+    private static validateStringArray(str_array: string[]): boolean {
         let bool = true;
-        for (let reference of references) {
-            if (!this.validateString(reference)) {
+        for (let element of str_array) {
+            if (!this.validateString(element)) {
                 bool = false;
             }
         }
