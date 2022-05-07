@@ -17,7 +17,6 @@ import {FlatProfileDataService} from "./main/data-services/FlatProfileDataServic
 // The Firebase Admin SDK to access Firestore.
 const admin = require('firebase-admin');
 const app = admin.initializeApp(config);
-admin.auth.setCustomUserClaims()
 
 // Required instances
 const userprofile_app = express();
@@ -30,7 +29,7 @@ const flatRepo = new FlatRepository(app)
 
 // Data Service Initialization
 const userProfileDataService = new UserProfileDataService(userRepo, flatRepo, app);
-const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo, app);
+const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
 
 // Export functions and set allowed origins
 exports.userprofiles = functions

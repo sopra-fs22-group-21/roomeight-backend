@@ -12,12 +12,10 @@ export class FlatProfileDataService {
 
     private flat_repository: FlatRepository;
     private user_repository: ProfileRepository;
-    private app: any;
 
-    constructor(flat_repo: FlatRepository, user_repo: ProfileRepository, app: any) {
+    constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
         this.user_repository = user_repo;
-        this.app = app;
         initializeApp(config);
     }
 
@@ -59,8 +57,6 @@ export class FlatProfileDataService {
             }
             await this.user_repository.updateProfile(update_fields, user_uid);
             functions.logger.debug(repo_response, {structuredData: true});
-
-            await this.app.auth.setCustomUserClaims(user_uid, {flatAdmin: flat_to_add.profileId})
 
             // Convert references
 
