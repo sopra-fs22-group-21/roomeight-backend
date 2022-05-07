@@ -50,7 +50,10 @@ export class FlatProfileDataService {
             const update_fields = {
                 "isSearchingRoom": false,
                 "isAdvertisingRoom": true,
-                "flatId": flat_to_add.profileId
+                "flatId": flat_to_add.profileId,
+                "matches": [],
+                "viewed": [],
+                "likes": []
             }
             await this.user_repository.updateProfile(update_fields, user_uid);
             functions.logger.debug(repo_response, {structuredData: true});
