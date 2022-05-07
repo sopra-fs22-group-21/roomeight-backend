@@ -153,7 +153,8 @@ describe("UserProfileDataService Test", () => {
             moveInDate: new Date(NaN),
             moveOutDate: new Date(NaN),
             flatId: "",
-            isComplete: false
+            isComplete: false,
+            filters: {}
         }
 
         const user_repo = new ValidMockUserRepository();
