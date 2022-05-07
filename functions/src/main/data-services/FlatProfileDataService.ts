@@ -7,7 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
-import {getAuth} from "firebase-admin/lib/auth";
+import {getAuth} from "firebase-admin/auth";
 
 export class FlatProfileDataService {
 
