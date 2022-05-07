@@ -3,7 +3,7 @@ import * as functions from "firebase-functions";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
 import {initializeApp} from "firebase/app";
 import {config} from "../../../firebase_config";
-import {v4 as uuidv4} from "uuid";
+import {v4 as uuidv4} from 'uuid';
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";

@@ -1,4 +1,5 @@
 import {ValidationReport} from "./ValidationReport";
+import {Tag} from "../data-model/Tag";
 
 
 export class FieldValidator {
@@ -26,28 +27,33 @@ export class FieldValidator {
             switch (key) {
                 case "name":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid name");
+                        report.setErrors("Invalid name: Should be of type string and have less than 300 signs");
                     }
                     break;
                 case "address":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid address");
+                        report.setErrors("Invalid address: Should be of type string and have less than 300 signs");
                     }
                     break;
                 case "description":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid description");
+                        report.setErrors("Invalid description: Should be of type string and have less than 300 signs");
                     }
                     break;
                 case "biography":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid biography");
+                        report.setErrors("Invalid biography: Should be of type string and have less than 300 signs");
                     }
                     break;
                 case "tags":
-                    // ToDo validate allowed tags
                     if (!this.validateStringArray(user_json_body[key])) {
-                        report.setErrors("invalid tags");
+                        report.setErrors("Invalid tags: Should be a string array");
+                    } else {
+                        for(let tag of user_json_body[key]) {
+                            if (!this.validateTag(tag)) {
+                                report.setErrors("Invalid tag: " + tag + " is not a valid tag. Valid tags are")
+                            }
+                        }
                     }
                     break;
                 case "pictureReferences":
@@ -56,20 +62,19 @@ export class FieldValidator {
                     }
                     break;
                 case "permanent":
-                    if (!(typeof user_json_body[key] == "boolean")) {
-                        report.setErrors("invalid isSearchingRoom, has to be true or false (boolean)");
+                    if (!(this.validateBoolean(user_json_body[key]))) {
+                        report.setErrors("Invalid isSearchingRoom: has to be true or false (boolean)");
                     }
                     break;
                 case "moveInDate":
                     if (!this.validateDate(user_json_body[key])) {
-                        report.setErrors("invalid moveInDate, Expected Format: 1999-06-22");
+                        report.setErrors("Invalid moveInDate: Expected Format: 1999-06-22");
                     }
                     break;
                 case "moveOutDate":
                     if (!this.validateDate(user_json_body[key])) {
-                        report.setErrors("invalid moveOutDate, Expected Format: 1999-06-22");
+                        report.setErrors("Invalid moveOutDate: Expected Format: 1999-06-22");
                     } else {
-                        // Todo: improve field validation -> MoveIn date not always in body
                         if (!user_json_body.hasOwnProperty("moveInDate")) {
                             break;
                         }
@@ -77,106 +82,226 @@ export class FieldValidator {
                             let moveOutDate = new Date(user_json_body["moveOutDate"]);
                             let moveInDate = new Date(user_json_body["moveInDate"]);
                             if (moveInDate > moveOutDate) {
-                                report.setErrors("moveInDate must be before moveOutDate");
+                                report.setErrors("Invalid moveOutDate: moveInDate must be before moveOutDate");
                             }
                         }
                     }
                     break;
                 case "password":
                     if (!this.validatePassword(user_json_body[key])) {
-                        report.setErrors("invalid password");
+                        report.setErrors("Invalid password: Should be of type string and have between 5 and 50 characters");
                     }
                     break;
                 case "firstName":
                     if (!this.validateName(user_json_body[key])) {
-                        report.setErrors("invalid firstName");
+                        report.setErrors("Invalid firstName");
                     }
                     break;
                 case "lastName":
                     if (!this.validateName(user_json_body[key])) {
-                        report.setErrors("invalid lastName");
+                        report.setErrors("Invalid lastName");
                     }
                     break;
                 case "birthday":
                     if (!this.validateBirthday(user_json_body[key])) {
-                        report.setErrors("invalid birthday, Expected Format: 1999-06-22");
+                        report.setErrors("Invalid birthday, Expected Format: 1999-06-22");
                     } else {
                         let today = new Date();
                         today.setHours(0, 0, 0, 0);
                         let birthday = new Date(user_json_body[key]);
                         if (birthday > today) {
-                            report.setErrors("invalid birthday: selected date is after today");
+                            report.setErrors("Invalid birthday: selected date is after today");
                         }
                     }
                     break;
                 case "email":
                     if (!this.validateEmail(user_json_body[key])) {
-                        report.setErrors("invalid email");
+                        report.setErrors("Invalid email");
                     }
                     break;
                 case "phoneNumber":
                     if (!this.validatePhone(user_json_body[key])) {
-                        report.setErrors("invalid phoneNumber");
+                        report.setErrors("Invalid phoneNumber");
                     }
                     break;
                 case "gender":
                     if (!this.validateGender(user_json_body[key], allowedGenders)) {
-                        report.setErrors("invalid gender, must be MALE/FEMALE or OTHERS");
+                        report.setErrors("Invalid gender, must be MALE/FEMALE or OTHERS");
                     }
                     break;
                 case "isComplete":
                     if (!(typeof user_json_body[key] == "boolean")) {
-                        report.setErrors("invalid isComplete, has to be true or false (boolean)");
+                        report.setErrors("Invalid isComplete, has to be true or false (boolean)");
                     }
                     break;
                 case "flatId":
                     if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("invalid flatId");
+                        report.setErrors("Invalid flatId");
                     }
                     break;
+                case "rent":
+                    if(!this.validateNumber(user_json_body[key])) {
+                        report.setErrors("Invalid rent: Should be of type number")
+                    }
+                    break;
+                case "numberOfRoomMates":
+                    if(!this.validateNumber(user_json_body[key])) {
+                        report.setErrors("Invalid numberOfRoomMates: Should be of type number")
+                    }
+                    break;
+                case "roomSize":
+                    if(!this.validateNumber(user_json_body[key])) {
+                        report.setErrors("Invalid roomSize: Should be of type number")
+                    }
+                    break;
+                case "numberOfBaths":
+                    if(!this.validateNumber(user_json_body[key])) {
+                        report.setErrors("Invalid numberOfBaths: Should be of type number")
+                    }
+                    break;
+                case "filters":
+                    const filters = user_json_body[key];
+                    try {
+                        for(let element of filters) {
+                            switch (element) {
+                                case "age":
+                                    if(!this.validateNumber(filters[element])) {
+                                        report.setErrors("Invalid Filter Age: Should be of type number")
+                                    }
+                                    break;
+                                case "gender":
+                                    if(!this.validateGender(filters[element], allowedGenders)) {
+                                        report.setErrors("Invalid Filter Gender: Allowed values" + allowedGenders)
+                                    }
+                                    break;
+                                case "tags":
+                                    if (!this.validateStringArray(filters[element])) {
+                                        report.setErrors("Invalid Filter tags: Should be a string array");
+                                    } else {
+                                        for(let tag of filters[element]) {
+                                            if (!this.validateTag(tag)) {
+                                                report.setErrors("Invalid Filter tag: " + tag + " is not a valid tag. Valid tags are")
+                                            }
+                                        }
+                                    }
+                                    break;
+                                case "moveInDate":
+                                    if (!this.validateDate(filters[element])) {
+                                        report.setErrors("Invalid Filter moveInDate: Expected Format: 1999-06-22");
+                                    }
+                                    break;
+                                case  "moveOutDate":
+                                    if (!this.validateDate(filters[element])) {
+                                        report.setErrors("Invalid Filter moveOutDate: Expected Format: 1999-06-22");
+                                    }
+                                    break;
+                                case "rent":
+                                    if(!this.validateNumber(filters[element])) {
+                                        report.setErrors("Invalid Filter rent: Should be of type number")
+                                    }
+                                    break;
+                                case "permanent":
+                                    if (!(this.validateBoolean(filters[element]))) {
+                                        report.setErrors("Invalid filter permanent: has to be true or false (boolean)");
+                                    }
+                                    break;
+                                case "numberOfRoomMates":
+                                    if(!this.validateNumber(filters[element])) {
+                                        report.setErrors("Invalid Filter numberOfRoomMates: Should be of type number")
+                                    }
+                                    break;
+                                case "roomSize":
+                                    if(!this.validateNumber(filters[element])) {
+                                        report.setErrors("Invalid Filter roomSize: Should be of type number")
+                                    }
+                                    break;
+                                case "numberOfBaths":
+                                    if(!this.validateNumber(filters[element])) {
+                                        report.setErrors("Invalid Filter numberOfBaths: Should be of type number")
+                                    }
+                                    break;
+                            }
+                        }
+                    } catch (e) {
+                        report.setErrors("Invalid filters: Filters must be of type map")
+                    }
             }
         }
         return report;
     }
 
-    private static validateDate(date: string): boolean {
+    private static validateDate(date: any): boolean {
+        if (!(typeof date == "string")) {
+            return false;
+        }
         return (!isNaN(Date.parse(date)) || date === "");
     }
-    private static validateBirthday(birthday: string): boolean {
+
+    private static validateBirthday(birthday: any): boolean {
+        if (!(typeof birthday == "string")) {
+            return false;
+        }
         return (!isNaN(Date.parse(birthday)));
     }
-    private static validateString(name: string): boolean {
-        return (name.length >= 0 && name.length < 300);
+
+    private static validateString(name: any): boolean {
+        return (name.length >= 0 && name.length < 300 && typeof name == "string");
     }
-    // Todo: validate allowed tags
-    // private static validateTags(name: string): boolean {
-    //     return (name.length >= 0 && name.length < 100000);
-    // }
-    private static validateStringArray(references: string[]): boolean {
+
+    private static validateTag(tag: any): boolean {
+        if (!(typeof tag == "string")) {
+            return false;
+        }
+        return Object.values(Tag).includes(tag as Tag);
+    }
+
+    private static validateStringArray(str_array: any): boolean {
+        if(!(Object.prototype.toString.call(str_array) === '[object Array]')) {
+            return false;
+        }
         let bool = true;
-        for (let reference of references) {
-            if (!this.validateString(reference)) {
+        for (let element of str_array) {
+            if (!this.validateString(element)) {
                 bool = false;
             }
         }
         return bool;
     }
-    private static validatePassword(password: string) {
-        return (password.length > 5 && password.length < 50);
+
+    private static validatePassword(password: any) {
+        return (typeof password == "string" && password.length > 5 && password.length < 50);
     }
-    private static validateName(name: string): boolean {
-        return (name.length > 0 && name.length < 50);
+
+    private static validateName(name: any): boolean {
+        return (typeof name == "string" && name.length > 0 && name.length < 50);
     }
-    private static validateGender(gender: string, allowedGenders: string[]): boolean {
-        return (allowedGenders.includes(gender) || gender === "");
+
+    private static validateGender(gender: any, allowedGenders: string[]): boolean {
+        return (typeof gender == "string" && allowedGenders.includes(gender) || gender === "");
     }
-    private static validatePhone(phone: string): boolean {
+
+    private static validatePhone(phone: any): boolean {
+        if (!(typeof phone == "string")) {
+            return false;
+        }
         const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');
         return regex.test(phone);
     }
-    private static validateEmail(mail: string): boolean {
+
+    private static validateEmail(mail: any): boolean {
+        if (!(typeof mail == "string")) {
+            return false;
+        }
         let regex = new RegExp('[a-z0-9]{1,1000}@[a-z]{1,1000}\.[a-z]{2,3}');
         return regex.test(mail);
+    }
+
+    private static validateBoolean(bool: any): boolean {
+        return typeof bool == "boolean";
+    }
+
+    private static validateNumber(nr: any): boolean {
+        return typeof nr == "number";
     }
 
 }
