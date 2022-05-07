@@ -98,19 +98,44 @@ export class UserProfileDataService {
 
 
     async deleteUser(profileId: string): Promise<string> {
-        return (
-        admin.auth(this.app)
-            .deleteUser(profileId)
-            .then(() => {
-                return this.user_repository.deleteProfile(profileId)
-                    .then((response) => {
-                        return response
-                    })
-                    .catch((error) => {
-                        throw new Error('Error: User was deleted from auth but not from firestore: ' + error.message);
-                    })
+
+        // delete the match on all matched flats
+        let user = await this.user_repository.getProfileById(profileId)
+            .catch(
+                (e) => {
+                    functions.logger.debug(e, {structuredData: true})
+                    throw new Error(e.message);
+                }
+            )
+        let matches = user.matches;
+        for (let match of matches) {
+            const flat_toUpdate = await this.flat_repository.getProfileById(match)
+                .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+
+            let flatMatches = flat_toUpdate.matches;
+            const index = flatMatches.indexOf(match, 0);
+            if (index > -1) {
+                flatMatches.splice(index, 1);
+            }
+            const updatedMatches = {
+                "matches": flatMatches
+            }
+
+            await this.flat_repository.updateProfile(updatedMatches, flat_toUpdate.profileId)
+                .catch((error) => {
+                    throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+                })
+
+        }
+        await admin.auth(this.app).deleteUser(profileId)
+        return this.user_repository.deleteProfile(profileId)
+            .then((response) => {
+                return response
             })
-        );
+            .catch((error) => {
+                throw new Error('Error: User was deleted from auth but not from firestore: ' + error.message);
+            })
+
     }
 
     async getProfileByIdFromRepo(profile_id: string): Promise<any> {
