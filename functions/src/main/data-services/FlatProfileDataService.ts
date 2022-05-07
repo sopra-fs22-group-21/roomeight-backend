@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
+import {getAuth} from "firebase-admin/lib/auth";
 
 export class FlatProfileDataService {
 
@@ -57,6 +58,8 @@ export class FlatProfileDataService {
             }
             await this.user_repository.updateProfile(update_fields, user_uid);
             functions.logger.debug(repo_response, {structuredData: true});
+
+            await getAuth().setCustomUserClaims(user_uid, {flatAdmin: flat_to_add.profileId})
 
             // Convert references
 
