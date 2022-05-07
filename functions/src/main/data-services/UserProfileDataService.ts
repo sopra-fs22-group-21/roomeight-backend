@@ -20,7 +20,6 @@ export class UserProfileDataService {
     constructor(user_repo: UserRepository, flat_repo: FlatRepository, app: any) {
         this.user_repository = user_repo;
         this.flat_repository = flat_repo;
-
         this.app = app;
         initializeApp(config);
     }
