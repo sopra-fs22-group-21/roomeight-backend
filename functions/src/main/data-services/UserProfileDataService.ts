@@ -113,7 +113,7 @@ export class UserProfileDataService {
                 .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
 
             let flatMatches = flat_toUpdate.matches;
-            const index = flatMatches.indexOf(match, 0);
+            const index = flatMatches.indexOf(user.profileId, 0);
             if (index > -1) {
                 flatMatches.splice(index, 1);
             }

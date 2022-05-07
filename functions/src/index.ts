@@ -102,7 +102,6 @@ userprofile_app.post('/', async (req, res) => {
         });
 });
 
-
 // Update User
 userprofile_app.patch('/:profileId', async (req, res) => {
     functions.logger.debug("Started User Patch Request", {structuredData: true});
@@ -185,6 +184,7 @@ userprofile_app.delete('/:profileId', async (req, res) => {
     }
 });
 
+// like operations
 userprofile_app.post('/likeUser/:likedUserId', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         // Get token from header
@@ -211,7 +211,6 @@ userprofile_app.post('/likeUser/:likedUserId', async (req, res) => {
         res.status(401).send("Authorization failed: No authorization header present");
     }
 });
-
 
 userprofile_app.post('/likeFlat/:likedFlatId', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
@@ -240,6 +239,7 @@ userprofile_app.post('/likeFlat/:likedFlatId', async (req, res) => {
     }
 });
 
+// dislike operation/viewed
 userprofile_app.post('/dislike/:Id', async (req, res) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
         // Get token from header

@@ -115,7 +115,7 @@ export class FlatProfileDataService {
                         .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
 
                     let userMatches = user_toUpdate.matches;
-                    const index = userMatches.indexOf(match, 0);
+                    const index = userMatches.indexOf(flat_toDelete.profileId, 0);
                     if (index > -1) {
                         userMatches.splice(index, 1);
                     }
@@ -123,7 +123,7 @@ export class FlatProfileDataService {
                         "matches": userMatches
                     }
 
-                    await this.flat_repository.updateProfile(updatedMatches, user_toUpdate.profileId)
+                    await this.user_repository.updateProfile(updatedMatches, user_toUpdate.profileId)
                         .catch((error) => {
                             throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
                         })
@@ -273,7 +273,7 @@ export class FlatProfileDataService {
                 .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
 
             let flatMatches = flat_toUpdate.matches;
-            const index = flatMatches.indexOf(match, 0);
+            const index = flatMatches.indexOf(mate.profileId, 0);
             if (index > -1) {
                 flatMatches.splice(index, 1);
             }
