@@ -17,7 +17,7 @@ describe('Validate PostUser', () => {
     "lastName": "test",
     "description": "test",
     "biography": "test",
-    "tags": "test",
+    "tags": ["COOKING"],
     "pictureReferences": ["test"],
     "birthday": "2019-06-22",
     "email": "test@test.ch",
@@ -91,6 +91,7 @@ describe('Validate PostUser', () => {
 
   test('test valid input for all fields', () => {
     let res = UserValidator.validatePostUser(validAllFields);
+    console.log(res.toString())
     expect(res.validationFoundErrors()).toBe(false);
   })
 
@@ -124,7 +125,8 @@ describe('Validate PostUser', () => {
 
   test('test invalid date range', () => {
     let res = UserValidator.validatePostUser(invalidDateRange);
-    let expected = "Errors:\nmoveInDate must be before moveOutDate\n" +
+    let expected = "Errors:\nInvalid tags: Should be a string array,\n" +
+        "Invalid moveOutDate: moveInDate must be before moveOutDate\n" +
         "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
         "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate,isComplete"
     expect(res.validationFoundErrors()).toBe(true);
@@ -149,7 +151,7 @@ describe('Validate PatchUser', () => {
     "lastName": "test",
     "description": "test",
     "biography": "test",
-    "tags": "test",
+    "tags": ["COOKING"],
     "pictureReferences": ["test"],
     "birthday": "2019-06-22",
     "email": "test@test.ch",
@@ -195,7 +197,7 @@ describe('Validate PatchUser', () => {
     let expected = "Errors:\nUnknown Field: password\n" +
         "Mandatory fields are: \n" +
         "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate,firstName," +
-                             "lastName,birthday,phoneNumber,email,flatId,isComplete"
+                             "lastName,birthday,phoneNumber,email,flatId,isComplete,filters"
     expect(res.validationFoundErrors()).toBe(true);
     expect(res.toString()).toEqual(expected);
   })

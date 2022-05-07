@@ -174,7 +174,7 @@ describe("UserProfileDataService Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\ninvalid email\n" +
+        const expected_response = "Errors:\nInvalid email\n" +
             "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
             "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate,isComplete"
         let invalid_input = StubInputs.getValidUserPostBody();
@@ -264,10 +264,10 @@ describe("UserProfileDataService Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\ninvalid phoneNumber\n" +
+        const expected_response = "Errors:\nInvalid phoneNumber\n" +
             "Mandatory fields are: \n" +
             "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate," +
-                                 "firstName,lastName,birthday,phoneNumber,email,flatId,isComplete"
+                                 "firstName,lastName,birthday,phoneNumber,email,flatId,isComplete,filters"
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
 

@@ -8,5 +8,9 @@ export enum Tag {
     pets = "PETS",
     party = "PARTY",
     coffee = "COFFEE",
-    wine = "WINE"
+    wine = "WINE",
+    woko = "WOKO",
+    juwo = "JUWO",
+    peaceful = "PEACEFUL",
+    smoker = "SMOKER"
 }

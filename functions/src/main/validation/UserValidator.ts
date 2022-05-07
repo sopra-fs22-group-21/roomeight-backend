@@ -14,7 +14,7 @@ export class UserValidator {
         let mandatoryFields: string[] = [];
         let optionalFields = ["description", "biography", "tags", "pictureReferences", "gender",
                               "moveInDate", "moveOutDate", "firstName", "lastName", "birthday",
-                              "phoneNumber", "email", "flatId", "isComplete"];
+                              "phoneNumber", "email", "flatId", "isComplete", "filters"];
         return FieldValidator.validateFields(update_fields, mandatoryFields, optionalFields);
     }
 
