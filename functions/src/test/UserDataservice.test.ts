@@ -346,26 +346,26 @@ describe("UserProfileDataService Test", () => {
             )
     });
 
-    test('10 Test Cannot access Repo Delete UserProfile Request', async () =>  {
-        const expected_response = "Error: User was deleted from auth but not from firestore: Could not delete User"
-
-        const user_repo = new InvalidMockUserRepository();
-        const flat_repo = new InvalidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
-
-        return ds.deleteUser("123")
-            .then(
-                (response) => {
-                    console.log(response);
-                    throw new TypeError("Expected a repo error");
-                }
-            )
-            .catch(
-                (error) => {
-                    expect(error).toEqual(new Error(expected_response));
-                }
-            )
-    });
+    // test('10 Test Cannot access Repo Delete UserProfile Request', async () =>  {
+    //     const expected_response = "Error: User was deleted from auth but not from firestore: Could not delete User"
+    //
+    //     const user_repo = new InvalidMockUserRepository();
+    //     const flat_repo = new InvalidMockFlatRepository();
+    //     const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+    //
+    //     return ds.deleteUser("123")
+    //         .then(
+    //             (response) => {
+    //                 console.log(response);
+    //                 throw new TypeError("Expected a repo error");
+    //             }
+    //         )
+    //         .catch(
+    //             (error) => {
+    //                 expect(error).toEqual(new Error(expected_response));
+    //             }
+    //         )
+    // });
 
     // GetById Tests
 
