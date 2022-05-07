@@ -240,6 +240,33 @@ userprofile_app.post('/likeFlat/:likedFlatId', async (req, res) => {
     }
 });
 
+userprofile_app.post('/dislike/:Id', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const disliked_id = sanitizeHtml(req.params.Id);
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                const uid = decodedToken.uid;
+                return userProfileDataService.dislike(uid, disliked_id)
+                    .then(
+                        (response) => res.status(200).send(response)
+                    )
+                    .catch((error) => {
+                        res.status(400).send(error.message);
+                    })
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
+
 // Flat Operation
 
 // Get Flat Profiles
@@ -431,8 +458,3 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
         res.status(401).send("Authorization failed: No authorization header present");
     }
 });
-
-flatprofile_app.post('/like', async (req, res) => {
-    res.status(404).send();
-});
-

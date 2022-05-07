@@ -332,4 +332,19 @@ export class UserProfileDataService {
             throw new Error("You cannot like a flat if your flag isSearchingRoom is false")
         }
     }
+
+    async dislike(uid: string, disliked_id: string): Promise<any> {
+        // get user
+        const user = await this.user_repository.getProfileById(uid)
+            .catch((e) => {throw new Error("Profile not found")})
+
+        // update viewed array
+        const viewed = user.viewed;
+        viewed.push(disliked_id);
+         const user_update = {
+             "viewed": viewed
+         }
+        // update user
+        return this.user_repository.updateProfile(user_update, user.profileId);
+    }
 }
