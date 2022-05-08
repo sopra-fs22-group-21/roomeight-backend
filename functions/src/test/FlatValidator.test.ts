@@ -80,7 +80,7 @@ describe('Validate PostFlat', () => {
         let res = FlatValidator.validatePostFlat(missingMandatory);
         let expected = "Errors:\nJSON object does not contain required field: address\n" +
             "Mandatory fields are: name,address\n" +
-            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates"
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,addressCoordinates"
         expect(res.validationFoundErrors()).toBe(true);
         expect(res.toString()).toEqual(expected);
     })
@@ -89,7 +89,7 @@ describe('Validate PostFlat', () => {
         let res = FlatValidator.validatePostFlat(unexpectedField);
         let expected = "Errors:\nUnknown Field: hometown\n" +
             "Mandatory fields are: name,address\n" +
-            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates"
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,addressCoordinates"
         expect(res.validationFoundErrors()).toBe(true);
         expect(res.toString()).toEqual(expected);
     })
@@ -99,7 +99,7 @@ describe('Validate PostFlat', () => {
         let expected = "Errors:\nInvalid tag: test is not a valid tag. Valid tags are: COOKING,SPORTS,INSTRUMENTS,CLEANLINESS,STUDENT,WORKING,PETS,PARTY,COFFEE,WINE,WOKO,JUWO,PEACEFUL,SMOKER,\n" +
             "Invalid moveOutDate: moveInDate must be before moveOutDate\n" +
             "Mandatory fields are: name,address\n" +
-            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates"
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,addressCoordinates"
         expect(res.validationFoundErrors()).toBe(true);
         expect(res.toString()).toEqual(expected);
     })
@@ -108,7 +108,7 @@ describe('Validate PostFlat', () => {
         let res = FlatValidator.validatePostFlat(containingNull);
         let expected = "Errors:\nname is null\n" +
             "Mandatory fields are: name,address\n" +
-            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates"
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,addressCoordinates"
         expect(res.validationFoundErrors()).toBe(true);
         expect(res.toString()).toEqual(expected);
     })
@@ -128,7 +128,8 @@ describe('Validate PatchUser', () => {
         "permanent": false,
         "roomSize": 18,
         "numberOfBaths": 1,
-        "numberOfRoommates": 3
+        "numberOfRoommates": 3,
+        "addressCoordinates": "12.34.56"
     }
 
     let invalidFields = {
@@ -155,7 +156,7 @@ describe('Validate PatchUser', () => {
         let res = FlatValidator.validatePatchFlat(unexpectedField);
         let expected = "Errors:\nUnknown Field: hometown\n" +
             "Mandatory fields are: \n" +
-            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,name,address"
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,name,address,addressCoordinates"
         expect(res.validationFoundErrors()).toBe(true);
         expect(res.toString()).toEqual(expected);
     })

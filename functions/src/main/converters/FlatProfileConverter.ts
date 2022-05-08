@@ -15,8 +15,9 @@ export class FlatProfileConverter{
 
         // Create Template userprofile with default values and mandatory fields
         let flat = new FlatProfile(json_body.name, "", "", [], [],
-            [], new Date(current_date), Status.online, null, null,
-            json_body.address, NaN, false, 1,  NaN, NaN, [json_body.user_uid], "", [])
+            [], new Date(current_date), Status.online, null, null, json_body.address, NaN,
+            false, 1,  NaN, NaN, [json_body.user_uid], "", [],
+            "")
 
         // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("description")) {
@@ -55,6 +56,9 @@ export class FlatProfileConverter{
         if (json_body.hasOwnProperty("numberOfBaths")) {
             flat.numberOfBaths = json_body.numberOfBaths;
         }
+        if (json_body.hasOwnProperty("addressCoordinates")) {
+            flat.addressCoordinates = json_body.addressCoordinates
+        }
 
         return flat;
     }
@@ -64,10 +68,12 @@ export class FlatProfileConverter{
         let likes: Like[] = [];
         db_entry.likes.map((like: any) => likes.push(new Like(like.likes, like.likedUser)));
         try {
-            return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags, db_entry.pictureReferences,
-                likes, db_entry.creationDate.toDate(), db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
-                db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent, db_entry.permanent,
-                db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths, db_entry.roomMates, db_entry.profileId, db_entry.matches);
+            return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags,
+                db_entry.pictureReferences, likes, db_entry.creationDate.toDate(), db_entry.onlineStatus,
+                db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
+                db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent,
+                db_entry.permanent, db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths,
+                db_entry.roomMates, db_entry.profileId, db_entry.matches, db_entry.addressCoordinates);
 
         } catch (e) {
             throw new TypeError("DB entry does not have expected format" + e)

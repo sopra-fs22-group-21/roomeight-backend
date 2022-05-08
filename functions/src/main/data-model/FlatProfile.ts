@@ -23,11 +23,13 @@ export class FlatProfile implements Profile {
     numberOfBaths: number;
     roomMates: string[];
     matches: string[];
+    addressCoordinates: string;
 
     constructor(name: string, description: string, biography: string, tags: Tag[], pictureReferences: string[],
                 likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: any, moveOutDate: any,
                 address: string, rent: number, permanent: boolean, numberOfRoommates: number, roomSize: number,
-                numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[]) {
+                numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[],
+                addressCoordinates: string) {
         this.name = name;
         this.description = description;
         this.biography = biography;
@@ -47,6 +49,7 @@ export class FlatProfile implements Profile {
         this.roomMates = roomMates;
         this.profileId = profile_id;
         this.matches = matches;
+        this.addressCoordinates = addressCoordinates
     }
 
     toJson(): any {
@@ -69,7 +72,8 @@ export class FlatProfile implements Profile {
             roomSize: this.roomSize,
             numberOfBaths: this.numberOfBaths,
             roomMates: this.roomMates,
-            matches: this.matches
+            matches: this.matches,
+            addressCoordinates: this.addressCoordinates
         };
     }
 
@@ -93,7 +97,8 @@ export class FlatProfile implements Profile {
             roomSize: this.roomSize,
             numberOfBaths: this.numberOfBaths,
             roomMates: this.roomMates,
-            matches: this.matches
+            matches: this.matches,
+            addressCoordinates: this.addressCoordinates
         };
     }
     

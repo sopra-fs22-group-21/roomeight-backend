@@ -159,6 +159,11 @@ export class FieldValidator {
                         report.setErrors("Invalid numberOfBaths: Should be of type number")
                     }
                     break;
+                case "addressCoordinates":
+                    if (!this.validateString(user_json_body[key])) {
+                        report.setErrors("Invalid addressCoordinates: Should be of type string and have less than 300 signs");
+                    }
+                    break;
                 case "filters":
                     const filters = user_json_body[key];
                     try {

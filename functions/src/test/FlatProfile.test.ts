@@ -7,7 +7,8 @@ describe('ValidatorReport test', () => {
     beforeEach(() => {
         userProfile = new FlatProfile("test", "test", "test", [], [], [],
             new Date(0), Status.online, new Date(0), new Date(0), "test teststrasse 3, 8032 zuerich",
-            500, false, 5, 18, 1, [], "testId", []);
+            500, false, 5, 18, 1, [], "testId",
+            [], "12.34.56");
     });
 
     test('new report should not contain errors', () => {
@@ -30,7 +31,8 @@ describe('ValidatorReport test', () => {
             "\"roomSize\":18," +
             "\"numberOfBaths\":1," +
             "\"roomMates\":[]," +
-            "\"matches\":[]}"
+            "\"matches\":[]," +
+            "\"addressCoordinates\":\"12.34.56\"}"
 
         expect(JSON.stringify(userProfile.toJson())).toEqual(expected);
     })
