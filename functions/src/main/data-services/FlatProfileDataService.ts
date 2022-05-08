@@ -10,8 +10,8 @@ import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 
 export class FlatProfileDataService {
 
-    flat_repository: FlatRepository;
-    user_repository: ProfileRepository;
+    private flat_repository: FlatRepository;
+    private user_repository: ProfileRepository;
 
     constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
