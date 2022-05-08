@@ -18,7 +18,7 @@ export class UserProfileConverter{
                                     [], [], new Date(current_date), Status.online, null,
                                     null, new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
-                                    "", false, new Map<string, any>())
+                                    "", false, new Map<string, any>(), []);
 
         // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("description")) {
@@ -62,7 +62,7 @@ export class UserProfileConverter{
                 db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.birthday.toDate(),
                 db_entry.email, db_entry.phoneNumber, db_entry.gender, db_entry.isSearchingRoom,
                 db_entry.isAdvertisingRoom, db_entry.viewed, db_entry.flatId, db_entry.likes, db_entry.profileId,
-                db_entry.isComplete, db_entry.filters);
+                db_entry.isComplete, db_entry.filters, db_entry.devicePushTokens);
 
         } catch (e) {
             throw new TypeError("DB entry does not have expected format: " + e);

@@ -28,12 +28,14 @@ export class UserProfile implements Profile{
     flatId: string;
     isComplete: boolean;
     filters: Map<string, any>;
+    devicePushTokens: string[];
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
                 pictureReferences: string[], matches: string[], creationDate: Date, onlineStatus: Status,
                 moveInDate: any, moveOutDate: any, birthday: Date, email: string, phoneNumber: string,
                 gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
-                likes: string[], profile_id: string, isComplete: boolean, filters: Map<string, any>) {
+                likes: string[], profile_id: string, isComplete: boolean, filters: Map<string, any>,
+                devicePushToken: string[]) {
         this.first_name = first_name;
         this.last_name = last_name;
         this.description = description;
@@ -57,6 +59,7 @@ export class UserProfile implements Profile{
         this.profileId = profile_id;
         this.isComplete = isComplete;
         this.filters = filters;
+        this.devicePushTokens = devicePushToken;
     }
 
     toJson(): any {
@@ -109,7 +112,8 @@ export class UserProfile implements Profile{
             moveOutDate: this.moveOutDate,
             flatId: this.flatId,
             isComplete: this.isComplete,
-            filters: this.filters[Symbol.toStringTag]
+            filters: this.filters[Symbol.toStringTag],
+            devicePushTokens: this.devicePushTokens
         };
     }
 }

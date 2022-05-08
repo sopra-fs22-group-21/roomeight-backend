@@ -9,7 +9,7 @@ describe('ValidatorReport test', () => {
         userProfile = new UserProfile("test", "test", "", "", [],
             [], [], new Date(0), Status.online, new Date(0), new Date(0),
             new Date(0), "lars.boesch@uzh.ch", "+41799127396", Gender.notSet, true,
-            false, [], "", [], "", false, new Map<string, any>());
+            false, [], "", [], "", false, new Map<string, any>(), []);
     });
 
     test('new report should not contain errors', () => {
