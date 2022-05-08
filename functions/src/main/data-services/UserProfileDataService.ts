@@ -247,11 +247,19 @@ export class UserProfileDataService {
 
         await this.user_repository.updateProfile(user_update, user.profileId);
         await this.flat_repository.updateProfile(flat_update, user_flat.profileId);
-        user_flat.matches = new_flat_matches;
+
+        // Resolve references of updated Profile
+        let reference_converter = new ReferenceController(this.user_repository);
+        let updated_flat_profile = user_flat.toJson();
+
+        await reference_converter.resolveProfileReferenceList(new_flat_matches)
+            .then((resolution) => {
+                updated_flat_profile.matches = resolution.result;
+            });
 
         return {
             isMatch: is_match,
-            updatedFlatProfile: user_flat.toJson()
+            updatedFlatProfile: updated_flat_profile
         }
     }
 
@@ -321,11 +329,19 @@ export class UserProfileDataService {
             }
             // Update user
             await this.user_repository.updateProfile(user_update, user.profileId);
-            user.matches = profile_matches
+            // Resolve references of updated Profile
+            let reference_converter = new ReferenceController(this.flat_repository);
+            let updated_user_profile = user.toJson();
 
+            await reference_converter.resolveProfileReferenceList(profile_matches)
+                .then((resolution) => {
+                    updated_user_profile.matches = resolution.result;
+                });
+
+            // Return if a match occurred and the profile containing the new match list
             return {
                 isMatch: is_match,
-                updatedUserProfile: user.toJson()
+                updatedUserProfile: updated_user_profile
             }
 
         } else {
