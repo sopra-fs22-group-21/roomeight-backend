@@ -96,7 +96,7 @@ describe('Validate PostFlat', () => {
 
     test('test invalid date range', () => {
         let res = FlatValidator.validatePostFlat(invalidDateRange);
-        let expected = "Errors:\nInvalid tag: test is not a valid tag. Valid tags are,\n" +
+        let expected = "Errors:\nInvalid tag: test is not a valid tag. Valid tags are: COOKING,SPORTS,INSTRUMENTS,CLEANLINESS,STUDENT,WORKING,PETS,PARTY,COFFEE,WINE,WOKO,JUWO,PEACEFUL,SMOKER,\n" +
             "Invalid moveOutDate: moveInDate must be before moveOutDate\n" +
             "Mandatory fields are: name,address\n" +
             "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates"
