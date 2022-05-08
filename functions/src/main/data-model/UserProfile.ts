@@ -109,7 +109,7 @@ export class UserProfile implements Profile{
             moveOutDate: this.moveOutDate,
             flatId: this.flatId,
             isComplete: this.isComplete,
-            filters: this.filters
+            filters: this.filters[Symbol.toStringTag]
         };
     }
 }

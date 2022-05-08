@@ -51,7 +51,7 @@ export class FieldValidator {
                     } else {
                         for(let tag of user_json_body[key]) {
                             if (!this.validateTag(tag)) {
-                                report.setErrors("Invalid tag: " + tag + " is not a valid tag. Valid tags are")
+                                report.setErrors("Invalid tag: " + tag + " is not a valid tag. Valid tags are: " + Object.values(Tag).toString());
                             }
                         }
                     }
@@ -180,7 +180,7 @@ export class FieldValidator {
                                     } else {
                                         for(let tag of filters[element]) {
                                             if (!this.validateTag(tag)) {
-                                                report.setErrors("Invalid Filter tag: " + tag + " is not a valid tag. Valid tags are")
+                                                report.setErrors("Invalid Filter tag: " + tag + " is not a valid tag. Valid tags are: " + Object.values(Tag).toString())
                                             }
                                         }
                                     }
