@@ -440,7 +440,7 @@ describe("UserProfileDataService Test", () => {
                 roomSize: 18,
                 numberOfBaths: 1,
                 roomMates: [],
-                matches: []
+                matches: {}
         }
     }
 
@@ -462,7 +462,7 @@ describe("UserProfileDataService Test", () => {
                 biography: '',
                 tags: [],
                 pictureReferences: [],
-                matches: [],
+                matches: {},
                 creationDate: "1970-01-01T00:00:00.000Z",
                 onlineStatus: 'ONLINE',
                 birthday: "1970-01-01T00:00:00.000Z",
