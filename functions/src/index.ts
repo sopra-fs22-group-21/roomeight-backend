@@ -267,6 +267,65 @@ userprofile_app.post('/dislike/:Id', async (req, res) => {
     }
 });
 
+// Add device to user profile (devicePushToken)
+userprofile_app.post('/devices/:deviceToken', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const device_token = sanitizeHtml(req.params.deviceToken);
+
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                const uid = decodedToken.uid;
+                return userProfileDataService.addDevice(uid, device_token)
+                    .then(
+                        (response) => res.status(200).send(response)
+                    )
+                    .catch((error) => {
+                        res.status(400).send(error.message);
+                    })
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
+
+// Remove device from user profile (devicePushToken)
+userprofile_app.delete('/devices/:deviceToken', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        // Get token from header
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        const device_token = sanitizeHtml(req.params.deviceToken);
+
+        // Verify token
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                const uid = decodedToken.uid;
+                return userProfileDataService.deleteDevice(uid, device_token)
+                    .then(
+                        (response) => res.status(200).send(response)
+                    )
+                    .catch((error) => {
+                        res.status(400).send(error.message);
+                    })
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
+
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
+
+
 // Flat Operation
 
 // Get Flat Profiles
