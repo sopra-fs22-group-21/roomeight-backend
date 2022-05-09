@@ -10,8 +10,8 @@ import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 
 export class FlatProfileDataService {
 
-    private flat_repository: FlatRepository;
-    private user_repository: ProfileRepository;
+    private readonly flat_repository: FlatRepository;
+    private readonly user_repository: ProfileRepository;
 
     constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
@@ -60,7 +60,7 @@ export class FlatProfileDataService {
 
             // Convert references
 
-            const reference_converter = new ReferenceController(this.user_repository);
+            const reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
             await reference_converter.resolveProfileReferenceList(flat_to_add.matches)
                 .then((resolution) => {
                     flat_to_add.matches = resolution.result;
@@ -149,18 +149,26 @@ export class FlatProfileDataService {
             const dto = FlatProfileConverter.convertDBEntryToProfile(db_entry).toJson()
 
             // Resolve References and clean up outdated References
-            const reference_converter = new ReferenceController(this.user_repository);
+            const reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
+            // Matches
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
                     reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
                     dto.matches = resolution.result;
                 });
+            // Roommates
             await reference_converter.resolveProfileReferenceList(dto.roomMates)
                 .then((resolution) => {
                     reference_converter.cleanUpReferencesList(profile_id, "roomMates", dto.roomMates, resolution.unresolvedReferences);
                     dto.roomMates = resolution.result;
                 });
+            // Likes
+            await reference_converter.resolveFlatLikes(dto.likes)
+                .then((resolution) => {
+                    dto.likes = resolution.result;
+                });
             return dto;
+
 
         } else {
             throw new Error("Flat Profile not found!")
@@ -177,7 +185,7 @@ export class FlatProfileDataService {
             })
 
             // Resolve References and clean up outdated References
-            const reference_converter = new ReferenceController(this.user_repository);
+            const reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
             for (let i in result) {
                 await reference_converter.resolveProfileReferenceList(result[i].matches)
                     .then((resolution) => {
@@ -188,6 +196,11 @@ export class FlatProfileDataService {
                     .then((resolution) => {
                         reference_converter.cleanUpReferencesList(result[i].profileId, "roomMates", result[i].roomMates, resolution.unresolvedReferences);
                         result[i].roomMates = resolution.result;
+                    });
+                // Likes
+                await reference_converter.resolveFlatLikes(result[i].likes)
+                    .then((resolution) => {
+                        result[i].likes = resolution.result;
                     });
             }
             return result;

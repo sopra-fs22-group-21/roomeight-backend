@@ -33,7 +33,7 @@ describe("ReferenceController Test", () => {
         }
         const reference_list = ["123"]
         const mock_user_repo = new ValidMockUserRepository();
-        const resolver = new ReferenceController(mock_user_repo);
+        const resolver = new ReferenceController(mock_user_repo, mock_user_repo);
 
         return resolver.resolveProfileReferenceList(reference_list).then((response) => {
             console.log(response);
@@ -45,7 +45,7 @@ describe("ReferenceController Test", () => {
     test('2 Test Resolving of Reference List containing single element -> element not found', () => {
         const reference_list = ["123"]
         const mock_user_repo = new InvalidMockUserRepository();
-        const resolver = new ReferenceController(mock_user_repo);
+        const resolver = new ReferenceController(mock_user_repo, mock_user_repo);
 
         return resolver.resolveProfileReferenceList(reference_list).then((response) => {
             console.log(response);
@@ -58,7 +58,7 @@ describe("ReferenceController Test", () => {
 
     test('3 Test Clean Up outdated References', () => {
         const mock_user_repo = new ValidMockUserRepository();
-        const resolver = new ReferenceController(mock_user_repo);
+        const resolver = new ReferenceController(mock_user_repo, mock_user_repo);
 
         return resolver.cleanUpReferencesList("123", "matches", ["456", "789"], ["789"])
             .then(
@@ -70,7 +70,7 @@ describe("ReferenceController Test", () => {
 
     test('4 Test Clean Up outdated References -> Update not possible', () => {
         const mock_user_repo = new InvalidMockUserRepository();
-        const resolver = new ReferenceController(mock_user_repo);
+        const resolver = new ReferenceController(mock_user_repo, mock_user_repo);
 
         return resolver.cleanUpReferencesList("123", "matches", ["456", "789"], ["789"])
             .then(
@@ -106,7 +106,7 @@ describe("ReferenceController Test", () => {
             }
         }
         const mock_user_repo = new ValidMockUserRepository();
-        const resolver = new ReferenceController(mock_user_repo);
+        const resolver = new ReferenceController(mock_user_repo, mock_user_repo);
 
         return resolver.resolveSingleProfileReference("123").then((response) => {
             console.log(response);
@@ -118,7 +118,7 @@ describe("ReferenceController Test", () => {
     test('6 Test Resolving of single Reference -> element not found', () => {
         const reference_list = ["123"]
         const mock_user_repo = new InvalidMockUserRepository();
-        const resolver = new ReferenceController(mock_user_repo);
+        const resolver = new ReferenceController(mock_user_repo, mock_user_repo);
 
         return resolver.resolveProfileReferenceList(reference_list).then((response) => {
             console.log(response);

@@ -7,13 +7,16 @@ import {UserProfileConverter} from "../converters/UserProfileConverter";
 /**
  * Reference Converter resolves profile id references to Profile Jsons
  * @Input resolving_repository: Repository which should be used to resolve the references
+ * @Input repository_to_clean: Repository where outdated reference lists should be updated
  * **/
 export class ReferenceController {
 
     private resolvingRepository;
+    private repositoryToClean;
 
-    constructor(resolving_repository: ProfileRepository) {
+    constructor(resolving_repository: ProfileRepository, repository_to_clean: ProfileRepository) {
         this.resolvingRepository = resolving_repository;
+        this.repositoryToClean = repository_to_clean;
     }
 
     /**
@@ -87,6 +90,39 @@ export class ReferenceController {
     }
 
     /**
+     * Resolves a array of likes.
+     * The found likedUser references are converted into a profile json which is pushed to a result array.
+     * And the unresolved references are pushed to a separate array.
+     * Both are returned in a Reference Resolution Object
+     * @Input like_list: List of likes.
+     * @Output: ReferenceResolution
+     */
+    async resolveFlatLikes(like_list: any[]): Promise<ReferenceResolution> {
+        let result = like_list;
+        let outdated_elements: string[] =  []
+        // Resolve likedUser profiles
+        for(let index in like_list) {
+            await this.resolveSingleProfileReference(like_list[index].likedUser)
+                .then((resolution) => {
+                    if (resolution.unresolvedReferences.length == 0) {
+                        result[index].likedUser = resolution.result;
+                    } else {
+                        outdated_elements.push(resolution.unresolvedReferences[0]);
+                    }
+                });
+        }
+
+        if (outdated_elements.length > 0) {
+            // Filter outdated liked out of result
+            result = result.filter(element => outdated_elements.indexOf(element.likedUser) == -1);
+        }
+
+        return new ReferenceResolution(result, outdated_elements);
+    }
+
+    // Todo Cleanup unresolved flat likes
+
+    /**
      * This method can be used to delete outdated references after the resolving
      * @Input profile_id: Profile Id of the profile which references should be cleaned
      * @Input field: Field in which the references that should be cleaned are stored
@@ -97,7 +133,7 @@ export class ReferenceController {
         const updated_reference_list = current_references.filter(reference => outdated_references.indexOf(reference))
         let update: any = {}
         update[field] = updated_reference_list;
-        return this.resolvingRepository.updateProfile(update, profile_id)
+        return this.repositoryToClean.updateProfile(update, profile_id)
             .then(() => {return "Successfully removed outdated references"})
             .catch((e) => {
                 return "Could not update References of profile " + profile_id + " due to: " + e.message;

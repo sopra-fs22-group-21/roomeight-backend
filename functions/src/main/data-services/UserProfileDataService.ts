@@ -13,8 +13,8 @@ import {Like} from "../data-model/Like";
 
 export class UserProfileDataService {
 
-    private user_repository: UserRepository;
-    private flat_repository: FlatRepository;
+    private readonly user_repository: UserRepository;
+    private readonly flat_repository: FlatRepository;
     private app: any;
 
     constructor(user_repo: UserRepository, flat_repo: FlatRepository, app: any) {
@@ -52,7 +52,7 @@ export class UserProfileDataService {
             let dto = user_to_add.toJson();
 
             // Convert references to actual profiles
-            const reference_converter = new ReferenceController(this.flat_repository);
+            const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
 
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
@@ -146,7 +146,7 @@ export class UserProfileDataService {
             let dto = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
 
             // Resolve References and clean up outdated references
-            const reference_converter = new ReferenceController(this.flat_repository);
+            const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
                     reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
@@ -169,7 +169,7 @@ export class UserProfileDataService {
             })
 
             // Resolve References and clean up outdated References
-            const reference_converter = new ReferenceController(this.flat_repository);
+            const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
             for (let i in result) {
                 await reference_converter.resolveProfileReferenceList(result[i].matches)
                     .then((resolution) => {
@@ -188,7 +188,7 @@ export class UserProfileDataService {
 
         // Get Profile and Like
         const user_response = await this.user_repository.getProfileById(user_id)
-            .catch((e) => {throw new Error("Profile not found")})
+            .catch(() => {throw new Error("Profile not found")})
         const user = UserProfileConverter.convertDBEntryToProfile(user_response)
 
         // Check if flat id is set
@@ -197,11 +197,11 @@ export class UserProfileDataService {
         }
 
         const user_flat_response = await this.flat_repository.getProfileById(user.flatId)
-            .catch((e) => {throw new Error("The flat of the liking user could not be found. You can only like a user if you belong to a flat")});
+            .catch(() => {throw new Error("The flat of the liking user could not be found. You can only like a user if you belong to a flat")});
         const user_flat = FlatProfileConverter.convertDBEntryToProfile(user_flat_response);
 
         const like_response = await this.user_repository.getProfileById(like_id)
-            .catch((e) => {throw new Error("Liked Profile not found")});
+            .catch(() => {throw new Error("Liked Profile not found")});
         const liked_user = UserProfileConverter.convertDBEntryToProfile(like_response);
 
         // Preconditions
@@ -273,7 +273,7 @@ export class UserProfileDataService {
         await this.flat_repository.updateProfile(flat_update, user_flat.profileId);
 
         // Resolve references of updated Profile
-        let reference_converter = new ReferenceController(this.user_repository);
+        let reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
         let updated_flat_profile = user_flat.toJson();
 
         await reference_converter.resolveProfileReferenceList(new_flat_matches)
@@ -291,11 +291,11 @@ export class UserProfileDataService {
         // Get Profile and Like
 
         const user_response = await this.user_repository.getProfileById(profile_id)
-            .catch((e) => {throw new Error("Profile not found")})
+            .catch(() => {throw new Error("Profile not found")})
         const user = UserProfileConverter.convertDBEntryToProfile(user_response)
 
         const like_response = await this.flat_repository.getProfileById(like_id)
-            .catch((e) => {throw new Error("Liked Profile not found")});
+            .catch(() => {throw new Error("Liked Profile not found")});
         const like = FlatProfileConverter.convertDBEntryToProfile(like_response);
 
         // Precondition
@@ -354,7 +354,7 @@ export class UserProfileDataService {
             // Update user
             await this.user_repository.updateProfile(user_update, user.profileId);
             // Resolve references of updated Profile
-            let reference_converter = new ReferenceController(this.flat_repository);
+            let reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
             let updated_user_profile = user.toJson();
 
             await reference_converter.resolveProfileReferenceList(profile_matches)
@@ -376,7 +376,7 @@ export class UserProfileDataService {
     async dislike(uid: string, disliked_id: string): Promise<any> {
         // get user
         const user = await this.user_repository.getProfileById(uid)
-            .catch((e) => {throw new Error("Profile not found")})
+            .catch(() => {throw new Error("Profile not found")});
 
         // update viewed array
         const viewed = user.viewed;
@@ -386,5 +386,56 @@ export class UserProfileDataService {
          }
         // update user
         return this.user_repository.updateProfile(user_update, user.profileId);
+    }
+
+    async addDevice(uid: string, pushToken: string): Promise<string> {
+        // get user
+        const repo_response = await this.user_repository.getProfileById(uid)
+            .catch(() => {throw new Error("Profile not found")});
+        const userprofile = UserProfileConverter.convertDBEntryToProfile(repo_response);
+
+        // Check if pushToken is already stored
+        if (userprofile.devicePushTokens.indexOf(pushToken) == -1) {
+            // Update Token Array
+            const updated_token_array = userprofile.devicePushTokens;
+            updated_token_array.push(pushToken);
+
+            // Update Userprofile
+            const update = {
+                "devicePushTokens":  updated_token_array
+            }
+            await this.user_repository.updateProfile(update, uid)
+                .catch((e) => {throw new Error("Could not update devicePushTokens due to: " + e.message)})
+
+            return "Successfully added token to device push token list!"
+
+        } else {
+            return "Token exists in current push token list"
+        }
+    }
+
+    async deleteDevice(uid: string, pushToken: string): Promise<string> {
+        // get user
+        const repo_response = await this.user_repository.getProfileById(uid)
+            .catch(() => {throw new Error("Profile not found")});
+        const userprofile = UserProfileConverter.convertDBEntryToProfile(repo_response);
+        const pushTokenIndex = userprofile.devicePushTokens.indexOf(pushToken);
+
+        // Check if pushToken is already stored
+        if (pushTokenIndex == -1) {
+            throw new Error("Could not found token " + pushToken + " in push token list");
+        } else {
+            // Update Token Array
+            const updated_token_array = userprofile.devicePushTokens;
+            updated_token_array.splice(pushTokenIndex, 1);
+
+            // Update Userprofile
+            const update = {
+                "devicePushTokens":  updated_token_array
+            }
+            await this.user_repository.updateProfile(update, uid)
+                .catch((e) => {throw new Error("Could not update devicePushTokens due to: " + e.message)})
+            return "Successfully deleted token from push token list"
+        }
     }
 }
