@@ -1,6 +1,7 @@
 import {FlatProfile} from "../data-model/FlatProfile";
 import {Status} from "../data-model/Status";
 import {Like} from "../data-model/Like";
+import {Coordinates} from "../data-model/Coordinates";
 
 
 export class FlatProfileConverter{
@@ -17,7 +18,7 @@ export class FlatProfileConverter{
         let flat = new FlatProfile(json_body.name, "", "", [], [],
             [], new Date(current_date), Status.online, null, null, json_body.address, NaN,
             false, 1,  NaN, NaN, [json_body.user_uid], "", [],
-            "")
+            new Coordinates(NaN, NaN))
 
         // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("description")) {
@@ -57,7 +58,12 @@ export class FlatProfileConverter{
             flat.numberOfBaths = json_body.numberOfBaths;
         }
         if (json_body.hasOwnProperty("addressCoordinates")) {
-            flat.addressCoordinates = json_body.addressCoordinates
+            if (json_body.addressCoordinates.hasOwnProperty("longitude")) {
+                flat.addressCoordinates.longitude = json_body.addressCoordinates.longitude;
+            }
+            if (json_body.addressCoordinates.hasOwnProperty("latitude")) {
+                flat.addressCoordinates.longitude = json_body.addressCoordinates.latitude;
+            }
         }
 
         return flat;
@@ -65,15 +71,19 @@ export class FlatProfileConverter{
 
     // Dynamically converts DB entry to a valid FlatProfile
     static convertDBEntryToProfile(db_entry: any): FlatProfile {
-        let likes: Like[] = [];
-        db_entry.likes.map((like: any) => likes.push(new Like(like.likes, like.likedUser)));
         try {
+            // Prepare Data
+            let likes: Like[] = [];
+            let coordinates = new Coordinates(db_entry.addressCoordinates.longitude, db_entry.addressCoordinates.latitude)
+
+            db_entry.likes.map((like: any) => likes.push(new Like(like.likes, like.likedUser)));
+
             return new FlatProfile(db_entry.name, db_entry.description, db_entry.biography, db_entry.tags,
                 db_entry.pictureReferences, likes, db_entry.creationDate.toDate(), db_entry.onlineStatus,
                 db_entry.moveInDate ? db_entry.moveInDate.toDate():null,
                 db_entry.moveOutDate ? db_entry.moveOutDate.toDate():null, db_entry.address, db_entry.rent,
                 db_entry.permanent, db_entry.numberOfRoommates, db_entry.roomSize, db_entry.numberOfBaths,
-                db_entry.roomMates, db_entry.profileId, db_entry.matches, db_entry.addressCoordinates);
+                db_entry.roomMates, db_entry.profileId, db_entry.matches, coordinates);
 
         } catch (e) {
             throw new TypeError("DB entry does not have expected format" + e)

@@ -28,7 +28,8 @@ describe("ReferenceController Test", () => {
                 isAdvertisingRoom: false,
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
-                flatId: ''
+                flatId: '',
+                filters: {}
             }
         }
         const reference_list = ["123"]
@@ -102,7 +103,8 @@ describe("ReferenceController Test", () => {
                 isAdvertisingRoom: false,
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
-                flatId: ''
+                flatId: '',
+                filters: {}
             }
         }
         const mock_user_repo = new ValidMockUserRepository();

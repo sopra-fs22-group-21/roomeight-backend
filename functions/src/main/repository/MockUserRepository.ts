@@ -53,31 +53,33 @@ export class ValidMockUserRepository implements UserRepository {
                 creationDate:  new Timestamp(0, 0),
                 moveOutDate:  new Timestamp(0, 0),
                 matches: [],
-                email: 'test@test.com'
+                email: 'test@test.com',
+                filters: {}
             });
         }
         return Promise.resolve({
-          firstName: 'Mock first_name',
-          moveInDate: new Timestamp(0, 0),
-          likes: [],
-          phoneNumber: '0795556677',
-          flatId: '',
-          tags: [],
-          isSearchingRoom: true,
-          isAdvertisingRoom: false,
-          biography: '',
-          profileId: '123',
-          gender: 'NOT SET',
-          pictureReferences: [],
-          birthday:  new Timestamp(0, 0),
-          description: '',
-          lastName: 'Mock last_name',
-          onlineStatus: 'ONLINE',
-          viewed: [],
-          creationDate:  new Timestamp(0, 0),
-          moveOutDate:  new Timestamp(0, 0),
-          matches: [],
-          email: 'test@test.com'
+              firstName: 'Mock first_name',
+              moveInDate: new Timestamp(0, 0),
+              likes: [],
+              phoneNumber: '0795556677',
+              flatId: '',
+              tags: [],
+              isSearchingRoom: true,
+              isAdvertisingRoom: false,
+              biography: '',
+              profileId: '123',
+              gender: 'NOT SET',
+              pictureReferences: [],
+              birthday:  new Timestamp(0, 0),
+              description: '',
+              lastName: 'Mock last_name',
+              onlineStatus: 'ONLINE',
+              viewed: [],
+              creationDate:  new Timestamp(0, 0),
+              moveOutDate:  new Timestamp(0, 0),
+              matches: [],
+              email: 'test@test.com',
+              filters: {}
         });
     }
 
@@ -107,7 +109,8 @@ export class ValidMockUserRepository implements UserRepository {
             creationDate:  new Timestamp(0, 0),
             moveOutDate:  new Timestamp(0, 0),
             matches: [],
-            email: 'test@test.com'
+            email: 'test@test.com',
+            filters: {}
     });
     }
 

@@ -9,7 +9,25 @@ describe("FlatProfileDataService Test", () => {
     // GetById Tests
 
     test('1 Test Valid GetById Request', () => {
-        const expected_response = "{\"name\":\"test\",\"description\":\"test\",\"biography\":\"test\",\"tags\":[\"test\"],\"pictureReferences\":[\"test\"],\"likes\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"address\":\"test\",\"rent\":500,\"permanent\":false,\"roomSize\":18,\"numberOfBaths\":1,\"roomMates\":{},\"matches\":{}}";
+        const expected_response = "{" +
+            "\"name\":\"test\"," +
+            "\"description\":\"test\"," +
+            "\"biography\":\"test\"," +
+            "\"tags\":[\"test\"]," +
+            "\"pictureReferences\":[\"test\"]," +
+            "\"likes\":[]," +
+            "\"creationDate\":\"1970-01-01T00:00:00.000Z\"," +
+            "\"moveInDate\":\"1970-01-01T00:00:00.000Z\"," +
+            "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"," +
+            "\"address\":\"test\"," +
+            "\"rent\":500," +
+            "\"permanent\":false," +
+            "\"roomSize\":18," +
+            "\"numberOfBaths\":1," +
+            "\"roomMates\":{}," +
+            "\"matches\":{}," +
+            "\"addressCoordinates\":{\"longitude\":12.34,\"latitude\":56.78}" +
+            "}";
         const ds = new FlatProfileDataService(new ValidMockFlatRepository(), new ValidMockUserRepository());
 
         return ds.getProfileByIdFromRepo("123").then(

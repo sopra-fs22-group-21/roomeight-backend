@@ -1,17 +1,18 @@
 import {FlatProfile} from "../main/data-model/FlatProfile";
 import {Status} from "../main/data-model/Status";
+import {Coordinates} from "../main/data-model/Coordinates";
 
-describe('ValidatorReport test', () => {
-    let userProfile: FlatProfile;
+describe('Flat profile test', () => {
+    let flatProfile: FlatProfile;
 
     beforeEach(() => {
-        userProfile = new FlatProfile("test", "test", "test", [], [], [],
+        flatProfile = new FlatProfile("test", "test", "test", [], [], [],
             new Date(0), Status.online, new Date(0), new Date(0), "test teststrasse 3, 8032 zuerich",
             500, false, 5, 18, 1, [], "testId",
-            [], "12.34.56");
+            [], new Coordinates(12.34, 56.78));
     });
 
-    test('new report should not contain errors', () => {
+    test('Test getJson of profile', () => {
         let expected = "{" +
             "\"profileId\":\"testId\"," +
             "\"name\":\"test\"," +
@@ -32,8 +33,12 @@ describe('ValidatorReport test', () => {
             "\"numberOfBaths\":1," +
             "\"roomMates\":[]," +
             "\"matches\":[]," +
-            "\"addressCoordinates\":\"12.34.56\"}"
+            "\"addressCoordinates\":{" +
+            "\"longitude\":12.34," +
+            "\"latitude\":56.78" +
+            "}" +
+            "}"
 
-        expect(JSON.stringify(userProfile.toJson())).toEqual(expected);
+        expect(JSON.stringify(flatProfile.toJson())).toEqual(expected);
     })
 })

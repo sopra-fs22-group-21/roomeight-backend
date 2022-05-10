@@ -46,7 +46,11 @@ export class ValidMockFlatRepository implements FlatRepository {
             likes: [],
             matches: [],
             flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
-            creationDate: new Timestamp(0, 0)
+            creationDate: new Timestamp(0, 0),
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
         })
     }
 

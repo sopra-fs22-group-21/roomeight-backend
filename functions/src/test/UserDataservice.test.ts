@@ -390,7 +390,8 @@ describe("UserProfileDataService Test", () => {
             isAdvertisingRoom: false,
             moveInDate: "1970-01-01T00:00:00.000Z",
             moveOutDate:  "1970-01-01T00:00:00.000Z",
-            flatId: ''
+            flatId: '',
+            filters: {}
         };
         const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
 
@@ -440,7 +441,11 @@ describe("UserProfileDataService Test", () => {
                 roomSize: 18,
                 numberOfBaths: 1,
                 roomMates: [],
-                matches: {}
+                matches: {},
+                addressCoordinates: {
+                    longitude: 12.34,
+                    latitude: 56.78
+                }
         }
     }
 
@@ -474,7 +479,8 @@ describe("UserProfileDataService Test", () => {
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate: "1970-01-01T00:00:00.000Z",
                 flatId: '',
-                isComplete: undefined
+                isComplete: undefined,
+                filters: {}
         }
     }
 

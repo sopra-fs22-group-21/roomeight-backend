@@ -2,6 +2,7 @@ import { Like } from "./Like";
 import { Profile } from "./Profile";
 import { Status } from "./Status";
 import { Tag } from "./Tag";
+import {Coordinates} from "./Coordinates";
 
 export class FlatProfile implements Profile {
     profileId: string;
@@ -23,13 +24,13 @@ export class FlatProfile implements Profile {
     numberOfBaths: number;
     roomMates: string[];
     matches: string[];
-    addressCoordinates: string;
+    addressCoordinates: Coordinates;
 
     constructor(name: string, description: string, biography: string, tags: Tag[], pictureReferences: string[],
                 likes: Like[], creationDate: Date, onlineStatus: Status, moveInDate: any, moveOutDate: any,
                 address: string, rent: number, permanent: boolean, numberOfRoommates: number, roomSize: number,
                 numberOfBaths: number, roomMates: string[], profile_id: string, matches: string[],
-                addressCoordinates: string) {
+                addressCoordinates: Coordinates) {
         this.name = name;
         this.description = description;
         this.biography = biography;
@@ -73,7 +74,7 @@ export class FlatProfile implements Profile {
             numberOfBaths: this.numberOfBaths,
             roomMates: this.roomMates,
             matches: this.matches,
-            addressCoordinates: this.addressCoordinates
+            addressCoordinates: this.addressCoordinates.toJson()
         };
     }
 
@@ -98,7 +99,7 @@ export class FlatProfile implements Profile {
             numberOfBaths: this.numberOfBaths,
             roomMates: this.roomMates,
             matches: this.matches,
-            addressCoordinates: this.addressCoordinates
+            addressCoordinates: this.addressCoordinates.toJson()
         };
     }
     
