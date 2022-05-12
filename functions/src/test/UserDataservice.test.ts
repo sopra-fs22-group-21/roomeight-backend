@@ -265,6 +265,7 @@ describe("UserProfileDataService Test", () => {
             moveInDate: new Date(0),
             moveOutDate:  new Date(0),
             flatId: '',
+            isComplete: false,
             filters: {}
         }
 

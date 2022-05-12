@@ -111,6 +111,8 @@ export class UserProfileDataService {
         if (!user) {
             throw new Error("User Profile not found!")
         }
+
+        // Delete matches with the user that should be deleted
         let matches = user.matches;
         for (let match of matches) {
             const flat_toUpdate = await this.flat_repository.getProfileById(match)
@@ -131,6 +133,7 @@ export class UserProfileDataService {
                 })
 
         }
+        // Delete User from auth and from firestore
         await admin.auth(this.app).deleteUser(profileId)
         return this.user_repository.deleteProfile(profileId)
             .then((response) => {
