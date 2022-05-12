@@ -154,7 +154,7 @@ describe("UserProfileDataService Test", () => {
             moveOutDate: new Date(NaN),
             flatId: "",
             isComplete: false,
-            filters: {}
+            filters: {matchingTimeRange: true}
         }
 
         const user_repo = new ValidMockUserRepository();
@@ -245,7 +245,28 @@ describe("UserProfileDataService Test", () => {
     // Patch Tests
 
     test('5 Test Valid Patch  UserProfile Request', () => {
-        const expected_response = "Successfully updated user 123"
+        const expected_response = {
+            profileId: "123",
+            firstName: 'Mock first_name',
+            lastName: 'Mock last_name',
+            description: '',
+            biography: '',
+            tags: [],
+            pictureReferences: [],
+            matches: {},
+            creationDate:  new Date(0),
+            onlineStatus: 'ONLINE',
+            birthday:  new Date(0),
+            email: 'test@test.com',
+            phoneNumber: '0795556677',
+            gender: 'NOT SET',
+            isSearchingRoom: true,
+            isAdvertisingRoom: false,
+            moveInDate: new Date(0),
+            moveOutDate:  new Date(0),
+            flatId: '',
+            filters: {}
+        }
 
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();

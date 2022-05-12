@@ -167,11 +167,18 @@ export class FieldValidator {
                 case "filters":
                     const filters = user_json_body[key];
                     try {
-                        for(let element of filters) {
+                        for(let element in filters) {
                             switch (element) {
                                 case "age":
-                                    if(!this.validateNumber(filters[element])) {
-                                        report.setErrors("Invalid Filter Age: Should be of type number")
+                                    if (filters[element].hasOwnProperty("min")){
+                                        if(!this.validateNumber(filters[element]["min"])) {
+                                            report.setErrors("Invalid Filter Age min: Should be of type number")
+                                        }
+                                    }
+                                    if (filters[element].hasOwnProperty("max")){
+                                        if(!this.validateNumber(filters[element]["max"])) {
+                                            report.setErrors("Invalid Filter Age max: Should be of type number")
+                                        }
                                     }
                                     break;
                                 case "gender":
@@ -190,19 +197,16 @@ export class FieldValidator {
                                         }
                                     }
                                     break;
-                                case "moveInDate":
-                                    if (!this.validateDate(filters[element])) {
-                                        report.setErrors("Invalid Filter moveInDate: Expected Format: 1999-06-22");
-                                    }
-                                    break;
-                                case  "moveOutDate":
-                                    if (!this.validateDate(filters[element])) {
-                                        report.setErrors("Invalid Filter moveOutDate: Expected Format: 1999-06-22");
-                                    }
-                                    break;
                                 case "rent":
-                                    if(!this.validateNumber(filters[element])) {
-                                        report.setErrors("Invalid Filter rent: Should be of type number")
+                                    if (filters[element].hasOwnProperty("min")){
+                                        if(!this.validateNumber(filters[element]["min"])) {
+                                            report.setErrors("Invalid Filter rent min: Should be of type number and positive")
+                                        }
+                                    }
+                                    if (filters[element].hasOwnProperty("max")){
+                                        if(!this.validateNumber(filters[element]["max"])) {
+                                            report.setErrors("Invalid Filter rent max: Should be of type number and positive")
+                                        }
                                     }
                                     break;
                                 case "permanent":
@@ -210,24 +214,51 @@ export class FieldValidator {
                                         report.setErrors("Invalid filter permanent: has to be true or false (boolean)");
                                     }
                                     break;
+                                case "matchingTimeRange":
+                                    if (!(this.validateBoolean(filters[element]))) {
+                                        report.setErrors("Invalid filter matchingTimeRange: has to be true or false (boolean)");
+                                    }
+                                    break;
                                 case "numberOfRoomMates":
-                                    if(!this.validateNumber(filters[element])) {
-                                        report.setErrors("Invalid Filter numberOfRoomMates: Should be of type number")
+                                    if (filters[element].hasOwnProperty("min")){
+                                        if(!this.validateNumber(filters[element]["min"])) {
+                                            report.setErrors("Invalid Filter numberOfRoomMates min: Should be of type number and positive")
+                                        }
+                                    }
+                                    if (filters[element].hasOwnProperty("max")){
+                                        if(!this.validateNumber(filters[element]["max"])) {
+                                            report.setErrors("Invalid Filter numberOfRoomMates max: Should be of type number and positive")
+                                        }
                                     }
                                     break;
                                 case "roomSize":
-                                    if(!this.validateNumber(filters[element])) {
-                                        report.setErrors("Invalid Filter roomSize: Should be of type number")
+                                    if (filters[element].hasOwnProperty("min")){
+                                        if(!this.validateNumber(filters[element]["min"])) {
+                                            report.setErrors("Invalid Filter roomSize min: Should be of type number and positive")
+                                        }
+                                    }
+                                    if (filters[element].hasOwnProperty("max")){
+                                        if(!this.validateNumber(filters[element]["max"])) {
+                                            report.setErrors("Invalid Filter roomSize max: Should be of type number and positive")
+                                        }
                                     }
                                     break;
                                 case "numberOfBaths":
-                                    if(!this.validateNumber(filters[element])) {
-                                        report.setErrors("Invalid Filter numberOfBaths: Should be of type number")
+                                    if (filters[element].hasOwnProperty("min")){
+                                        if(!this.validateNumber(filters[element]["min"])) {
+                                            report.setErrors("Invalid Filter numberOfBaths min: Should be of type number and positive")
+                                        }
+                                    }
+                                    if (filters[element].hasOwnProperty("max")){
+                                        if(!this.validateNumber(filters[element]["max"])) {
+                                            report.setErrors("Invalid Filter numberOfBaths max: Should be of type number and positive")
+                                        }
                                     }
                                     break;
                             }
                         }
                     } catch (e) {
+                        console.log(e);
                         report.setErrors("Invalid filters: Filters must be of type map")
                     }
             }
@@ -306,7 +337,7 @@ export class FieldValidator {
     }
 
     private static validateNumber(nr: any): boolean {
-        return typeof nr == "number";
+        return typeof nr == "number" && nr >= 0;
     }
 
 }

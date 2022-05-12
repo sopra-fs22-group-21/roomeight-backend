@@ -27,14 +27,14 @@ export class UserProfile implements Profile{
     isAdvertisingRoom: boolean;
     flatId: string;
     isComplete: boolean;
-    filters: Map<string, any>;
+    filters: {};
     devicePushTokens: string[];
 
     constructor(first_name: string, last_name: string, description: string, biography: string, tags: Array<Tag>,
                 pictureReferences: string[], matches: string[], creationDate: Date, onlineStatus: Status,
                 moveInDate: any, moveOutDate: any, birthday: Date, email: string, phoneNumber: string,
                 gender: Gender, isSearchingRoom: boolean, isAdvertisingRoom: boolean, viewed: string[], flatId: string,
-                likes: string[], profile_id: string, isComplete: boolean, filters: Map<string, any>,
+                likes: string[], profile_id: string, isComplete: boolean, filters: {},
                 devicePushToken: string[]) {
         this.first_name = first_name;
         this.last_name = last_name;
@@ -112,7 +112,7 @@ export class UserProfile implements Profile{
             moveOutDate: this.moveOutDate,
             flatId: this.flatId,
             isComplete: this.isComplete,
-            filters: this.filters[Symbol.toStringTag],
+            filters: this.filters,
             devicePushTokens: this.devicePushTokens
         };
     }
