@@ -18,7 +18,7 @@ export class UserProfileConverter{
                                     [], [], new Date(current_date), Status.online, null,
                                     null, new Date(json_body.birthday), json_body.email, json_body.phoneNumber,
                                     Gender.notSet, true, false, [], "", [],
-                                    "", false, new Map<string, any>(), []);
+                                    "", false, {"matchingTimeRange": true}, []);
 
         // Check if optional fields are in the json body
         if (json_body.hasOwnProperty("description")) {
