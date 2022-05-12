@@ -15,8 +15,8 @@ export class ValidMockFlatRepository implements FlatRepository {
     }
 
     addProfile(flat_to_add: FlatProfile): Promise<string> {
-        throw new Error("Method not implemented.");
-    }
+        console.log("Entered Mock addFlatProfile");
+        return Promise.resolve("Successfully added " + flat_to_add.name);    }
 
     getProfiles(): Promise<any> {
         throw new Error("Method not implemented.");

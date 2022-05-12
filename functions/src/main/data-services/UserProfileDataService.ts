@@ -106,6 +106,10 @@ export class UserProfileDataService {
                     throw new Error(e.message);
                 }
             )
+        // Check if user exists on repo
+        if (!user) {
+            throw new Error("User Profile not found!")
+        }
         let matches = user.matches;
         for (let match of matches) {
             const flat_toUpdate = await this.flat_repository.getProfileById(match)
@@ -180,7 +184,7 @@ export class UserProfileDataService {
             return result;
 
         } else {
-            throw new Error("Flat Profile not found!")
+            throw new Error("User Profiles not found!")
         }
     }
 

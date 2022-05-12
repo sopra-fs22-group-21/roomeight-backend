@@ -347,26 +347,26 @@ describe("UserProfileDataService Test", () => {
             )
     });
 
-    // test('10 Test Cannot access Repo Delete UserProfile Request', async () =>  {
-    //     const expected_response = "Error: User was deleted from auth but not from firestore: Could not delete User"
-    //
-    //     const user_repo = new InvalidMockUserRepository();
-    //     const flat_repo = new InvalidMockFlatRepository();
-    //     const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
-    //
-    //     return ds.deleteUser("123")
-    //         .then(
-    //             (response) => {
-    //                 console.log(response);
-    //                 throw new TypeError("Expected a repo error");
-    //             }
-    //         )
-    //         .catch(
-    //             (error) => {
-    //                 expect(error).toEqual(new Error(expected_response));
-    //             }
-    //         )
-    // });
+    test('10 Test Cannot access Repo Delete UserProfile Request', async () =>  {
+        const expected_response = "User Profile not found!"
+
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+
+        return ds.deleteUser("123")
+            .then(
+                (response) => {
+                    console.log(response);
+                    throw new TypeError("Expected a repo error");
+                }
+            )
+            .catch(
+                (error) => {
+                    expect(error).toEqual(new Error(expected_response));
+                }
+            )
+    });
 
     // GetById Tests
 
@@ -391,6 +391,7 @@ describe("UserProfileDataService Test", () => {
             moveInDate: "1970-01-01T00:00:00.000Z",
             moveOutDate:  "1970-01-01T00:00:00.000Z",
             flatId: '',
+            isComplete: false,
             filters: {}
         };
         const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
@@ -479,7 +480,7 @@ describe("UserProfileDataService Test", () => {
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate: "1970-01-01T00:00:00.000Z",
                 flatId: '',
-                isComplete: undefined,
+                isComplete: false,
                 filters: {}
         }
     }

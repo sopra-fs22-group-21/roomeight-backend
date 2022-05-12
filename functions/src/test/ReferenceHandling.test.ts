@@ -29,6 +29,7 @@ describe("ReferenceController Test", () => {
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
                 flatId: '',
+                isComplete: false,
                 filters: {}
             }
         }
@@ -104,6 +105,7 @@ describe("ReferenceController Test", () => {
                 moveInDate: "1970-01-01T00:00:00.000Z",
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
                 flatId: '',
+                isComplete: false,
                 filters: {}
             }
         }
