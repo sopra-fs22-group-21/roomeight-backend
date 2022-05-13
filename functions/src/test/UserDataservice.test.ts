@@ -312,7 +312,7 @@ describe("UserProfileDataService Test", () => {
     });
 
     test('7 Test Cannot access Repo Patch UserProfile Request', async () =>  {
-        const expected_response = "Could not update User"
+        const expected_response = "Error: something went wrong and User was not updated: Could not update User"
 
         const user_repo = new InvalidMockUserRepository();
         const flat_repo = new InvalidMockFlatRepository();

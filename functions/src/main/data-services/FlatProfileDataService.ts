@@ -53,7 +53,8 @@ export class FlatProfileDataService {
                 "flatId": flat_to_add.profileId,
                 "matches": [],
                 "viewed": [],
-                "likes": []
+                "likes": [],
+                "filters": {"matchingTimeRange": true}
             }
             await this.user_repository.updateProfile(update_fields, user_uid);
             functions.logger.debug(repo_response, {structuredData: true});
@@ -100,7 +101,8 @@ export class FlatProfileDataService {
             const update_fields = {
                 "flatId": "",
                 "isAdvertisingRoom": false,
-                "isSearchingRoom": true
+                "isSearchingRoom": true,
+                "filters": {"matchingTimeRange": true}
             }
             if (roomMates.includes(user_uid)) {
                 // If uid of token matches the profileId continue with request processing
@@ -217,34 +219,7 @@ export class FlatProfileDataService {
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Patch Request: Passed validation", {structuredData: true});
-            return this.flat_repository.getProfileById(flat_id)
-                .then(
-                    (flat_toUpdate) => {
-                        if (!flat_toUpdate) {
-                            throw new Error('Flat Profile not found')
-                        }
-                        let roomMates = flat_toUpdate.roomMates
-                        if (roomMates.includes(user_uid)) {
-                            if (body.hasOwnProperty("moveInDate")) {
-                                body.moveInDate = new Date(body.moveInDate);
-                            }
-                            if (body.hasOwnProperty("moveOutDate")) {
-                                body.moveOutDate = new Date(body.moveOutDate);
-                            }
-                            // If uid of token matches the profileId continue with request processing
-                            return (this.flat_repository.updateProfile(body, flat_id)
-                                .then((response) => {
-                                    return response
-                                })
-                                .catch((error) => {
-                                    throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
-                                }))
-                        } else {
-                            // Else return NotAuthorized-Exception
-                            throw new Error("User is not authorized to delete the selected flat!")
-                        }
-                    }
-                )
+            const flat_toUpdate = await this.flat_repository.getProfileById(flat_id)
                 .catch(
                     (e) => {
                         functions.logger.debug(e, {structuredData: true})
@@ -252,6 +227,30 @@ export class FlatProfileDataService {
                         // res.status(404).send(e.message);
                     }
                 )
+                if (!flat_toUpdate) {
+                    throw new Error('Flat Profile not found')
+                }
+                let roomMates = flat_toUpdate.roomMates
+                if (roomMates.includes(user_uid)) {
+                    if (body.hasOwnProperty("moveInDate")) {
+                        body.moveInDate = new Date(body.moveInDate);
+                    }
+                    if (body.hasOwnProperty("moveOutDate")) {
+                        body.moveOutDate = new Date(body.moveOutDate);
+                    }
+                    // If uid of token matches the profileId continue with request processing
+                    await this.flat_repository.updateProfile(body, flat_id)
+                        .catch((error) => {
+                            throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
+                        })
+                    return this.getProfileByIdFromRepo(flat_id)
+                        .catch((error) => {
+                            throw new Error('Error: Flat was updated but could not get new instance: ' + error.message);
+                        })
+                } else {
+                    // Else return NotAuthorized-Exception
+                    throw new Error("User is not authorized to delete the selected flat!")
+                }
         }else {
             // Throw value error with list of errors which were found if validation failed
             functions.logger.debug(validation_results.toString(), {structuredData: true});
@@ -319,7 +318,8 @@ export class FlatProfileDataService {
             "isAdvertisingRoom": true,
             "matches": [],
             "viewed": [],
-            "likes": []
+            "likes": [],
+            "filters": {"matchingTimeRange": true}
         }
 
         return this.user_repository.updateProfile(update_roomMate, mate.profileId)
@@ -362,7 +362,8 @@ export class FlatProfileDataService {
             "flatId": "",
             "viewed": [],
             "isAdvertisingRoom": false,
-            "isSearchingRoom": true
+            "isSearchingRoom": true,
+            "filters": {"matchingTimeRange": true}
         }
         return this.user_repository.updateProfile(update_fields, user_uid)
             .catch((error) => {

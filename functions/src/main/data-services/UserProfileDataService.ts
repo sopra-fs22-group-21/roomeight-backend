@@ -88,8 +88,14 @@ export class UserProfileDataService {
                 update_fields.birthday = new Date(update_fields.birthday);
             }
             functions.logger.info(update_fields);
-            await this.user_repository.updateProfile(update_fields, profile_id);
+            await this.user_repository.updateProfile(update_fields, profile_id)
+                .catch((error) => {
+                        throw new Error('Error: something went wrong and User was not updated: ' + error.message);
+                    })
             return this.getProfileByIdFromRepo(profile_id)
+                .catch((error) => {
+                    throw new Error('Error: User was updated but could not get new instance: ' + error.message);
+                })
         } else {
             // Throw value error with list of errors which were found if validation failed
             throw new Error(validation_results.toString());
