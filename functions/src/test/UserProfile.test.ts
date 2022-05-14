@@ -12,7 +12,7 @@ describe('ValidatorReport test', () => {
             false, [], "", [], "", false, new Map<string, any>(), []);
     });
 
-    test('new report should not contain errors', () => {
+    test('1 Test new report should not contain errors', () => {
         let expected = "{\"profileId\":\"\"," +
             "\"firstName\":\"test\"," +
             "\"lastName\":\"test\"," +

@@ -335,7 +335,7 @@ export class UserProfileDataService {
         let recipients: string[] = [];
         for (let roommate_id of user_flat.roomMates) {
             if (roommate_id !== user.profileId) {
-                const response = await this.getProfileByIdFromRepo(roommate_id);
+                const response = await this.user_repository.getProfileById(roommate_id);
                 roommate = UserProfileConverter.convertDBEntryToProfile(response);
                 recipients.push(...roommate.devicePushTokens)
             }
@@ -349,9 +349,7 @@ export class UserProfileDataService {
             title: 'Rommeight',
             body: `Hey! Your roomeight ${liking_user.first_name} liked ${liked_user.first_name}`,
             data: {
-                type: NotificationType.NEW_LIKE,
-                profile: liked_user,
-                liking_user_id: liking_user.profileId
+                type: NotificationType.NEW_LIKE
             }
         }
         // Send message
@@ -380,8 +378,8 @@ export class UserProfileDataService {
     }
 
     async likeFlat(profile_id: string, like_id: string): Promise<any> {
-        // Get Profile and Like
 
+        // Get Profile and Like
         const user_response = await this.user_repository.getProfileById(profile_id)
             .catch(() => {throw new Error("Profile not found")})
         const user = UserProfileConverter.convertDBEntryToProfile(user_response)
@@ -389,6 +387,7 @@ export class UserProfileDataService {
         const like_response = await this.flat_repository.getProfileById(like_id)
             .catch(() => {throw new Error("Liked Profile not found")});
         const like = FlatProfileConverter.convertDBEntryToProfile(like_response);
+
 
         // Precondition
         if (user.likes.indexOf(like.profileId) > -1) {
@@ -398,7 +397,7 @@ export class UserProfileDataService {
         let is_match = false;
         let nr_of_roommates = like.roomMates.length;
 
-        // Check if user is searching room;
+        // Check if user is searching room
         if (user.isSearchingRoom) {
             // Check if flat liked the profile
             for (let i in like.likes) {

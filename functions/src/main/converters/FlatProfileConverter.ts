@@ -86,7 +86,7 @@ export class FlatProfileConverter{
                 db_entry.roomMates, db_entry.profileId, db_entry.matches, coordinates);
 
         } catch (e) {
-            throw new TypeError("DB entry does not have expected format" + e)
+            throw new TypeError("DB entry does not have expected format: " + e)
         }
     }
 }

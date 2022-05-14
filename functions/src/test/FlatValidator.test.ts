@@ -142,17 +142,17 @@ describe('Validate PatchUser', () => {
         "hometown": "zuerich"
     }
 
-    test('test valid input for all fields', () => {
+    test('1 Test valid input for all fields', () => {
         let res = FlatValidator.validatePatchFlat(validAllFields);
         expect(res.validationFoundErrors()).toBe(false);
     })
 
-    test('test invalid input fields', () => {
+    test('2 Test invalid input fields', () => {
         let res = FlatValidator.validatePatchFlat(invalidFields);
         expect(res.validationFoundErrors()).toBe(true);
     })
 
-    test('test invalid input with unexpected fields', () => {
+    test('3 Test invalid input with unexpected fields', () => {
         let res = FlatValidator.validatePatchFlat(unexpectedField);
         let expected = "Errors:\nUnknown Field: hometown\n" +
             "Mandatory fields are: \n" +

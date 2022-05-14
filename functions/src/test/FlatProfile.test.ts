@@ -12,7 +12,7 @@ describe('Flat profile test', () => {
             [], new Coordinates(12.34, 56.78));
     });
 
-    test('Test getJson of profile', () => {
+    test('1 Test getJson of profile', () => {
         let expected = "{" +
             "\"profileId\":\"testId\"," +
             "\"name\":\"test\"," +

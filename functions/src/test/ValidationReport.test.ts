@@ -10,11 +10,11 @@ describe('ValidatorReport test', () => {
         validationReport = new ValidationReport(mandatoryFields, optionalFields);
     });
 
-    test('new report should not contain errors', () => {
+    test('1 Test new report should not contain errors', () => {
         expect(validationReport.validationFoundErrors()).toBe(false);
     })
 
-    test('report should match the errormessage', () => {
+    test('2 Test report should match the errormessage', () => {
         let errormsg = "Error: test test\n" +
             "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
             "Optional fields are: description,biography,tags,pictureReferences,gender,isSearchingRoom,isAdvertisingRoom,moveInDate,moveOutDate"

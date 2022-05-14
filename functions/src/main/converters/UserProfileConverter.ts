@@ -55,7 +55,6 @@ export class UserProfileConverter{
     // Dynamically converts DB entry to a valid UserProfile
     static convertDBEntryToProfile(db_entry: any): UserProfile {
         try {
-
             return new UserProfile(db_entry.firstName, db_entry.lastName, db_entry.description, db_entry.biography,
                 db_entry.tags, db_entry.pictureReferences, db_entry.matches, db_entry.creationDate.toDate(),
                 db_entry.onlineStatus, db_entry.moveInDate ? db_entry.moveInDate.toDate():null,

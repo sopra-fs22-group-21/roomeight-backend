@@ -18,7 +18,7 @@ describe('ValidatorReport test', () => {
         "matches": []
     };
 
-    test('report should match the errormessage', () => {
+    test('1 Test report should match the errormessage', () => {
         let res = FlatProfileConverter.convertPostDto(json_body);
         // TODO: expect res to match predefined object
         expect(res).toBeDefined();

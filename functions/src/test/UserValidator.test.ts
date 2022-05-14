@@ -182,17 +182,17 @@ describe('Validate PatchUser', () => {
     "phoneNumber": "+41795233087"
   }
 
-  test('test valid input for all fields', () => {
+  test('1 Test valid input for all fields', () => {
     let res = UserValidator.validatePatchUser(validAllFields);
     expect(res.validationFoundErrors()).toBe(false);
   })
 
-  test('test invalid input fields', () => {
+  test('2 Test invalid input fields', () => {
     let res = UserValidator.validatePatchUser(invalidFields);
     expect(res.validationFoundErrors()).toBe(true);
   })
 
-  test('test invalid input with unexpected fields', () => {
+  test('3 Test invalid input with unexpected fields', () => {
     let res = UserValidator.validatePatchUser(unexpectedField);
     let expected = "Errors:\nUnknown Field: password\n" +
         "Mandatory fields are: \n" +
