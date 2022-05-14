@@ -2,13 +2,13 @@ import * as express from "express";
 import { getAuth } from "firebase-admin/auth";
 import * as functions from "firebase-functions";
 import { config } from "../firebase_config";
-import { chatService } from "./main/chat-service/chatService";
 import { FlatProfileDataService } from "./main/data-services/FlatProfileDataService";
 import { UserProfileDataService } from "./main/data-services/UserProfileDataService";
-import { ChatRepository } from "./main/repository/ChatRepository";
 import { FlatRepository } from "./main/repository/FlatRepository";
 import { UserRepository } from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
+import {chatService} from "./main/chat-service/chatService";
+import {ChatRepository} from "./main/repository/ChatRepository";
 
 
 
