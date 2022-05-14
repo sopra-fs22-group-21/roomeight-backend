@@ -216,9 +216,12 @@ export class UserProfileDataService {
             .catch(() => {throw new Error("Profile not found")})
         const user = UserProfileConverter.convertDBEntryToProfile(user_response)
 
-        // Check if flat id is set
+        // Preconditions
         if(user.flatId == "") {
             throw new Error("Flat id of liking user is not set. You can only like a user if you belong to a flat")
+        }
+        if (!user.isAdvertisingRoom) {
+            throw new Error("You can only like a User if isAdvertisingRoom is true")
         }
 
         const user_flat_response = await this.flat_repository.getProfileById(user.flatId)
@@ -229,10 +232,7 @@ export class UserProfileDataService {
             .catch(() => {throw new Error("Liked Profile not found")});
         const liked_user = UserProfileConverter.convertDBEntryToProfile(like_response);
 
-        // Preconditions
-        if (!user.isAdvertisingRoom) {
-            throw new Error("You can only like a User if isAdvertisingRoom is true")
-        }
+        // Precondition
         if (!liked_user.isSearchingRoom) {
             throw new Error("You can only like a User which has set flag isSearchingRoom")
         }
@@ -242,7 +242,6 @@ export class UserProfileDataService {
         let is_match = false;
         let new_flat_likes = user_flat.likes.map((like) =>like.toJson());
         let new_flat_matches = user_flat.matches;
-        let nr_of_roommates = user_flat.roomMates.length;
 
         // Check if like of user already exists on flat
         for (let i in user_flat.likes) {
@@ -250,42 +249,49 @@ export class UserProfileDataService {
                 is_liked = true;
                 // Check if at min half of the roommates liked the user -> if yes: match
                 let number_of_likes = user_flat.likes[i].likes.length + 1;
-                this.checkIsFlatMatch(number_of_likes, nr_of_roommates, liked_user, user_flat);
+                this.checkIsFlatMatch(number_of_likes, liked_user, user_flat);
 
-                if ((user_flat.likes[i].likes.length + 1) >= (nr_of_roommates*this.flat_match_ratio)) {
-                    is_match = true;
-                }
+                is_match = this.checkIsFlatMatch(number_of_likes, liked_user, user_flat);
+
                 // Push user id to likes
                 new_flat_likes[i].likes.push(user.profileId);
                 break;
             }
         }
 
-
         // Create new like object and add it if none exists
         if (!is_liked) {
             new_flat_likes.push(new Like([user.profileId], liked_user.profileId).toJson());
-            if (nr_of_roommates*this.flat_match_ratio <= 1) {
-
-                is_match = true;
-            }
+            is_match = this.checkIsFlatMatch(1, liked_user, user_flat);
         }
 
-        const recipients = await this.getRoommatesPushTokens(user_flat, user);
-        //Send notification to other roomMates
-        if(liked_user.likes.includes(user_flat.profileId)){
+        await this.userLikeProfilesUpdate(new_flat_likes, new_flat_matches, user, liked_user, is_match, user_flat);
 
-            const message: MessageData = {
-                title: 'Rommeight',
-                body: `Hey! Your roomeight ${user.first_name} liked ${liked_user.first_name}`,
-                data: {
-                    type: NotificationType.NEW_LIKE,
-                    like: liked_user
-                }
-            }
-            await this.expoPushClient.pushToClients(recipients, message)
+        // Resolve references of updated Profile
+        let reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
+        let updated_flat_profile = user_flat.toJson();
+
+        await reference_converter.resolveProfileReferenceList(new_flat_matches)
+            .then((resolution) => {
+                updated_flat_profile.matches = resolution.result;
+            });
+
+        // Send Notifications if user also liked flat (also if it is not a match due to too few likes from roommates)
+        const flat_recipients = await this.getRoommatesPushTokens(user_flat, user);
+        if (is_match) {
+            await this.sendMatchNotifications(liked_user.devicePushTokens, flat_recipients, user_flat.name, liked_user.first_name);
+        } else if(liked_user.likes.includes(user_flat.profileId)) {
+            await this.sendLikeNotifications(flat_recipients, user, liked_user);
         }
 
+        return {
+            isMatch: is_match,
+            updatedFlatProfile: updated_flat_profile
+        }
+    }
+
+    private async userLikeProfilesUpdate(new_flat_likes: any[], new_flat_matches: string[], user: UserProfile,
+                                 liked_user: UserProfile, is_match: boolean, user_flat: FlatProfile) {
         // updates
         let flat_update = {
             likes: new_flat_likes,
@@ -298,54 +304,79 @@ export class UserProfileDataService {
             viewed: new_viewes
         }
 
-        if (liked_user.likes.indexOf(user_flat.profileId) > -1 && user_flat.matches.indexOf(liked_user.profileId) == -1 ) {
-            // If liked user already liked flat and more than half of your flat liked the user and match does not already exist-> set match
-
-            if (is_match) {
-                // Update liked user matches
-                let new_liked_user_matches = liked_user.matches;
-                new_liked_user_matches.push(user_flat.profileId);
-                new_flat_matches.push(liked_user.profileId);
-                const liked_user_update = {
-                    matches: new_liked_user_matches
-                }
-                await this.user_repository.updateProfile(liked_user_update, liked_user.profileId);
+        // Update user profile (matches) if it is a match
+        if (is_match) {
+            // Update liked user matches
+            let new_liked_user_matches = liked_user.matches;
+            new_liked_user_matches.push(user_flat.profileId);
+            new_flat_matches.push(liked_user.profileId);
+            const liked_user_update = {
+                matches: new_liked_user_matches
             }
-        } else {
-            is_match = false;
+            await this.user_repository.updateProfile(liked_user_update, liked_user.profileId);
         }
 
         await this.user_repository.updateProfile(user_update, user.profileId);
         await this.flat_repository.updateProfile(flat_update, user_flat.profileId);
-
-        // Resolve references of updated Profile
-        let reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
-        let updated_flat_profile = user_flat.toJson();
-
-        await reference_converter.resolveProfileReferenceList(new_flat_matches)
-            .then((resolution) => {
-                updated_flat_profile.matches = resolution.result;
-            });
-
-        return {
-            isMatch: is_match,
-            updatedFlatProfile: updated_flat_profile
-        }
     }
 
-    private checkIsFlatMatch = 0;
+    private checkIsFlatMatch(number_of_likes: number, liked_user: UserProfile, flat: FlatProfile): boolean {
+        let nr_of_roommates = flat.roomMates.length;
+        if (number_of_likes >= (nr_of_roommates*this.flat_match_ratio)) {
+            if (liked_user.likes.indexOf(flat.profileId) > -1 && flat.matches.indexOf(liked_user.profileId) == -1 ) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     private async getRoommatesPushTokens(user_flat: FlatProfile, user: UserProfile) {
         let roommate;
         let recipients: string[] = [];
         for (let roommate_id of user_flat.roomMates) {
             if (roommate_id !== user.profileId) {
-                const response = await this.getProfileByIdFromRepo(roommate_id)
+                const response = await this.getProfileByIdFromRepo(roommate_id);
                 roommate = UserProfileConverter.convertDBEntryToProfile(response);
                 recipients.push(...roommate.devicePushTokens)
             }
         }
         return recipients;
+    }
+
+    private async sendLikeNotifications(recipients: string[], liking_user: UserProfile, liked_user: UserProfile): Promise<void> {
+        // Prepare Message and if isMatch add liked user to recipients list
+        let message: MessageData = {
+            title: 'Rommeight',
+            body: `Hey! Your roomeight ${liking_user.first_name} liked ${liked_user.first_name}`,
+            data: {
+                type: NotificationType.NEW_LIKE,
+                profile: liked_user,
+                liking_user_id: liking_user.profileId
+            }
+        }
+        // Send message
+        await this.expoPushClient.pushToClients(recipients, message);
+    }
+
+    private async sendMatchNotifications(user_recipients: string[], flat_recipients: string[], flat_name: string, user_name: string): Promise<void> {
+        // Prepare Message and if isMatch add liked user to recipients list
+        let user_message: MessageData = {
+            title: 'Rommeight',
+            body: `It's a match! You matched with the flat ${flat_name}`,
+            data: {
+                type: NotificationType.NEW_MATCH
+            }
+        }
+        let flat_message: MessageData = {
+            title: 'Rommeight',
+            body: `It's a match! Your flat matched with ${user_name}`,
+            data: {
+                type: NotificationType.NEW_MATCH
+            }
+        }
+        // Send messages
+        await this.expoPushClient.pushToClients(user_recipients, user_message);
+        await this.expoPushClient.pushToClients(flat_recipients, flat_message);
     }
 
     async likeFlat(profile_id: string, like_id: string): Promise<any> {
@@ -405,6 +436,10 @@ export class UserProfileDataService {
                     likes: profile_likes,
                     viewed: profile_viewed
                 }
+                // Send Notifications on match
+                const flat_recipients = await this.getRoommatesPushTokens(like, user);
+                await this.sendMatchNotifications(user.devicePushTokens, flat_recipients, like.name, user.first_name);
+
             } else {
                 // If User is not yet liked by flat -> only set like on user profile
                 user_update = {
