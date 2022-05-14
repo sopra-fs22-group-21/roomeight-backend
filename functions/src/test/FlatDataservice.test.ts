@@ -76,7 +76,8 @@ describe("FlatProfileDataService Test", () => {
                     moveOutDate: new Date(0),
                     flatId: "",
                     isComplete: false,
-                    filters: {}
+                    filters: {},
+                    likes: []
                 }
             },
             matches: {},

@@ -154,7 +154,8 @@ describe("UserProfileDataService Test", () => {
             moveOutDate: new Date(NaN),
             flatId: "",
             isComplete: false,
-            filters: {matchingTimeRange: true}
+            filters: {matchingTimeRange: true},
+            likes: []
         }
 
         const user_repo = new ValidMockUserRepository();
@@ -266,7 +267,8 @@ describe("UserProfileDataService Test", () => {
             moveOutDate:  new Date(0),
             flatId: '',
             isComplete: false,
-            filters: {}
+            filters: {},
+            likes: []
         }
 
         const user_repo = new ValidMockUserRepository();
@@ -414,7 +416,8 @@ describe("UserProfileDataService Test", () => {
             moveOutDate:  "1970-01-01T00:00:00.000Z",
             flatId: '',
             isComplete: false,
-            filters: {}
+            filters: {},
+            likes: []
         };
         const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
 
@@ -503,7 +506,8 @@ describe("UserProfileDataService Test", () => {
                 moveOutDate: "1970-01-01T00:00:00.000Z",
                 flatId: '',
                 isComplete: false,
-                filters: {}
+                filters: {},
+                likes: [null]
         }
     }
 
