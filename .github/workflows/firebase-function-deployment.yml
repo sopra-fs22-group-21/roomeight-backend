@@ -34,9 +34,10 @@ jobs:
       - name: Installations
         run: |
           cd functions
-          npm install jest -g
-          npm install jest-sonar-reporter
-          npm install @types/uuid
+          npm i jest -g
+          npm i jest-sonar-reporter
+          npm i @types/uuid
+          npm i expo-server-sdk
           npm ci
       - name: Run Tests
         run: |
