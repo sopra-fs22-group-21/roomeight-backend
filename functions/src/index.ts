@@ -55,13 +55,8 @@ exports.flatprofiles = functions
                         .https.onRequest(flatprofile_app);
 flatprofile_app.use(cors({ origin: "*" }));
 
-/**
- * Background Function triggered by a change to a Firebase RTDB reference.
- *
- * @param {!Object} event The Cloud Functions event.
- * @param {!Object} context The Cloud Functions event context.
- */
- exports.RTDBNotifications = functions
+// RTDB Triggers
+ exports.onNewMessage = functions
                             .region("europe-west1")
                             .runWith({
                                 maxInstances: 5,
@@ -70,8 +65,20 @@ flatprofile_app.use(cors({ origin: "*" }));
                             .database
                             .ref('/messages/{chatId}/{messageId}')
                             .onCreate((snapshot, context) => {
-                                chatservice.onMessageCreate(snapshot, context);
+                                return chatservice.onMessageCreate(snapshot, context);
                             });
+
+ exports.onNewChat = functions
+     .region("europe-west1")
+     .runWith({
+         maxInstances: 5,
+         timeoutSeconds: 10
+     })
+     .database
+     .ref('chats/{chatId}')
+     .onCreate((snapshot, context)=> {
+        return chatservice.onChatCreate(snapshot, context);
+     });
 
 // User Operations
 

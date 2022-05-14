@@ -15,6 +15,12 @@ export class chatService {
     this.expoPushClient = new ExpoPushClient();
   }
 
+  /**
+   * executed whenever a new child of /messages/chatId is created, updates the chatinfo with lastSender
+   * and sends push notification to all chat members
+   * @param snapshot
+   * @param context
+   */
   async onMessageCreate(
     snapshot: functions.database.DataSnapshot,
     context: functions.EventContext
@@ -35,23 +41,37 @@ export class chatService {
     };
     const members = await this.chat_repository.getMembers(chatId);
     functions.logger.debug("Members: " + members);
-    const recepients = members.filter((member) => member !== senderId);
+    const recipients = members.filter((member) => member !== senderId);
+    functions.logger.debug("Recipients: " + recipients);
     let expoPushTokens: string[] = [];
 
-    recepients.forEach(async (recepient) => {
-      const profile = await this.user_repository.getProfileById(recepient);
+    for (const recipient of recipients) {
+      const profile = await this.user_repository.getProfileById(recipient);
       functions.logger.debug("Profile: " + profile);
       const devicePushTokens: string[] = profile.devicePushTokens;
       expoPushTokens.push(...devicePushTokens);
-    });
+    }
     functions.logger.debug("ExpoPushTokens: " + expoPushTokens);
-    this.expoPushClient.pushToClients(expoPushTokens, message);
+    await this.expoPushClient.pushToClients(expoPushTokens, message);
 
-    //update last sender and last message in chatinfo
+    //update last sender and last message in chat info
     let updates: Updates = {};
     updates["/lastSender"] = senderName;
     updates["/lastMessage"] = text;
-    updates["/timestamp"] = messageData.timestamp;
+    updates["/timestamp"] = messageData.createdAt;
     await this.chat_repository.updateChatInfo(chatId, updates);
   }
+
+  /**
+   * executed whenever a new child of /chats is created, updates the /memberships
+   * @param snapshot
+   * @param context
+   */
+  async onChatCreate(snapshot: functions.database.DataSnapshot, context: functions.EventContext){
+    const chatId = context.params.chatId;
+    const chatInfo = snapshot.val();
+    const members = Object.keys(chatInfo.members);
+    await this.chat_repository.addMemberships(chatId, members);
+  }
+
 }
