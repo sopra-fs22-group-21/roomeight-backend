@@ -10,18 +10,29 @@ import {UserProfileConverter} from "../converters/UserProfileConverter";
 import {FlatProfileConverter} from "../converters/FlatProfileConverter";
 import {FlatRepository} from "../repository/FlatRepository";
 import {Like} from "../data-model/Like";
+import {ExpoPushClient} from "../clients/ExpoPushClient";
+import {MessageData} from "../../assets/Types";
+import {NotificationType} from "../data-model/NotificationType";
+import {FlatProfile} from "../data-model/FlatProfile";
+import {UserProfile} from "../data-model/UserProfile";
 
 export class UserProfileDataService {
 
     private readonly user_repository: UserRepository;
     private readonly flat_repository: FlatRepository;
+    // Number of likes needed in a flat that a user becomes a match
+    private readonly flat_match_ratio: number;
+    private expoPushClient: ExpoPushClient;
     private app: any;
 
     constructor(user_repo: UserRepository, flat_repo: FlatRepository, app: any) {
         this.user_repository = user_repo;
         this.flat_repository = flat_repo;
         this.app = app;
+        this.expoPushClient = new ExpoPushClient();
+
         initializeApp(config);
+        this.flat_match_ratio = 0.5;
     }
 
     async addUserProfile(body: any): Promise<string> {
@@ -238,7 +249,10 @@ export class UserProfileDataService {
             if (user_flat.likes[i].likedUser == liked_user.profileId) {
                 is_liked = true;
                 // Check if at min half of the roommates liked the user -> if yes: match
-                if ((user_flat.likes[i].likes.length + 1) >= (nr_of_roommates/2)) {
+                let number_of_likes = user_flat.likes[i].likes.length + 1;
+                this.checkIsFlatMatch(number_of_likes, nr_of_roommates, liked_user, user_flat);
+
+                if ((user_flat.likes[i].likes.length + 1) >= (nr_of_roommates*this.flat_match_ratio)) {
                     is_match = true;
                 }
                 // Push user id to likes
@@ -247,12 +261,29 @@ export class UserProfileDataService {
             }
         }
 
+
         // Create new like object and add it if none exists
         if (!is_liked) {
             new_flat_likes.push(new Like([user.profileId], liked_user.profileId).toJson());
-            if (nr_of_roommates <= 2) {
+            if (nr_of_roommates*this.flat_match_ratio <= 1) {
+
                 is_match = true;
             }
+        }
+
+        const recipients = await this.getRoommatesPushTokens(user_flat, user);
+        //Send notification to other roomMates
+        if(liked_user.likes.includes(user_flat.profileId)){
+
+            const message: MessageData = {
+                title: 'Rommeight',
+                body: `Hey! Your roomeight ${user.first_name} liked ${liked_user.first_name}`,
+                data: {
+                    type: NotificationType.NEW_LIKE,
+                    like: liked_user
+                }
+            }
+            await this.expoPushClient.pushToClients(recipients, message)
         }
 
         // updates
@@ -269,6 +300,7 @@ export class UserProfileDataService {
 
         if (liked_user.likes.indexOf(user_flat.profileId) > -1 && user_flat.matches.indexOf(liked_user.profileId) == -1 ) {
             // If liked user already liked flat and more than half of your flat liked the user and match does not already exist-> set match
+
             if (is_match) {
                 // Update liked user matches
                 let new_liked_user_matches = liked_user.matches;
@@ -299,6 +331,21 @@ export class UserProfileDataService {
             isMatch: is_match,
             updatedFlatProfile: updated_flat_profile
         }
+    }
+
+    private checkIsFlatMatch = 0;
+
+    private async getRoommatesPushTokens(user_flat: FlatProfile, user: UserProfile) {
+        let roommate;
+        let recipients: string[] = [];
+        for (let roommate_id of user_flat.roomMates) {
+            if (roommate_id !== user.profileId) {
+                const response = await this.getProfileByIdFromRepo(roommate_id)
+                roommate = UserProfileConverter.convertDBEntryToProfile(response);
+                recipients.push(...roommate.devicePushTokens)
+            }
+        }
+        return recipients;
     }
 
     async likeFlat(profile_id: string, like_id: string): Promise<any> {
