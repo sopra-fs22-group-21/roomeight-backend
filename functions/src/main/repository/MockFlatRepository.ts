@@ -62,6 +62,10 @@ export class ValidMockFlatRepository implements FlatRepository {
     getProfileByEmail(email: string): Promise<any> {
         throw new Error("Method not implemented.");
     }
+
+    discover(queryConstraints: any[]): Promise<any> {
+        return Promise.resolve(undefined);
+    }
 }
 
 export class InvalidMockFlatRepository implements FlatRepository {
@@ -97,6 +101,10 @@ export class InvalidMockFlatRepository implements FlatRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve(undefined);
+    }
+
+    discover(queryConstraints: any[]): Promise<any> {
         return Promise.resolve(undefined);
     }
 }

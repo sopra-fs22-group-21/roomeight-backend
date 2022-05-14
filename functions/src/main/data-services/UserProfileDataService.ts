@@ -458,7 +458,8 @@ export class UserProfileDataService {
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const db_entries = await this.flat_repository.getProfiles();
+        const queries: any[] = this.createQuery(user.filters)
+        const db_entries = await this.flat_repository.discover(queries);
 
         if (db_entries) {
             let results: any[] = [];
@@ -499,5 +500,11 @@ export class UserProfileDataService {
         } else {
             throw new Error("No Flat Profiles found!")
         }
+    }
+
+    private createQuery(filters: any): any[] {
+        const queryConstraints = []
+        queryConstraints.push(['permanent', '==', false]);
+        return queryConstraints
     }
 }

@@ -377,7 +377,8 @@ export class FlatProfileDataService {
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const db_entries = await this.user_repository.getProfiles();
+        const queries: any[] = this.createQuery(user.filters)
+        const db_entries = await this.user_repository.discover(queries);
 
         if (db_entries) {
             let results: any[] = [];
@@ -409,5 +410,11 @@ export class FlatProfileDataService {
         } else {
             throw new Error("No Flat Profiles found!")
         }
+    }
+
+    private createQuery(filters: any): any[] {
+        const queryConstraints = []
+        queryConstraints.push(['isSearchingRoom', '==', true]);
+        return queryConstraints
     }
 }
