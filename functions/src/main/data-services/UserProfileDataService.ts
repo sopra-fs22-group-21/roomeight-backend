@@ -505,6 +505,8 @@ export class UserProfileDataService {
     private createQuery(filters: any): any[] {
         const queryConstraints = []
         queryConstraints.push(['permanent', '==', false]);
+        queryConstraints.push(['numberOfBaths', '>=', 1]);
+        queryConstraints.push(['numberOfBaths', '<=', 7]);
         return queryConstraints
     }
 }
