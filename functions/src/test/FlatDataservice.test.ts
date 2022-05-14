@@ -161,35 +161,120 @@ describe("FlatProfileDataService Test", () => {
             )
     });
 
+    test('3 Test Valid Add FlatProfile Request', () => {
+        // Input
+        const post_body = {
+            name: "test_flat",
+            address: "test_address",
+            description: "test",
+            biography: "test bio",
+            rent: 100
+        }
+        const uid = "123-advertising";
+
+        // Expected Output
+        const expected_error_msg = "User is already part of a flat"
+
+
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        return ds.addFlatProfile(post_body, uid)
+            .then(
+                (response) => {
+                    console.log(response);
+                    throw new TypeError("Expected a validation error");
+                }
+            )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                }
+            )
+    });
+
+    // Post Flat Profile Tests
+    test('4 Test Valid Delete Flat Request', () => {
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Input
+        const profile_id = "flt&1234"
+        const uid = "123-advertising"
+
+        // Expected Output
+        const expected_response = "Successfully deleted user flt&1234"
+
+        return ds.deleteFlat(profile_id, uid).then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+            }
+        );
+    });
+
+
     // GetById Tests
 
     test('3 Test Valid GetById Request', () => {
-        const expected_response = "{" +
-            "\"name\":\"test\"," +
-            "\"description\":\"test\"," +
-            "\"biography\":\"test\"," +
-            "\"tags\":[\"test\"]," +
-            "\"pictureReferences\":[\"test\"]," +
-            "\"likes\":[]," +
-            "\"creationDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"moveInDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"address\":\"test\"," +
-            "\"rent\":500," +
-            "\"permanent\":false," +
-            "\"roomSize\":18," +
-            "\"numberOfBaths\":1," +
-            "\"roomMates\":{}," +
-            "\"matches\":{}," +
-            "\"addressCoordinates\":{\"longitude\":12.34,\"latitude\":56.78}" +
-            "}";
+        const expected_response = {
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            likes: [],
+            creationDate: new Date(0),
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            address: "test",
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+                "123-advertising": {
+                    profileId: "123-advertising",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: false,
+                    isAdvertisingRoom: true,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "123",
+                    isComplete: false,
+                    filters: {}
+                }
+            },
+            matches: {},
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }
+
         const ds = new FlatProfileDataService(new ValidMockFlatRepository(), new ValidMockUserRepository());
 
         return ds.getProfileByIdFromRepo("123").then(
             (response) => {
                 console.log(response);
-                expect(JSON.stringify(response)).toEqual(expected_response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
             }
         );
     });
+
+
 })
