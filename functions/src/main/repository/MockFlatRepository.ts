@@ -42,7 +42,7 @@ export class ValidMockFlatRepository implements FlatRepository {
             permanent: false,
             roomSize: 18,
             numberOfBaths: 1,
-            roomMates: [],
+            roomMates: ["123-advertising"],
             likes: [],
             matches: [],
             flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",

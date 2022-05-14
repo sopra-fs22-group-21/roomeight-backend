@@ -90,7 +90,6 @@ export class FlatProfileDataService {
                 (e) => {
                     functions.logger.debug(e, {structuredData: true})
                     throw new Error(e.message);
-                    // res.status(404).send(e.message);
                 }
             )
 

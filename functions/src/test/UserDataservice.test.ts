@@ -463,7 +463,7 @@ describe("UserProfileDataService Test", () => {
                 numberOfRoommates: undefined,
                 roomSize: 18,
                 numberOfBaths: 1,
-                roomMates: [],
+                roomMates: ["123-advertising"],
                 matches: {},
                 addressCoordinates: {
                     longitude: 12.34,
