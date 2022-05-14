@@ -33,8 +33,8 @@ describe('ValidatorReport test', () => {
             "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"," +
             "\"flatId\":\"\"," +
             "\"isComplete\":false," +
-            "\"filters\":{}}"
-
+            "\"filters\":{}," +
+            "\"likes\":[]}"
         expect(JSON.stringify(userProfile.toJson())).toEqual(expected);
     })
 })

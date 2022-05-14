@@ -30,7 +30,8 @@ describe("ReferenceController Test", () => {
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
                 flatId: '',
                 isComplete: false,
-                filters: {}
+                filters: {},
+                likes: []
             }
         }
         const reference_list = ["123"]
@@ -106,7 +107,8 @@ describe("ReferenceController Test", () => {
                 moveOutDate:  "1970-01-01T00:00:00.000Z",
                 flatId: '',
                 isComplete: false,
-                filters: {}
+                filters: {},
+                likes: []
             }
         }
         const mock_user_repo = new ValidMockUserRepository();

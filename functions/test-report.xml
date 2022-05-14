@@ -1,72 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatProfileConverter.test.ts">
-    <testCase name="ValidatorReport test report should match the errormessage" duration="5"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserValidator.test.ts">
-    <testCase name="Validate PostUser test valid input for all fields" duration="91"/>
-    <testCase name="Validate PostUser test valid input for mandatory fields" duration="3"/>
-    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
-    <testCase name="Validate PostUser test invalid input with missing fields" duration="2"/>
-    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="1"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserValidator.test.ts">
+    <testCase name="Validate PostUser test valid input for all fields" duration="196"/>
+    <testCase name="Validate PostUser test valid input for mandatory fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input fields" duration="0"/>
+    <testCase name="Validate PostUser test invalid input with missing fields" duration="0"/>
+    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="0"/>
     <testCase name="Validate PostUser test invalid date range" duration="1"/>
     <testCase name="Validate PostUser test json with null value" duration="0"/>
     <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
     <testCase name="Validate PatchUser test invalid input fields" duration="1"/>
-    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="1"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatProfile.test.ts">
-    <testCase name="Flat profile test Test getJson of profile" duration="5"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ValidationReport.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="3"/>
-    <testCase name="ValidatorReport test report should match the errormessage" duration="2"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfile.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="4"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatValidator.test.ts">
-    <testCase name="Validate PostFlat test valid input for all fields" duration="21"/>
-    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="3"/>
-    <testCase name="Validate PostFlat test invalid input fields" duration="2"/>
-    <testCase name="Validate PostFlat test invalid input with missing fields" duration="3"/>
-    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="3"/>
-    <testCase name="Validate PostFlat test invalid date range" duration="11"/>
-    <testCase name="Validate PostFlat test json with null value" duration="1"/>
-    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
-    <testCase name="Validate PatchUser test invalid input fields" duration="1"/>
     <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
   </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserProfileConverter.test.ts">
-    <testCase name="ValidatorReport test report should match the errormessage" duration="5"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserProfileConverter.test.ts">
+    <testCase name="ValidatorReport test report should match the errormessage" duration="0"/>
   </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\ReferenceHandling.test.ts">
-    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="48"/>
-    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="3"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatProfileConverter.test.ts">
+    <testCase name="ValidatorReport test report should match the errormessage" duration="0"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/ValidationReport.test.ts">
+    <testCase name="ValidatorReport test new report should not contain errors" duration="0"/>
+    <testCase name="ValidatorReport test report should match the errormessage" duration="1"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatValidator.test.ts">
+    <testCase name="Validate PostFlat test valid input for all fields" duration="33"/>
+    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input with missing fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="3"/>
+    <testCase name="Validate PostFlat test invalid date range" duration="3"/>
+    <testCase name="Validate PostFlat test json with null value" duration="8"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="1"/>
+    <testCase name="Validate PatchUser test invalid input fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserProfile.test.ts">
+    <testCase name="ValidatorReport test new report should not contain errors" duration="1"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatProfile.test.ts">
+    <testCase name="Flat profile test Test getJson of profile" duration="2"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts">
+    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="150"/>
+    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="11"/>
+    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="39"/>
+    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="16"/>
+    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="7"/>
+    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="5"/>
+    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 11 Test Valid GetById Request" duration="7"/>
+    <testCase name="UserProfileDataService Test 12 Test Invalid GetById Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 13 Test valid LikeUser Request" duration="6"/>
+    <testCase name="UserProfileDataService Test 14 Test valid LikeFlat Request" duration="4"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/ReferenceHandling.test.ts">
+    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="84"/>
+    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="5"/>
     <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="1"/>
     <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="1"/>
     <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="2"/>
     <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="2"/>
   </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\FlatDataservice.test.ts">
-    <testCase name="FlatProfileDataService Test 1 Test Valid Add FlatProfile Request" duration="52"/>
-    <testCase name="FlatProfileDataService Test 2 Test Invalid Input Add FlatProfile Request" duration="8"/>
-    <testCase name="FlatProfileDataService Test 3 Test Valid GetById Request" duration="6"/>
-  </file>
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts">
-    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="47"/>
-    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="30"/>
-    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="15"/>
-    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 11 Test Valid GetById Request" duration="3"/>
-    <testCase name="UserProfileDataService Test 12 Test Invalid GetById Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 13 Test valid LikeUser Request" duration="7"/>
-    <testCase name="UserProfileDataService Test 14 Test valid LikeFlat Request" duration="3"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatDataservice.test.ts">
+    <testCase name="FlatProfileDataService Test 1 Test Valid Add FlatProfile Request" duration="72"/>
+    <testCase name="FlatProfileDataService Test 2 Test Invalid Input Add FlatProfile Request" duration="3"/>
+    <testCase name="FlatProfileDataService Test 3 Test Valid Add FlatProfile Request" duration="2"/>
+    <testCase name="FlatProfileDataService Test 4 Test Valid Delete Flat Request" duration="3"/>
+    <testCase name="FlatProfileDataService Test 3 Test Valid GetById Request" duration="4"/>
   </file>
 </testExecutions>
