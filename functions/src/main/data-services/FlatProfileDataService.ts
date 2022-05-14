@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
+import {UserProfileConverter} from "../converters/UserProfileConverter";
 
 export class FlatProfileDataService {
 
@@ -208,7 +209,7 @@ export class FlatProfileDataService {
             return result;
 
         } else {
-            throw new Error("Flat Profile not found!")
+            throw new Error("Flat Profiles not found!")
         }
     }
 
@@ -369,5 +370,44 @@ export class FlatProfileDataService {
             .catch((error) => {
                 throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
             })
+    }
+
+    async discover(uid: string, quantity: number): Promise<any> {
+        const user = await this.user_repository.getProfileById(uid)
+            .catch((e) => {
+                throw new Error("Own Userprofile not found!")
+            })
+        const db_entries = await this.user_repository.getProfiles();
+
+        if (db_entries) {
+            let results: any[] = [];
+            let i = 0;
+            for (let entry of db_entries) {
+                if (!user.viewed.hasOwnProperty(entry.profileId) && i < quantity) {
+                    results.push(entry);
+                    i++;
+                }
+            }
+
+            let resolved: any[] = [];
+            results.map((entry: any) => {
+                resolved.push(UserProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
+
+            functions.logger.debug("user was converted", {structuredData: true});
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
+            for (let i in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
+                        resolved[i].matches = resolution.result;
+                    });
+            }
+            return resolved;
+
+        } else {
+            throw new Error("No Flat Profiles found!")
+        }
     }
 }

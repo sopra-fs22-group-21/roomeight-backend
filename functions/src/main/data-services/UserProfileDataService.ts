@@ -452,4 +452,52 @@ export class UserProfileDataService {
             return "Successfully deleted token from push token list"
         }
     }
+
+    async discover(uid: string, quantity: number): Promise<any> {
+        const user = await this.user_repository.getProfileById(uid)
+            .catch((e) => {
+                throw new Error("Own Userprofile not found!")
+            })
+        const db_entries = await this.flat_repository.getProfiles();
+
+        if (db_entries) {
+            let results: any[] = [];
+            let i = 0;
+            for (let entry of db_entries) {
+                if (!user.viewed.hasOwnProperty(entry.profileId) && i < quantity) {
+                    results.push(entry);
+                    i++;
+                }
+            }
+
+            let resolved: any[] = [];
+            results.map((entry: any) => {
+                resolved.push(FlatProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
+
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
+            for (let i in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
+                        resolved[i].matches = resolution.result;
+                    });
+                await reference_converter.resolveProfileReferenceList(resolved[i].roomMates)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "roomMates", resolved[i].roomMates, resolution.unresolvedReferences);
+                        resolved[i].roomMates = resolution.result;
+                    });
+                // Likes
+                await reference_converter.resolveFlatLikes(resolved[i].likes)
+                    .then((resolution) => {
+                        resolved[i].likes = resolution.result;
+                    });
+            }
+            return resolved;
+
+        } else {
+            throw new Error("No Flat Profiles found!")
+        }
+    }
 }
