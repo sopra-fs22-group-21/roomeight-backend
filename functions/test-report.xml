@@ -1,72 +1,136 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/UserProfile.test.ts">
-    <testCase name="ValidatorReport test new report should not contain errors" duration="2"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserValidator.test.ts">
+    <testCase name="Validate PostUser test valid input for all fields" duration="110"/>
+    <testCase name="Validate PostUser test valid input for mandatory fields" duration="2"/>
+    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid input with missing fields" duration="5"/>
+    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="1"/>
+    <testCase name="Validate PostUser test invalid date range" duration="1"/>
+    <testCase name="Validate PostUser test json with null value" duration="1"/>
+    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input fields" duration="1"/>
+    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/UserProfileConverter.test.ts">
-    <testCase name="ValidatorReport test report should match the errormessage" duration="2"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserProfileConverter.test.ts">
+    <testCase name="ValidatorReport test report should match the errormessage" duration="1"/>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/FlatProfileConverter.test.ts">
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatProfileConverter.test.ts">
     <testCase name="ValidatorReport test report should match the errormessage" duration="0"/>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/FlatProfile.test.ts">
-    <testCase name="Flat profile test Test getJson of profile" duration="0"/>
-  </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/ValidationReport.test.ts">
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/ValidationReport.test.ts">
     <testCase name="ValidatorReport test new report should not contain errors" duration="1"/>
     <testCase name="ValidatorReport test report should match the errormessage" duration="1"/>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/UserValidator.test.ts">
-    <testCase name="Validate PostUser test valid input for all fields" duration="19"/>
-    <testCase name="Validate PostUser test valid input for mandatory fields" duration="0"/>
-    <testCase name="Validate PostUser test invalid input fields" duration="1"/>
-    <testCase name="Validate PostUser test invalid input with missing fields" duration="0"/>
-    <testCase name="Validate PostUser test invalid input with unexpected fields" duration="0"/>
-    <testCase name="Validate PostUser test invalid date range" duration="0"/>
-    <testCase name="Validate PostUser test json with null value" duration="0"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatValidator.test.ts">
+    <testCase name="Validate PostFlat test valid input for all fields" duration="35"/>
+    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input with missing fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="3"/>
+    <testCase name="Validate PostFlat test invalid date range" duration="1"/>
+    <testCase name="Validate PostFlat test json with null value" duration="4"/>
     <testCase name="Validate PatchUser test valid input for all fields" duration="1"/>
     <testCase name="Validate PatchUser test invalid input fields" duration="0"/>
-    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
+    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="1"/>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/FlatValidator.test.ts">
-    <testCase name="Validate PostFlat test valid input for all fields" duration="13"/>
-    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="0"/>
-    <testCase name="Validate PostFlat test invalid input fields" duration="0"/>
-    <testCase name="Validate PostFlat test invalid input with missing fields" duration="0"/>
-    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="1"/>
-    <testCase name="Validate PostFlat test invalid date range" duration="4"/>
-    <testCase name="Validate PostFlat test json with null value" duration="1"/>
-    <testCase name="Validate PatchUser test valid input for all fields" duration="0"/>
-    <testCase name="Validate PatchUser test invalid input fields" duration="0"/>
-    <testCase name="Validate PatchUser test invalid input with unexpected fields" duration="0"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserProfile.test.ts">
+    <testCase name="ValidatorReport test new report should not contain errors" duration="4">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"profileId\":\"\",\"firstName\":\"test\",\"lastName\":\"test\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"lars.boesch@uzh.ch\",\"phoneNumber\":\"+41799127396\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}"
+Received: "{\"profileId\":\"\",\"firstName\":\"test\",\"lastName\":\"test\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"lars.boesch@uzh.ch\",\"phoneNumber\":\"+41799127396\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[]}"
+    at Object.<anonymous> (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserProfile.test.ts:38:54)
+    at Promise.then.completed (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusTest (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:218:40)
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)
+    at _runTest (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:155:3)
+    at _runTestsForDescribeBlock (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/node_modules/jest-circus/build/run.js:25:3)]]></failure>
+    </testCase>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/ReferenceHandling.test.ts">
-    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="27"/>
-    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="1"/>
-    <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="0"/>
-    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="1"/>
-    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="1"/>
-    <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="0"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatProfile.test.ts">
+    <testCase name="Flat profile test Test getJson of profile" duration="2"/>
   </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts">
-    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="55"/>
-    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="2"/>
-    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="1"/>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/ReferenceHandling.test.ts">
+    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="82">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"123\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}}"
+Received: "{\"123\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[]}}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/ReferenceHandling.test.ts:42:53
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="8"/>
+    <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="1"/>
+    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="0"/>
+    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="13">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"123\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}}"
+Received: "{\"123\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[]}}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/ReferenceHandling.test.ts:117:53
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="2"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatDataservice.test.ts">
+    <testCase name="FlatProfileDataService Test 1 Test Valid Add FlatProfile Request" duration="89">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"profileId\":\"flt$1234\",\"name\":\"test_flat\",\"description\":\"test\",\"biography\":\"test bio\",\"tags\":[],\"pictureReferences\":[],\"likes\":[],\"creationDate\":\"2022-05-13T22:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"moveInDate\":null,\"moveOutDate\":null,\"address\":\"test_address\",\"rent\":100,\"permanent\":false,\"numberOfRoommates\":1,\"roomSize\":null,\"numberOfBaths\":null,\"roomMates\":{\"123\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}},\"matches\":{},\"addressCoordinates\":{\"longitude\":null,\"latitude\":null}}"
+Received: "{\"profileId\":\"flt$1234\",\"name\":\"test_flat\",\"description\":\"test\",\"biography\":\"test bio\",\"tags\":[],\"pictureReferences\":[],\"likes\":[],\"creationDate\":\"2022-05-13T22:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"moveInDate\":null,\"moveOutDate\":null,\"address\":\"test_address\",\"rent\":100,\"permanent\":false,\"numberOfRoommates\":1,\"roomSize\":null,\"numberOfBaths\":null,\"roomMates\":{\"123\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":[],\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[]}},\"matches\":{},\"addressCoordinates\":{\"longitude\":null,\"latitude\":null}}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/FlatDataservice.test.ts:97:50
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="FlatProfileDataService Test 2 Test Invalid Input Add FlatProfile Request" duration="12"/>
+    <testCase name="FlatProfileDataService Test 3 Test Valid GetById Request" duration="7"/>
+  </file>
+  <file path="/Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts">
+    <testCase name="UserProfileDataService Test 1 Test Valid Add UserProfile Request" duration="96">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"profileId\":\"123\",\"firstName\":\"test\",\"lastName\":\"test\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"2022-05-13T22:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1999-06-22T00:00:00.000Z\",\"email\":\"test@test.ch\",\"phoneNumber\":\"0795553030\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":null,\"moveOutDate\":null,\"flatId\":\"\",\"isComplete\":false,\"filters\":{\"matchingTimeRange\":true}}"
+Received: "{\"profileId\":\"123\",\"firstName\":\"test\",\"lastName\":\"test\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"2022-05-13T22:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1999-06-22T00:00:00.000Z\",\"email\":\"test@test.ch\",\"phoneNumber\":\"0795553030\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":null,\"moveOutDate\":null,\"flatId\":\"\",\"isComplete\":false,\"filters\":{\"matchingTimeRange\":true},\"likes\":[]}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts:167:50
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="UserProfileDataService Test 2 Test Validator Error Add UserProfile Request" duration="24"/>
+    <testCase name="UserProfileDataService Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="2"/>
     <testCase name="UserProfileDataService Test 4 Test Cannot access Repo Add UserProfile Request" duration="31"/>
-    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="4"/>
-    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="0"/>
+    <testCase name="UserProfileDataService Test 5 Test Valid Patch  UserProfile Request" duration="15">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}"
+Received: "{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[]}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts:279:50
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="UserProfileDataService Test 6 Test Validator Error Patch UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 7 Test Cannot access Repo Patch UserProfile Request" duration="7"/>
+    <testCase name="UserProfileDataService Test 8 Test Valid Delete UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 9 Test Cannot access Auth Delete UserProfile Request" duration="2"/>
     <testCase name="UserProfileDataService Test 10 Test Cannot access Repo Delete UserProfile Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 11 Test Valid GetById Request" duration="1"/>
-    <testCase name="UserProfileDataService Test 12 Test Invalid GetById Request" duration="0"/>
-    <testCase name="UserProfileDataService Test 13 Test valid LikeUser Request" duration="4"/>
-    <testCase name="UserProfileDataService Test 14 Test valid LikeFlat Request" duration="1"/>
-  </file>
-  <file path="/Users/larsboesch/Desktop/FS22/SoPra/roomeight-backend/functions/src/test/FlatDataservice.test.ts">
-    <testCase name="FlatProfileDataService Test 1 Test Valid Add FlatProfile Request" duration="45"/>
-    <testCase name="FlatProfileDataService Test 2 Test Invalid Input Add FlatProfile Request" duration="1"/>
-    <testCase name="FlatProfileDataService Test 3 Test Valid GetById Request" duration="1"/>
+    <testCase name="UserProfileDataService Test 11 Test Valid GetById Request" duration="11">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}"
+Received: "{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[]}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts:424:50
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="UserProfileDataService Test 12 Test Invalid GetById Request" duration="2"/>
+    <testCase name="UserProfileDataService Test 13 Test valid LikeUser Request" duration="5"/>
+    <testCase name="UserProfileDataService Test 14 Test valid LikeFlat Request" duration="3">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "{\"isMatch\":false,\"updatedUserProfile\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{}}}"
+Received: "{\"isMatch\":false,\"updatedUserProfile\":{\"profileId\":\"123\",\"firstName\":\"Mock first_name\",\"lastName\":\"Mock last_name\",\"description\":\"\",\"biography\":\"\",\"tags\":[],\"pictureReferences\":[],\"matches\":{},\"creationDate\":\"1970-01-01T00:00:00.000Z\",\"onlineStatus\":\"ONLINE\",\"birthday\":\"1970-01-01T00:00:00.000Z\",\"email\":\"test@test.com\",\"phoneNumber\":\"0795556677\",\"gender\":\"NOT SET\",\"isSearchingRoom\":true,\"isAdvertisingRoom\":false,\"moveInDate\":\"1970-01-01T00:00:00.000Z\",\"moveOutDate\":\"1970-01-01T00:00:00.000Z\",\"flatId\":\"\",\"isComplete\":false,\"filters\":{},\"likes\":[null]}}"
+    at /Users/larsboesch/Documents/FS22/SoPra/roomeight-backend/functions/src/test/UserDataservice.test.ts:513:50
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
   </file>
 </testExecutions>
