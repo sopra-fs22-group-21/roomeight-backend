@@ -1,12 +1,14 @@
-import * as functions from "firebase-functions";
 import * as express from "express";
-import {UserProfileDataService} from "./main/data-services/UserProfileDataService";
-import {getAuth} from "firebase-admin/auth";
-import {config} from "../firebase_config";
-import {UserRepository} from "./main/repository/UserRepository";
+import { getAuth } from "firebase-admin/auth";
+import * as functions from "firebase-functions";
+import { config } from "../firebase_config";
+import { chatService } from "./main/chat-service/chatService";
+import { FlatProfileDataService } from "./main/data-services/FlatProfileDataService";
+import { UserProfileDataService } from "./main/data-services/UserProfileDataService";
+import { ChatRepository } from "./main/repository/ChatRepository";
+import { FlatRepository } from "./main/repository/FlatRepository";
+import { UserRepository } from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
-import {FlatRepository} from "./main/repository/FlatRepository";
-import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
 
 
 
@@ -25,11 +27,14 @@ const cors = require('cors');
 
 // Repository Initialization
 const userRepo = new UserRepository(app);
-const flatRepo = new FlatRepository(app)
+const flatRepo = new FlatRepository(app);
+const chatRepo = new ChatRepository(app);
 
 // Data Service Initialization
 const userProfileDataService = new UserProfileDataService(userRepo, flatRepo, app);
 const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
+
+const chatservice = new chatService(userRepo, chatRepo);
 
 // Export functions and set allowed origins
 exports.userprofiles = functions
@@ -50,6 +55,30 @@ exports.flatprofiles = functions
                         .https.onRequest(flatprofile_app);
 flatprofile_app.use(cors({ origin: "*" }));
 
+// RTDB Triggers
+ exports.onNewMessage = functions
+                            .region("europe-west1")
+                            .runWith({
+                                maxInstances: 5,
+                                timeoutSeconds: 10
+                            })
+                            .database
+                            .ref('/messages/{chatId}/{messageId}')
+                            .onCreate((snapshot, context) => {
+                                return chatservice.onMessageCreate(snapshot, context);
+                            });
+
+ exports.onNewChat = functions
+     .region("europe-west1")
+     .runWith({
+         maxInstances: 5,
+         timeoutSeconds: 10
+     })
+     .database
+     .ref('chats/{chatId}')
+     .onCreate((snapshot, context)=> {
+        return chatservice.onChatCreate(snapshot, context);
+     });
 
 // User Operations
 
@@ -399,7 +428,7 @@ flatprofile_app.post('/roommate/:mate_email', async (req, res) => {
             .then((decodedToken) => {
                 functions.logger.debug("Started add roommate Post Request", {structuredData: true});
                 return flatProfileDataService.addUserToFlat(decodedToken.uid, mate_email)
-                    .then((data_service_response) => {
+                    .then(() => {
                             res.set('Access-Control-Allow-Origin', '*')
                             res.status(200).send("Successfully added the User " + mate_email + " to the flat");
                         }
