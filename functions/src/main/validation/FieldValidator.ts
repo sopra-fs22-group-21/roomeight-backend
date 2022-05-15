@@ -160,8 +160,8 @@ export class FieldValidator {
                     }
                     break;
                 case "addressCoordinates":
-                    if (!this.validateString(user_json_body[key])) {
-                        report.setErrors("Invalid addressCoordinates: Should be of type string and have less than 300 signs");
+                    if (!this.validateCoordinates(user_json_body[key])) {
+                        report.setErrors("Invalid addressCoordinates: Should contain latitude and longitude, both of type number");
                     }
                     break;
                 case "filters":
@@ -340,4 +340,7 @@ export class FieldValidator {
         return typeof nr == "number" && nr >= 0;
     }
 
+    private static validateCoordinates(coordinates: any): boolean {
+        return typeof coordinates.latitude == "number" && coordinates.latitude >= 0 && typeof coordinates.longitude == "number" && coordinates.longitude >= 0;
+    }
 }

@@ -129,7 +129,10 @@ describe('Validate PatchUser', () => {
         "roomSize": 18,
         "numberOfBaths": 1,
         "numberOfRoommates": 3,
-        "addressCoordinates": "12.34.56"
+        "addressCoordinates": {
+            "latitude": 47.5,
+            "longitude": 8.55
+        }
     }
 
     let invalidFields = {
