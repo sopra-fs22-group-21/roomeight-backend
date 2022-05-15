@@ -2,13 +2,14 @@ import * as express from "express";
 import { getAuth } from "firebase-admin/auth";
 import * as functions from "firebase-functions";
 import { config } from "../firebase_config";
-import { FlatProfileDataService } from "./main/data-services/FlatProfileDataService";
 import { UserProfileDataService } from "./main/data-services/UserProfileDataService";
-import { FlatRepository } from "./main/repository/FlatRepository";
 import { UserRepository } from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
 import {chatService} from "./main/chat-service/chatService";
 import {ChatRepository} from "./main/repository/ChatRepository";
+import {FlatRepository} from "./main/repository/FlatRepository";
+import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
+import {Assigner} from "./main/data-services/Assigner";
 
 
 
@@ -23,6 +24,7 @@ const app = admin.initializeApp(config);
 // Required instances
 const userprofile_app = express();
 const flatprofile_app = express();
+const discover_app = express();
 const cors = require('cors');
 
 // Repository Initialization
@@ -33,6 +35,7 @@ const chatRepo = new ChatRepository(app);
 // Data Service Initialization
 const userProfileDataService = new UserProfileDataService(userRepo, flatRepo, app);
 const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
+const assigner = new Assigner(userRepo);
 
 const chatservice = new chatService(userRepo, chatRepo);
 
@@ -79,6 +82,15 @@ flatprofile_app.use(cors({ origin: "*" }));
      .onCreate((snapshot, context)=> {
         return chatservice.onChatCreate(snapshot, context);
      });
+exports.discover = functions
+    .region("europe-west1")
+    .runWith({
+        maxInstances: 5,
+        timeoutSeconds: 10
+    })
+    .https.onRequest(discover_app);
+discover_app.use(cors({ origin: "*" }));
+
 
 // User Operations
 
@@ -542,6 +554,51 @@ flatprofile_app.delete('/:profileId', async (req, res) => {
                 res.status(401).send("Authorization failed: " + error);
             });
 
+    } else {
+        res.status(401).send("Authorization failed: No authorization header present");
+    }
+});
+
+
+// Discover
+discover_app.get('/:quantity', async (req, res) => {
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+        const idToken = req.headers.authorization.split('Bearer ')[1]
+        let quantity = sanitizeHtml(req.params.quantity);
+        getAuth()
+            .verifyIdToken(idToken)
+            .then((decodedToken) => {
+                functions.logger.debug("Started discover Request", {structuredData: true});
+                return assigner.isFlatMate(decodedToken.uid)
+                    .then((isFlatMate) => {
+                        if (isFlatMate) {
+                            functions.logger.debug("user belongs to flat", {structuredData: true});
+                            return flatProfileDataService.discover(decodedToken.uid, parseInt(quantity))
+                                .then((response) => {
+                                        res.status(200).send(response);
+                                    }
+                                )
+                                .catch ((e) => {
+                                    functions.logger.debug(e, {structuredData: true})
+                                    res.status(404).send(e.message);
+                                });
+                        } else {
+                            functions.logger.debug("user does not belong to flat", {structuredData: true});
+                            return userProfileDataService.discover(decodedToken.uid, parseInt(quantity))
+                                .then((response) => {
+                                        res.status(200).send(response);
+                                    }
+                                )
+                                .catch ((e) => {
+                                    functions.logger.debug(e, {structuredData: true})
+                                    res.status(404).send(e.message);
+                                });
+                        }
+                    })
+            })
+            .catch((error) => {
+                res.status(401).send("Authorization failed: " + error);
+            });
     } else {
         res.status(401).send("Authorization failed: No authorization header present");
     }

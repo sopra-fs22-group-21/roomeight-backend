@@ -117,6 +117,10 @@ export class ValidMockUserRepository implements UserRepository {
     });
     }
 
+    discover(queryConstraints: any[]): Promise<any> {
+        return Promise.resolve(undefined);
+    }
+
 }
 
 export class InvalidMockUserRepository implements UserRepository {
@@ -152,6 +156,10 @@ export class InvalidMockUserRepository implements UserRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
+        return Promise.resolve(undefined);
+    }
+
+    discover(queryConstraints: any[]): Promise<any> {
         return Promise.resolve(undefined);
     }
 

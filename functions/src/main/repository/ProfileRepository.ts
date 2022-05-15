@@ -7,4 +7,5 @@ export interface ProfileRepository {
     addProfile(profile_to_add: Profile): Promise<string>;
     updateProfile(update_fields: any, profile_id: string): Promise<string>;
     deleteProfile(profile_id: string): Promise<string>;
+    discover(queryConstraints: any): Promise<any>;
 }

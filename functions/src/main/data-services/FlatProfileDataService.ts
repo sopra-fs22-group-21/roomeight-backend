@@ -7,6 +7,7 @@ import {v4 as uuidv4} from 'uuid';
 import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
+import {UserProfileConverter} from "../converters/UserProfileConverter";
 
 export class FlatProfileDataService {
 
@@ -207,7 +208,7 @@ export class FlatProfileDataService {
             return result;
 
         } else {
-            throw new Error("Flat Profile not found!")
+            throw new Error("Flat Profiles not found!")
         }
     }
 
@@ -368,5 +369,73 @@ export class FlatProfileDataService {
             .catch((error) => {
                 throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
             })
+    }
+
+    async discover(uid: string, quantity: number): Promise<any> {
+        const user = await this.user_repository.getProfileById(uid)
+            .catch((e) => {
+                throw new Error("Own Userprofile not found!")
+            })
+        const queries: any[] = this.createQuery(user.filters, user)
+        const db_entries = await this.user_repository.discover(queries);
+
+        if (db_entries) {
+            let results: any[] = [];
+            let i = 0;
+            for (let entry of db_entries) {
+                if (!user.viewed.includes(entry.profileId) && i < quantity) {
+                    results.push(entry);
+                    i++;
+                }
+            }
+
+            let resolved: any[] = [];
+            results.map((entry: any) => {
+                resolved.push(UserProfileConverter.convertDBEntryToProfile(entry).toJson());
+            })
+
+            functions.logger.debug("user was converted", {structuredData: true});
+            // Resolve References and clean up outdated References
+            const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
+            for (let i in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+                    .then((resolution) => {
+                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
+                        resolved[i].matches = resolution.result;
+                    });
+            }
+            return resolved;
+
+        } else {
+            throw new Error("No Flat Profiles found!")
+        }
+    }
+
+    private createQuery(filters: any, user: any): any[] {
+        const queryConstraints = []
+        queryConstraints.push(['isSearchingRoom', '==', true]);
+        if (filters.hasOwnProperty("tags")) {
+            queryConstraints.push(['tags', "array-contains-any", filters.tags]);
+        }
+        if (filters.hasOwnProperty("age")) {
+            if (filters.age.hasOwnProperty("max")) {
+                let maxDate = new Date();
+                maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
+                queryConstraints.push(['birthday', ">=", maxDate]);
+            }
+            if (filters.age.hasOwnProperty("min")) {
+                let minDate = new Date();
+                minDate.setFullYear( minDate.getFullYear() - filters.age.min );
+                queryConstraints.push(['birthday', "<=", minDate]);
+            }
+        }
+        // if (filters.hasOwnProperty("matchingTimeRange")) {
+        //     const flat = await this.flat_repository.getProfileById(user.flatId);
+        //     const moveInDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("1900-01-01")
+        //     const moveOutDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("2100-01-01")
+        //     queryConstraints.push(['moveInDate', "<=", moveOutDate]);
+        //     queryConstraints.push(['moveOutDate', ">=", moveInDate]);
+        // }
+        return queryConstraints
     }
 }
