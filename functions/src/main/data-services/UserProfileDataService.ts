@@ -465,7 +465,7 @@ export class UserProfileDataService {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!user.viewed.hasOwnProperty(entry.profileId) && i < quantity) {
+                if (!user.viewed.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -504,9 +504,20 @@ export class UserProfileDataService {
 
     private createQuery(filters: any): any[] {
         const queryConstraints = []
-        queryConstraints.push(['permanent', '==', false]);
-        queryConstraints.push(['numberOfBaths', '>=', 1]);
-        queryConstraints.push(['numberOfBaths', '<=', 7]);
+        if (filters.hasOwnProperty("permanent")) {
+            queryConstraints.push(['permanent', "==", filters.permanent]);
+        }
+        if (filters.hasOwnProperty("tags")) {
+            queryConstraints.push(['tags', "array-contains-any", filters.tags]);
+        }
+        if (filters.hasOwnProperty("rent")) {
+            if (filters.rent.hasOwnProperty("max")) {
+                queryConstraints.push(['rent', "<=", filters.rent.max]);
+            }
+            if (filters.rent.hasOwnProperty("min")) {
+                queryConstraints.push(['rent', ">=", filters.rent.min]);
+            }
+        }
         return queryConstraints
     }
 }

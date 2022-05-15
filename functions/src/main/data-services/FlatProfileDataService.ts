@@ -377,14 +377,14 @@ export class FlatProfileDataService {
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const queries: any[] = this.createQuery(user.filters)
+        const queries: any[] = this.createQuery(user.filters, user)
         const db_entries = await this.user_repository.discover(queries);
 
         if (db_entries) {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!user.viewed.hasOwnProperty(entry.profileId) && i < quantity) {
+                if (!user.viewed.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -412,9 +412,31 @@ export class FlatProfileDataService {
         }
     }
 
-    private createQuery(filters: any): any[] {
+    private createQuery(filters: any, user: any): any[] {
         const queryConstraints = []
         queryConstraints.push(['isSearchingRoom', '==', true]);
+        if (filters.hasOwnProperty("tags")) {
+            queryConstraints.push(['tags', "array-contains-any", filters.tags]);
+        }
+        if (filters.hasOwnProperty("age")) {
+            if (filters.age.hasOwnProperty("max")) {
+                let maxDate = new Date();
+                maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
+                queryConstraints.push(['birthday', ">=", maxDate]);
+            }
+            if (filters.age.hasOwnProperty("min")) {
+                let minDate = new Date();
+                minDate.setFullYear( minDate.getFullYear() - filters.age.min );
+                queryConstraints.push(['birthday', "<=", minDate]);
+            }
+        }
+        // if (filters.hasOwnProperty("matchingTimeRange")) {
+        //     const flat = await this.flat_repository.getProfileById(user.flatId);
+        //     const moveInDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("1900-01-01")
+        //     const moveOutDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("2100-01-01")
+        //     queryConstraints.push(['moveInDate', "<=", moveOutDate]);
+        //     queryConstraints.push(['moveOutDate', ">=", moveInDate]);
+        // }
         return queryConstraints
     }
 }
