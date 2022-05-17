@@ -396,7 +396,7 @@ export class FlatProfileDataService {
             }
 
             let resolved: any[] = [];
-            results.map((entry: any) => {
+            results.forEach((entry: any) => {
                 resolved.push(UserProfileConverter.convertDBEntryToProfile(entry).toJson());
             })
 

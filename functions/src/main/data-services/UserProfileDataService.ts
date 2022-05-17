@@ -552,7 +552,7 @@ export class UserProfileDataService {
             }
 
             let resolved: any[] = [];
-            results.map((entry: any) => {
+            results.forEach((entry: any) => {
                 resolved.push(FlatProfileConverter.convertDBEntryToProfile(entry).toJson());
             })
 
