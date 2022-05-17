@@ -467,7 +467,32 @@ describe("UserProfileDataService Test", () => {
                 roomSize: 18,
                 numberOfBaths: 1,
                 roomMates: ["123-advertising"],
-                matches: {},
+                matches: {
+                    "123": {
+                        profileId: "123",
+                        firstName: "Mock first_name",
+                        lastName: "Mock last_name",
+                        description: "",
+                        biography: "",
+                        tags: [],
+                        pictureReferences: [],
+                        matches: [],
+                        creationDate: new Date(0),
+                        onlineStatus: "ONLINE",
+                        birthday: new Date(0),
+                        email: "test@test.com",
+                        phoneNumber: "0795556677",
+                        gender: "NOT SET",
+                        isSearchingRoom: true,
+                        isAdvertisingRoom: false,
+                        moveInDate: new Date(0),
+                        moveOutDate: new Date(0),
+                        flatId: "",
+                        isComplete: false,
+                        filters: {},
+                        likes: []
+                    }
+                },
                 addressCoordinates: {
                     longitude: 12.34,
                     latitude: 56.78

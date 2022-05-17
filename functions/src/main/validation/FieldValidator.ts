@@ -58,12 +58,12 @@ export class FieldValidator {
                     break;
                 case "pictureReferences":
                     if (!this.validateStringArray(user_json_body[key])) {
-                        report.setErrors("invalid pictureReferences");
+                        report.setErrors("invalid pictureReferences: Should be an array of strings");
                     }
                     break;
                 case "permanent":
                     if (!(this.validateBoolean(user_json_body[key]))) {
-                        report.setErrors("Invalid isSearchingRoom: has to be true or false (boolean)");
+                        report.setErrors("Invalid permanent: Has to be true or false (boolean)");
                     }
                     break;
                 case "moveInDate":

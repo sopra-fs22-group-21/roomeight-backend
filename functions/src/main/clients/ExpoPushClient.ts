@@ -9,7 +9,7 @@ export class ExpoPushClient {
         this.client = new Expo()
     }
 
-    private verifyPushTokens(tokens: string[]): void {
+    private static verifyPushTokens(tokens: string[]): void {
         for (const token of tokens) {
             if (!Expo.isExpoPushToken(token)) {
               console.error(`Push token ${token} is not a valid Expo push token`);
@@ -38,7 +38,7 @@ export class ExpoPushClient {
     }
 
     async pushToClients(recipients: string[], data: MessageData): Promise<any>{
-        this.verifyPushTokens(recipients);
+        ExpoPushClient.verifyPushTokens(recipients);
         let messages: ExpoPushMessage[] = [];
         recipients.forEach(recipient => {
             messages.push({
@@ -50,8 +50,4 @@ export class ExpoPushClient {
         const tickets = await this.sendChunks(chunks);
         functions.logger.info('tickets: ', tickets);
     }
-        
-
-
-
 }

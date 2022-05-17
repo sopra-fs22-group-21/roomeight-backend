@@ -19,16 +19,39 @@ export class ValidMockFlatRepository implements FlatRepository {
         return Promise.resolve("Successfully added " + flat_to_add.name);    }
 
     getProfiles(): Promise<any> {
-        throw new Error("Method not implemented.");
+        console.log("Entered Mock getFlatProfiles");
+        return Promise.resolve([{
+            name: "test",
+            address: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            moveInDate: new Timestamp(0, 0),
+            moveOutDate: new Timestamp(0, 0),
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: ["123-advertising"],
+            likes: [],
+            matches: ["123"],
+            flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            creationDate: new Timestamp(0, 0),
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }]);
     }
 
     deleteProfile(profile_id: string): Promise<string> {
-        console.log("Entered Mock deleteUserProfile");
-        return Promise.resolve("Successfully deleted user " + profile_id);
+        console.log("Entered Mock deleteFlatProfile");
+        return Promise.resolve("Successfully deleted flat " + profile_id);
     }
 
     getProfileById(profile_id: string): any {
-        console.log("Entered Mock updateUserProfile");
+        console.log("Entered Mock getFlatProfileById");
         return Promise.resolve({
             name: "test",
             address: "test",
@@ -44,19 +67,19 @@ export class ValidMockFlatRepository implements FlatRepository {
             numberOfBaths: 1,
             roomMates: ["123-advertising"],
             likes: [],
-            matches: [],
+            matches: ["123"],
             flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
             creationDate: new Timestamp(0, 0),
             addressCoordinates: {
                 longitude: 12.34,
                 latitude: 56.78
             }
-        })
+        });
     }
 
     updateProfile(update_fields: any, profile_id: string): Promise<string> {
-        console.log("Entered Mock updateUserProfile");
-        return Promise.resolve("Successfully updated user " + profile_id);
+        console.log("Entered Mock updateFlatProfile");
+        return Promise.resolve("Successfully updated flat " + profile_id);
     }
 
     getProfileByEmail(email: string): Promise<any> {
@@ -87,12 +110,12 @@ export class InvalidMockFlatRepository implements FlatRepository {
     }
 
     addProfile(flat_to_add: FlatProfile): Promise<string> {
-        console.log("Entered Mock invalid addUserProfile");
+        console.log("Entered Mock invalid addFlatProfile");
         return Promise.reject(new Error("Could not post Flat"));
     }
 
     deleteProfile(profileId: string): Promise<string> {
-        console.log("Entered Mock invalid deleteUserProfile");
+        console.log("Entered Mock invalid deleteFlatProfile");
         return Promise.reject(new Error("Could not delete Flat"));
     }
 

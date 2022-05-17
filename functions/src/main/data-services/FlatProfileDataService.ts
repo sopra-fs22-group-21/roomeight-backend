@@ -219,7 +219,7 @@ export class FlatProfileDataService {
 
         if (!validation_results.validationFoundErrors()) {
             functions.logger.debug("Patch Request: Passed validation", {structuredData: true});
-            const flat_toUpdate = await this.flat_repository.getProfileById(flat_id)
+            const flat_to_update = await this.flat_repository.getProfileById(flat_id)
                 .catch(
                     (e) => {
                         functions.logger.debug(e, {structuredData: true})
@@ -227,10 +227,10 @@ export class FlatProfileDataService {
                         // res.status(404).send(e.message);
                     }
                 )
-                if (!flat_toUpdate) {
+                if (!flat_to_update) {
                     throw new Error('Flat Profile not found')
                 }
-                let roomMates = flat_toUpdate.roomMates
+                let roomMates = flat_to_update.roomMates
                 if (roomMates.includes(user_uid)) {
                     if (body.hasOwnProperty("moveInDate")) {
                         body.moveInDate = new Date(body.moveInDate);

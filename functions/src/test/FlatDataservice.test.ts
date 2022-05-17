@@ -1,6 +1,7 @@
 import {ValidMockUserRepository} from "../main/repository/MockUserRepository";
-import {ValidMockFlatRepository} from "../main/repository/MockFlatRepository";
+import {InvalidMockFlatRepository, ValidMockFlatRepository} from "../main/repository/MockFlatRepository";
 import {FlatProfileDataService} from "../main/data-services/FlatProfileDataService";
+import {FlatValidator} from "../main/validation/FlatValidator";
 
 
 // Mocks
@@ -13,7 +14,7 @@ jest.mock('uuid', () => {
 
 // Unit Tests
 
-describe("FlatProfileDataService Test", () => {
+describe("FlatProfileDataService Post Profile Test", () => {
 
     // Post Flat Profile Tests
 
@@ -87,7 +88,7 @@ describe("FlatProfileDataService Test", () => {
             }
         }
 
-
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
         const ds = new FlatProfileDataService(flat_repo, user_repo);
@@ -132,17 +133,17 @@ describe("FlatProfileDataService Test", () => {
             "Invalid name: Should be of type string and have less than 300 signs,\n" +
             "Invalid biography: Should be of type string and have less than 300 signs,\n" +
             "Invalid tags: Should be a string array,\n" +
-            "invalid pictureReferences,\n" +
+            "invalid pictureReferences: Should be an array of strings,\n" +
             "Invalid moveInDate: Expected Format: 1999-06-22,\n" +
             "Invalid moveOutDate: Expected Format: 1999-06-22,\n" +
             "Invalid rent: Should be of type number,\n" +
-            "Invalid isSearchingRoom: has to be true or false (boolean),\n" +
+            "Invalid permanent: Has to be true or false (boolean),\n" +
             "Invalid roomSize: Should be of type number,\n" +
             "Invalid numberOfBaths: Should be of type number\n" +
             "Mandatory fields are: name,address\n" +
             "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate,rent,permanent,roomSize,numberOfBaths,numberOfRoommates,addressCoordinates"
 
-
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
         const ds = new FlatProfileDataService(flat_repo, user_repo);
@@ -158,10 +159,10 @@ describe("FlatProfileDataService Test", () => {
                 (error) => {
                     expect(error.message).toEqual(expected_error_msg);
                 }
-            )
+            );
     });
 
-    test('3 Test Valid Add FlatProfile Request', () => {
+    test('3 Test Invalid Add FlatProfile Request - Already in flat', () => {
         // Input
         const post_body = {
             name: "test_flat",
@@ -175,7 +176,7 @@ describe("FlatProfileDataService Test", () => {
         // Expected Output
         const expected_error_msg = "User is already part of a flat"
 
-
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
         const ds = new FlatProfileDataService(flat_repo, user_repo);
@@ -184,28 +185,31 @@ describe("FlatProfileDataService Test", () => {
             .then(
                 (response) => {
                     console.log(response);
-                    throw new TypeError("Expected a validation error");
+                    throw new TypeError("Expected a flat-exists error");
                 }
             )
             .catch(
                 (error) => {
                     expect(error.message).toEqual(expected_error_msg);
                 }
-            )
+            );
     });
+});
 
-    // Post Flat Profile Tests
+describe("FlatProfileDataService Delete Profile Test", () => {
+
     test('4 Test Valid Delete Flat Request', () => {
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
         const ds = new FlatProfileDataService(flat_repo, user_repo);
 
         // Input
-        const profile_id = "flt&1234"
+        const profile_id = "flt$1234"
         const uid = "123-advertising"
 
         // Expected Output
-        const expected_response = "Successfully deleted user flt&1234"
+        const expected_response = "Successfully deleted flat flt$1234"
 
         return ds.deleteFlat(profile_id, uid).then(
             (response) => {
@@ -215,10 +219,64 @@ describe("FlatProfileDataService Test", () => {
         );
     });
 
+    test('5 Test Invalid Delete Flat Request - Flat not found', () => {
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
 
-    // GetById Tests
+        // Input
+        const profile_id = "flt$1234"
+        const uid = "123-advertising"
 
-    test('3 Test Valid GetById Request', () => {
+        // Expected Output
+        const expected_error_msg = "Flat Profile not found"
+
+        return ds.deleteFlat(profile_id, uid).then(
+                (response) => {
+                    console.log(response);
+                    throw new TypeError("Expected a profile not found error");
+                }
+            )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                }
+            );
+    });
+
+    // Post Flat Profile Tests
+    test('6 Test Invalid Delete Flat Request - User not part of flat', () => {
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Input
+        const profile_id = "flt$1234"
+        const uid = "123"
+
+        // Expected Output
+        const expected_error_msg = "User is not authorized to delete the selected flat!"
+
+        return ds.deleteFlat(profile_id, uid).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a authorization error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                }
+            );
+    });
+});
+
+describe("FlatProfileDataService Get Profile Test", () => {
+
+    test('7 Test Valid GetById Request', () => {
+        // Expected Output
         const expected_response = {
             name: "test",
             description: "test",
@@ -260,14 +318,42 @@ describe("FlatProfileDataService Test", () => {
                     likes: []
                 }
             },
-            matches: {},
+            matches: {
+                "123": {
+                    profileId: "123",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
             addressCoordinates: {
                 longitude: 12.34,
                 latitude: 56.78
             }
         }
 
-        const ds = new FlatProfileDataService(new ValidMockFlatRepository(), new ValidMockUserRepository());
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
 
         return ds.getProfileByIdFromRepo("123").then(
             (response) => {
@@ -277,5 +363,398 @@ describe("FlatProfileDataService Test", () => {
         );
     });
 
+    test('8 Test Valid GetProfilesFromRepo Request', () => {
+        // Expected Output
+        const expected_response = [{
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            likes: [],
+            creationDate: new Date(0),
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            address: "test",
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+                "123-advertising": {
+                    profileId: "123-advertising",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: false,
+                    isAdvertisingRoom: true,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "123",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
+            matches: {
+                "123": {
+                    profileId: "123",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }]
 
-})
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        return ds.getProfilesFromRepo().then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+            }
+        );
+    });
+
+    test('9 Test Invalid GetById Request - Flat not found', () => {
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Expected Output
+        const expected_error_msg = "Flat Profile not found!"
+
+        return ds.getProfileByIdFromRepo("123").then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile-not-found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                }
+            );
+    });
+});
+
+describe("FlatProfileDataService Patch Profile Test", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test('10 Test Valid Patch Request', () => {
+        // Setup Spies
+        jest.spyOn(FlatValidator, 'validatePatchFlat');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Input
+        const update_body = {
+            description: "updated desc",
+            biography: "updated bio",
+            tags: ["SPORTS"],
+            pictureReferences: ["updatedPRef"],
+            onlineStatus: "OFFLINE",
+            moveInDate: new Date(1).toString(),
+            moveOutDate: new Date(2).toString(),
+            rent: 200,
+            permanent: true,
+            roomSize: 30,
+            numberOfBaths: 4,
+            numberOfRoommates: 4,
+            name: "updated name",
+            address: "updated address",
+            addressCoordinates: {
+                latitude: 43.21,
+                longitude: 98.76
+            }
+        }
+        const uid = "123-advertising"
+        const flat_id = "flt$1234"
+
+        // Expected Output
+        const expected_response = {
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            likes: [],
+            creationDate: new Date(0),
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            address: "test",
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+                "123-advertising": {
+                    profileId: "123-advertising",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: false,
+                    isAdvertisingRoom: true,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "123",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
+            matches: {
+                "123": {
+                    profileId: "123",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }
+
+        return ds.updateFlat(update_body, flat_id, uid).then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(FlatValidator.validatePatchFlat).toBeCalledTimes(1);
+                expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(2);
+                // Two of the three times of the updateProfile calls come from the reference resolver
+                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(3);
+            }
+        )
+    });
+
+    test('11 Test Invalid Patch Request - Validation Errors', () => {
+        // Setup Spies
+        jest.spyOn(FlatValidator, 'validatePatchFlat');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+
+        // Input
+        const update_body = {
+            description: 0,
+            biography: 0,
+            tags: ["INVALID_TAG"],
+            pictureReferences: "updatedPRef",
+            onlineStatus: "OFLINE",
+            moveInDate: new Date(1),
+            moveOutDate: new Date(2),
+            rent: "200",
+            permanent: "true",
+            roomSize: "30",
+            numberOfBaths: "4",
+            numberOfRoommates: "4",
+            name: 0,
+            address: "",
+            addressCoordinates: {
+                latitude: "43.21",
+                longitude: "98.76"
+            }
+        }
+        const uid = "123-advertising"
+        const flat_id = "flt$1234"
+
+        // Expected Output
+        const expected_error_msg = "Errors:\n" +
+            "Invalid description: Should be of type string and have less than 300 signs,\n" +
+            "Invalid biography: Should be of type string and have less than 300 signs,\n" +
+            "Invalid tag: INVALID_TAG is not a valid tag. Valid tags are: COOKING,SPORTS,INSTRUMENTS,CLEANLINESS," +
+                "STUDENT,WORKING,PETS,PARTY,COFFEE,WINE,WOKO,JUWO,PEACEFUL,SMOKER,\n" +
+            "invalid pictureReferences: Should be an array of strings,\n" +
+            "Invalid moveInDate: Expected Format: 1999-06-22,\n" +
+            "Invalid moveOutDate: Expected Format: 1999-06-22,\n" +
+            "Invalid rent: Should be of type number,\n" +
+            "Invalid permanent: Has to be true or false (boolean),\n" +
+            "Invalid roomSize: Should be of type number,\n" +
+            "Invalid numberOfBaths: Should be of type number,\n" +
+            "Invalid name: Should be of type string and have less than 300 signs,\n" +
+            "Invalid addressCoordinates: Should contain latitude and longitude, both of type number\n" +
+            "Mandatory fields are: \n" +
+            "Optional fields are: description,biography,tags,pictureReferences,onlineStatus,moveInDate,moveOutDate," +
+                "rent,permanent,roomSize,numberOfBaths,numberOfRoommates,name,address,addressCoordinates"
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        return ds.updateFlat(update_body, flat_id, uid)
+            .then(
+                (response) => {
+                    console.log(response);
+                    throw new TypeError("Expected a validation error");
+                }
+            )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(FlatValidator.validatePatchFlat).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(0);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+    });
+
+    test('12 Test Invalid Update Flat Request - Flat not found', () => {
+        // Setup Spies
+        jest.spyOn(FlatValidator, 'validatePatchFlat');
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'updateProfile');
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Input
+        const update_body = {
+            description: "updated desc",
+            biography: "updated bio"
+        }
+        const profile_id = "flt$1234"
+        const uid = "123-advertising"
+
+        // Expected Output
+        const expected_error_msg = "Flat Profile not found"
+
+        return ds.updateFlat(update_body,profile_id, uid).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(FlatValidator.validatePatchFlat).toBeCalledTimes(1);
+                    expect(InvalidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+    });
+
+    test('13 Test Invalid Update Flat Request - User not in flat', () => {
+        // Setup Spies
+        jest.spyOn(FlatValidator, 'validatePatchFlat');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Input
+        const update_body = {
+            description: "updated desc",
+            biography: "updated bio"
+        }
+        const profile_id = "flt$1234"
+        const uid = "123"
+
+        // Expected Output
+        const expected_error_msg = "User is not authorized to delete the selected flat!"
+
+        return ds.updateFlat(update_body,profile_id, uid).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(FlatValidator.validatePatchFlat).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+    });
+});
+
+describe("FlatProfileDataService FlatMate Operations Test", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test('14 Test Valid add user to flat', () => {
+    });
+});
