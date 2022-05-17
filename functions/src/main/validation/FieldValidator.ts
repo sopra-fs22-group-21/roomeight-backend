@@ -341,6 +341,6 @@ export class FieldValidator {
     }
 
     private static validateCoordinates(coordinates: any): boolean {
-        return typeof coordinates.latitude == "number" && coordinates.latitude >= 0 && typeof coordinates.longitude == "number" && coordinates.longitude >= 0;
+        return typeof coordinates.latitude == "number" && typeof coordinates.longitude == "number";
     }
 }

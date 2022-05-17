@@ -372,18 +372,17 @@ export class FlatProfileDataService {
     }
 
     async discover(uid: string, quantity: number): Promise<any> {
-        const user = await this.user_repository.getProfileById(uid)
+        const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const queries: any[] = this.createQuery(user.filters, user)
-        const db_entries = await this.user_repository.discover(queries);
+        const db_entries: any[] = await this.query(searchingUser)
 
         if (db_entries) {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!user.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -411,31 +410,51 @@ export class FlatProfileDataService {
         }
     }
 
-    private createQuery(filters: any, user: any): any[] {
-        const queryConstraints = []
-        queryConstraints.push(['isSearchingRoom', '==', true]);
-        if (filters.hasOwnProperty("tags")) {
-            queryConstraints.push(['tags', "array-contains-any", filters.tags]);
-        }
-        if (filters.hasOwnProperty("age")) {
-            if (filters.age.hasOwnProperty("max")) {
-                let maxDate = new Date();
-                maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
-                queryConstraints.push(['birthday', ">=", maxDate]);
+    private async query(searchingUser: any): Promise<any[]> {
+        const filters = searchingUser.filters;
+        const users = await this.user_repository.getProfiles();
+        let matches: any[] = [];
+        for (let user of users) {
+            let filterMatch = [];
+            filterMatch.push(user.isSearchingRoom == true);
+            if (filters.hasOwnProperty("tags")) {
+                for(let tag of filters.tags) {
+                    filterMatch.push(user.tags.includes(tag))
+                }
             }
-            if (filters.age.hasOwnProperty("min")) {
-                let minDate = new Date();
-                minDate.setFullYear( minDate.getFullYear() - filters.age.min );
-                queryConstraints.push(['birthday', "<=", minDate]);
+            if (filters.hasOwnProperty("gender")) {
+                filterMatch.push(user.gender == filters.gender)
+            }
+            if (filters.hasOwnProperty("age")) {
+                if (filters.age.hasOwnProperty("max")) {
+                    let maxDate = new Date();
+                    maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
+                    filterMatch.push(new Date(user.birthday.toDate()) >= maxDate);
+                }
+                if (filters.age.hasOwnProperty("min")) {
+                    let minDate = new Date();
+                    minDate.setFullYear( minDate.getFullYear() - filters.age.min );
+                    filterMatch.push(new Date(user.birthday.toDate()) <= minDate);
+                }
+            }
+            if (filters.matchingTimeRange) {
+                if (filters.hasOwnProperty("moveInDate")) {
+                    if (user.moveOutDate) {
+                        filterMatch.push(new Date(filters.moveInDate) <= user.moveOutDate.toDate())
+                    }
+                }
+                if (filters.hasOwnProperty("moveOutDate")) {
+                    if (user.moveInDate) {
+                        filterMatch.push(new Date(filters.moveOutDate) >= user.moveInDate.toDate())
+                    }
+                }
+            }
+
+            if(!filterMatch.includes(false)) {
+                matches.push(user);
             }
         }
-        // if (filters.hasOwnProperty("matchingTimeRange")) {
-        //     const flat = await this.flat_repository.getProfileById(user.flatId);
-        //     const moveInDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("1900-01-01")
-        //     const moveOutDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("2100-01-01")
-        //     queryConstraints.push(['moveInDate', "<=", moveOutDate]);
-        //     queryConstraints.push(['moveOutDate', ">=", moveInDate]);
-        // }
-        return queryConstraints
+
+        return matches
     }
 }

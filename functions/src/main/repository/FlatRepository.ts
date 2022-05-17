@@ -58,16 +58,4 @@ export class FlatRepository implements ProfileRepository {
     getProfileByEmail(email: string): Promise<any> {
         return Promise.resolve(undefined);
     }
-
-    discover(queryConstraints: any[]): Promise<any> {
-        var query = this.database.collection(this.collection_name)
-        for (let queryConstraint of queryConstraints) {
-            query = query.where(...queryConstraint)
-        }
-
-        return query.get()
-            .then((response: any) => {
-                return response.docs.map((doc: any) => doc.data());
-            });
-    }
 }
