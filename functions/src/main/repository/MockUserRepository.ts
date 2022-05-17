@@ -78,7 +78,7 @@ export class ValidMockUserRepository implements UserRepository {
                 viewed: [],
                 creationDate:  new Timestamp(0, 0),
                 moveOutDate:  new Timestamp(0, 0),
-                matches: [],
+                matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                 email: 'test@test.com',
                 filters: {},
                 isComplete: false
@@ -90,6 +90,33 @@ export class ValidMockUserRepository implements UserRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
+        if (email == "advertising@test.com") {
+            return Promise.resolve({
+                firstName: 'Mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556677',
+                flatId: '123',
+                tags: [],
+                isSearchingRoom: false,
+                isAdvertisingRoom: true,
+                biography: '',
+                profileId: '123-advertising',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: [],
+                email: 'test@test.com',
+                filters: {},
+                isComplete: false
+            });
+        }
         return Promise.resolve({
             firstName: 'Mock first_name',
             moveInDate: new Timestamp(0, 0),
@@ -110,11 +137,11 @@ export class ValidMockUserRepository implements UserRepository {
             viewed: [],
             creationDate:  new Timestamp(0, 0),
             moveOutDate:  new Timestamp(0, 0),
-            matches: [],
+            matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
             email: 'test@test.com',
             filters: {},
             isComplete: false
-    });
+        });
     }
 
     discover(queryConstraints: any[]): Promise<any> {

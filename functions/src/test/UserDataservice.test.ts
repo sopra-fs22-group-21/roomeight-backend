@@ -254,7 +254,30 @@ describe("UserProfileDataService Test", () => {
             biography: '',
             tags: [],
             pictureReferences: [],
-            matches: {},
+            matches: {
+                "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb": {
+                    name: "test",
+                    description: "test",
+                    biography: "test",
+                    tags: ["test"],
+                    pictureReferences: ["test"],
+                    likes: [],
+                    creationDate: new Date( 0),
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    address: "test",
+                    rent: 500,
+                    permanent: false,
+                    roomSize: 18,
+                    numberOfBaths: 1,
+                    roomMates: ["123-advertising"],
+                    matches: ["123"],
+                    addressCoordinates: {
+                        longitude: 12.34,
+                        latitude: 56.78
+                    }
+                }
+            },
             creationDate:  new Date(0),
             onlineStatus: 'ONLINE',
             birthday:  new Date(0),
@@ -403,7 +426,30 @@ describe("UserProfileDataService Test", () => {
             biography: '',
             tags: [],
             pictureReferences: [],
-            matches: {},
+            matches: {
+                "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb": {
+                    name: "test",
+                    description: "test",
+                    biography: "test",
+                    tags: ["test"],
+                    pictureReferences: ["test"],
+                    likes: [],
+                    creationDate: new Date( 0),
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    address: "test",
+                    rent: 500,
+                    permanent: false,
+                    roomSize: 18,
+                    numberOfBaths: 1,
+                    roomMates: ["123-advertising"],
+                    matches: ["123"],
+                    addressCoordinates: {
+                        longitude: 12.34,
+                        latitude: 56.78
+                    }
+                }
+            },
             creationDate: "1970-01-01T00:00:00.000Z",
             onlineStatus: 'ONLINE',
             birthday: "1970-01-01T00:00:00.000Z",
@@ -476,7 +522,7 @@ describe("UserProfileDataService Test", () => {
                         biography: "",
                         tags: [],
                         pictureReferences: [],
-                        matches: [],
+                        matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                         creationDate: new Date(0),
                         onlineStatus: "ONLINE",
                         birthday: new Date(0),
@@ -518,7 +564,30 @@ describe("UserProfileDataService Test", () => {
                 biography: '',
                 tags: [],
                 pictureReferences: [],
-                matches: {},
+                matches: {
+                    "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb": {
+                        name: "test",
+                        description: "test",
+                        biography: "test",
+                        tags: ["test"],
+                        pictureReferences: ["test"],
+                        likes: [],
+                        creationDate: new Date( 0),
+                        moveInDate: new Date(0),
+                        moveOutDate: new Date(0),
+                        address: "test",
+                        rent: 500,
+                        permanent: false,
+                        roomSize: 18,
+                        numberOfBaths: 1,
+                        roomMates: ["123-advertising"],
+                        matches: ["123"],
+                        addressCoordinates: {
+                            longitude: 12.34,
+                            latitude: 56.78
+                        }
+                    }
+                },
                 creationDate: "1970-01-01T00:00:00.000Z",
                 onlineStatus: 'ONLINE',
                 birthday: "1970-01-01T00:00:00.000Z",

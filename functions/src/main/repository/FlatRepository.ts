@@ -56,6 +56,6 @@ export class FlatRepository implements ProfileRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 }

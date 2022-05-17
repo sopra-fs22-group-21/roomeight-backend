@@ -1,4 +1,4 @@
-import {ValidMockUserRepository} from "../main/repository/MockUserRepository";
+import {InvalidMockUserRepository, ValidMockUserRepository} from "../main/repository/MockUserRepository";
 import {InvalidMockFlatRepository, ValidMockFlatRepository} from "../main/repository/MockFlatRepository";
 import {FlatProfileDataService} from "../main/data-services/FlatProfileDataService";
 import {FlatValidator} from "../main/validation/FlatValidator";
@@ -64,7 +64,7 @@ describe("FlatProfileDataService Post Profile Test", () => {
                     biography: "",
                     tags: [],
                     pictureReferences: [],
-                    matches: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                     creationDate: new Date(0),
                     onlineStatus: "ONLINE",
                     birthday: new Date(0),
@@ -327,7 +327,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
                     biography: "",
                     tags: [],
                     pictureReferences: [],
-                    matches: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                     creationDate: new Date(0),
                     onlineStatus: "ONLINE",
                     birthday: new Date(0),
@@ -415,7 +415,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
                     biography: "",
                     tags: [],
                     pictureReferences: [],
-                    matches: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                     creationDate: new Date(0),
                     onlineStatus: "ONLINE",
                     birthday: new Date(0),
@@ -566,7 +566,7 @@ describe("FlatProfileDataService Patch Profile Test", () => {
                     biography: "",
                     tags: [],
                     pictureReferences: [],
-                    matches: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                     creationDate: new Date(0),
                     onlineStatus: "ONLINE",
                     birthday: new Date(0),
@@ -756,5 +756,291 @@ describe("FlatProfileDataService FlatMate Operations Test", () => {
     });
 
     test('14 Test Valid add user to flat', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123";
+        const mate_email = "test@test.com";
+
+        // Expected Output
+        const expected_response = "Successfully added user with mail test@test.com to flat test"
+
+        return ds.addUserToFlat(uid, mate_email).then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(2);
+                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(2);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
+            });
+
+    });
+
+    test('15 Test Invalid add user to flat - User not found', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123";
+        const mate_email = "test@test.com";
+
+        // Expected Output
+        const expected_error_msg = "User Profile with id 123 not found"
+
+        return ds.addUserToFlat(uid, mate_email).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(0);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(InvalidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+
+    });
+
+    test('15 Test Invalid add user to flat - New mate already part of a flat', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123-advertising";
+        const mate_email = "advertising@test.com";
+
+        // Expected Output
+        const expected_error_msg = "User (new Mate) with email advertising@test.com is already part of a flat"
+
+        return ds.addUserToFlat(uid, mate_email).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+
+    });
+
+    test('15 Test Invalid add user to flat - User not found', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123";
+        const mate_email = "test@test.com";
+
+        // Expected Output
+        const expected_error_msg = "User Profile with id 123 not found"
+
+        return ds.addUserToFlat(uid, mate_email).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(0);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(InvalidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+
+    });
+
+    test('16 Test Invalid add user to flat - Cannot find flat', () => {
+        // Prepare spies
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123-advertising";
+        const mate_email = "test@test.com";
+
+        // Expected Output
+        const expected_error_msg = "Could not find flat 123 where user should be added"
+
+        return ds.addUserToFlat(uid, mate_email).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(InvalidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+
+    });
+
+    test('17 Test Valid delete roommate from flat', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123-advertising";
+
+        // Expected Output
+        const expected_response = "Successfully removed user with 123-advertising from flat test"
+
+        return ds.deleteUserFromFlat(uid).then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
+                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
+            });
+
+    });
+
+    test('18 Test Invalid remove user from flat - Cannot find flat', () => {
+        // Prepare spies
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new InvalidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123-advertising";
+
+        // Expected Output
+        const expected_error_msg = "Could not find flat 123 where user should be removed"
+
+        return ds.deleteUserFromFlat(uid).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(InvalidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+
+    });
+
+    test('15 Test Invalid add user to flat - User not found', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'updateProfile');
+
+
+        // Used Instances
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new FlatProfileDataService(flat_repo, user_repo);
+
+        // Inputs
+        const uid = "123";
+
+        // Expected Output
+        const expected_error_msg = "User Profile with id 123 not found"
+
+        return ds.deleteUserFromFlat(uid).then(
+            (response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            }
+        )
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(0);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(InvalidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                }
+            );
+
     });
 });

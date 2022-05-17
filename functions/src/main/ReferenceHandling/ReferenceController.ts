@@ -48,7 +48,7 @@ export class ReferenceController {
             } else {
                 resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry).toJson();
             }
-            result[resolved_reference.profileId] = resolved_reference;
+            result[reference_id] = resolved_reference;
         } else {
             // If the referenced profile does not exist write an empty dict into the field and mark the reference as unresolved
             unresolved_references.push(reference_id)
@@ -66,7 +66,7 @@ export class ReferenceController {
      */
     async resolveProfileReferenceList(reference_id_list: string[]): Promise<ReferenceResolution> {
         // Initialize vars
-        let profile_list: any = {};
+        let resolved_profiles: any = {};
         let temp_resolved_reference: Profile;
         let unresolved_references: string[] = [];
         let db_entry;
@@ -80,13 +80,13 @@ export class ReferenceController {
                 } else {
                     temp_resolved_reference = UserProfileConverter.convertDBEntryToProfile(db_entry);
                 }
-                profile_list[temp_resolved_reference.profileId] = temp_resolved_reference.toJson();
+                resolved_profiles[reference_id_list[key]] = temp_resolved_reference.toJson();
             } else {
                 unresolved_references.push(reference_id_list[key])
             }
         }
         // Update field and return Resolution of the field
-        return new ReferenceResolution(profile_list, unresolved_references);
+        return new ReferenceResolution(resolved_profiles, unresolved_references);
     }
 
     /**

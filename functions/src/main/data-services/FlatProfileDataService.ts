@@ -27,7 +27,6 @@ export class FlatProfileDataService {
         let validation_results = FlatValidator.validatePostFlat(body);
         const req_user = await this.user_repository.getProfileById(user_uid)
             .catch((repo_error) => {
-                functions.logger.debug(repo_error, {structuredData: true})
                 throw new Error("Could not find user which started the request: " + repo_error.message);
             })
         if (req_user.flatId != "") {
@@ -45,7 +44,6 @@ export class FlatProfileDataService {
             // After profile id is fetched from auth write flat into db
             const repo_response = await this.flat_repository.addProfile(flat_to_add)
                 .catch((repo_error) => {
-                    functions.logger.debug(repo_error, {structuredData: true})
                     throw new Error("Could not post user due to: " + repo_error.message);
                 })
             const update_fields = {
@@ -89,7 +87,6 @@ export class FlatProfileDataService {
         let flat_toDelete = await this.flat_repository.getProfileById(profileId)
             .catch(
                 (e) => {
-                    functions.logger.debug(e, {structuredData: true})
                     throw new Error(e.message);
                 }
             )
@@ -222,9 +219,7 @@ export class FlatProfileDataService {
             const flat_to_update = await this.flat_repository.getProfileById(flat_id)
                 .catch(
                     (e) => {
-                        functions.logger.debug(e, {structuredData: true})
                         throw new Error(e.message);
-                        // res.status(404).send(e.message);
                     }
                 )
                 if (!flat_to_update) {
@@ -261,30 +256,35 @@ export class FlatProfileDataService {
     async addUserToFlat(user_uid: string, mate_email: string): Promise<string> {
         functions.logger.debug("Entered FlatProfileDataService", {structuredData: true});
         let user = await this.user_repository.getProfileById(user_uid)
-            .catch(
-                (e) => {
-                    functions.logger.debug(e, {structuredData: true})
-                    throw new Error(e.message);
-                }
-            )
+            .catch((e) => {throw new Error(e.message)});
+        if (!user) {
+            throw new Error(`User Profile with id ${user_uid} not found`)
+        }
 
         const flatId = user.flatId;
         const flat = await this.flat_repository.getProfileById(flatId)
             .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+        if (!flat) {
+            throw new Error(`Could not find flat ${flatId} where user should be added`)
+        }
 
         const mate = await this.user_repository.getProfileByEmail(mate_email)
             .catch((e) => {throw new Error("The User you wanted to add to your flat does not exist! " + e)});
+
+        if (!mate) {
+            throw new Error(`User Profile (new Mate) with email ${mate_email} not found`)
+        }
         if (mate.flatId != "") {
-            throw new Error ("User is already part of a flat");
+            throw new Error (`User (new Mate) with email ${mate_email} is already part of a flat`);
         }
 
         // delete the match on all matched flats
         let matches = mate.matches;
         for (let match of matches) {
-            const flat_toUpdate = await this.flat_repository.getProfileById(match)
+            const flat_to_update = await this.flat_repository.getProfileById(match)
                 .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
 
-            let flatMatches = flat_toUpdate.matches;
+            let flatMatches = flat_to_update.matches;
             const index = flatMatches.indexOf(mate.profileId, 0);
             if (index > -1) {
                 flatMatches.splice(index, 1);
@@ -293,7 +293,7 @@ export class FlatProfileDataService {
                 "matches": flatMatches
             }
 
-            await this.flat_repository.updateProfile(updatedMatches, flat_toUpdate.profileId)
+            await this.flat_repository.updateProfile(updatedMatches, flat_to_update.profileId)
                 .catch((error) => {
                     throw new Error('Error: something went wrong and Flat was not updated: ' + error.message);
                 })
@@ -323,25 +323,29 @@ export class FlatProfileDataService {
         }
 
         return this.user_repository.updateProfile(update_roomMate, mate.profileId)
+            .then(() => {
+                return `Successfully added user with mail ${mate_email} to flat ${flat.name}`
+            })
             .catch((error) => {
                 throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
             })
     }
 
-    async deleteUserFromFlat(body: any, user_uid: string): Promise<string> {
+    async deleteUserFromFlat(user_uid: string): Promise<string> {
         // get the user object
         let user = await this.user_repository.getProfileById(user_uid)
-            .catch(
-                (e) => {
-                    functions.logger.debug(e, {structuredData: true})
-                    throw new Error(e.message);
-                }
-            )
+            .catch((e) => {throw new Error(e.message)});
+        if (!user) {
+            throw new Error(`User Profile with id ${user_uid} not found`)
+        }
 
         // get the associated flat
         const flatId = user.flatId;
         const flat = await this.flat_repository.getProfileById(flatId)
             .catch((e) => {throw new Error("Something went wrong while getting the flat object " + e)});
+        if (!flat) {
+            throw new Error(`Could not find flat ${flatId} where user should be removed`)
+        }
 
         // delete user from roomMates array
         let roomMates = flat.roomMates
@@ -366,6 +370,9 @@ export class FlatProfileDataService {
             "filters": {"matchingTimeRange": true}
         }
         return this.user_repository.updateProfile(update_fields, user_uid)
+            .then(() => {
+                return `Successfully removed user with ${user_uid} from flat ${flat.name}`
+            })
             .catch((error) => {
                 throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
             })

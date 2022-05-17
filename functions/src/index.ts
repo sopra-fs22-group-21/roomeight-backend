@@ -466,7 +466,7 @@ flatprofile_app.post('/leaveFlat', async (req, res) => {
             .verifyIdToken(idToken)
             .then((decodedToken) => {
                 functions.logger.debug("Started Flat Post Request", {structuredData: true});
-                return flatProfileDataService.deleteUserFromFlat(req.body, decodedToken.uid)
+                return flatProfileDataService.deleteUserFromFlat(decodedToken.uid)
                     .then((data_service_response) => {
                             res.set('Access-Control-Allow-Origin', '*')
                             res.status(200).send(data_service_response);
