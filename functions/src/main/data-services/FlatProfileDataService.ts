@@ -376,8 +376,7 @@ export class FlatProfileDataService {
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const queries: any[] = this.createQuery(user.filters, user)
-        const db_entries = await this.user_repository.discover(queries);
+        const db_entries: any[] = await this.query(user.filters)
 
         if (db_entries) {
             let results: any[] = [];
@@ -411,31 +410,38 @@ export class FlatProfileDataService {
         }
     }
 
-    private createQuery(filters: any, user: any): any[] {
-        const queryConstraints = []
-        queryConstraints.push(['isSearchingRoom', '==', true]);
-        if (filters.hasOwnProperty("tags")) {
-            queryConstraints.push(['tags', "array-contains-any", filters.tags]);
-        }
-        if (filters.hasOwnProperty("age")) {
-            if (filters.age.hasOwnProperty("max")) {
-                let maxDate = new Date();
-                maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
-                queryConstraints.push(['birthday', ">=", maxDate]);
+    private async query(filters: any): Promise<any[]> {
+        const users = await this.user_repository.getProfiles();
+        let matches: any[] = [];
+        for (let user of users) {
+            let filterMatch = [];
+            filterMatch.push(user.isSearchingRoom == true);
+            if (filters.hasOwnProperty("tags")) {
+                for(let tag of filters.tags) {
+                    filterMatch.push(user.tags.includes(tag))
+                }
             }
-            if (filters.age.hasOwnProperty("min")) {
-                let minDate = new Date();
-                minDate.setFullYear( minDate.getFullYear() - filters.age.min );
-                queryConstraints.push(['birthday', "<=", minDate]);
+            if (filters.hasOwnProperty("gender")) {
+                filterMatch.push(user.gender == filters.gender)
+            }
+            if (filters.hasOwnProperty("age")) {
+                if (filters.age.hasOwnProperty("max")) {
+                    let maxDate = new Date();
+                    maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
+                    filterMatch.push(new Date(user.birthday.toDate()) >= maxDate);
+                }
+                if (filters.age.hasOwnProperty("min")) {
+                    let minDate = new Date();
+                    minDate.setFullYear( minDate.getFullYear() - filters.age.min );
+                    filterMatch.push(new Date(user.birthday.toDate()) <= minDate);
+                }
+            }
+
+            if(!filterMatch.includes(false)) {
+                matches.push(user);
             }
         }
-        // if (filters.hasOwnProperty("matchingTimeRange")) {
-        //     const flat = await this.flat_repository.getProfileById(user.flatId);
-        //     const moveInDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("1900-01-01")
-        //     const moveOutDate = flat.moveOutDate ? new Date(flat.moveOutDate) : new Date("2100-01-01")
-        //     queryConstraints.push(['moveInDate', "<=", moveOutDate]);
-        //     queryConstraints.push(['moveOutDate', ">=", moveInDate]);
-        // }
-        return queryConstraints
+
+        return matches
     }
 }

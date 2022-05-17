@@ -539,8 +539,7 @@ export class UserProfileDataService {
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const queries: any[] = this.createQuery(user.filters)
-        const db_entries = await this.flat_repository.discover(queries);
+        const db_entries = await this.query(user.filters)
 
         if (db_entries) {
             let results: any[] = [];
@@ -583,22 +582,57 @@ export class UserProfileDataService {
         }
     }
 
-    private createQuery(filters: any): any[] {
-        const queryConstraints = []
-        if (filters.hasOwnProperty("permanent")) {
-            queryConstraints.push(['permanent', "==", filters.permanent]);
-        }
-        if (filters.hasOwnProperty("tags")) {
-            queryConstraints.push(['tags', "array-contains-any", filters.tags]);
-        }
-        if (filters.hasOwnProperty("rent")) {
-            if (filters.rent.hasOwnProperty("max")) {
-                queryConstraints.push(['rent', "<=", filters.rent.max]);
+    private async query(filters: any): Promise<any[]> {
+        const flats = await this.flat_repository.getProfiles();
+        let matches: any[] = [];
+        for (let flat of flats) {
+            let filterMatch = [];
+            if (filters.hasOwnProperty("permanent")) {
+                filterMatch.push(flat.permanent == filters.permanent);
             }
-            if (filters.rent.hasOwnProperty("min")) {
-                queryConstraints.push(['rent', ">=", filters.rent.min]);
+            if (filters.hasOwnProperty("tags")) {
+                for(let tag of filters.tags) {
+                    filterMatch.push(flat.tags.includes(tag))
+                }
+            }
+            if (filters.hasOwnProperty("rent")) {
+                if (filters.rent.hasOwnProperty("max")) {
+                    filterMatch.push(flat.rent <= filters.rent.max);
+                }
+                if (filters.rent.hasOwnProperty("min")) {
+                    filterMatch.push(flat.rent >= filters.rent.min);
+                }
+            }
+            if (filters.hasOwnProperty("numberOfRoommates")) {
+                if (filters.numberOfRoommates.hasOwnProperty("max")) {
+                    filterMatch.push(flat.numberOfRoommates <= filters.numberOfRoommates.max);
+                }
+                if (filters.numberOfRoommates.hasOwnProperty("min")) {
+                    filterMatch.push(flat.numberOfRoommates >= filters.numberOfRoommates.min);
+                }
+            }
+            if (filters.hasOwnProperty("numberOfBaths")) {
+                if (filters.numberOfBaths.hasOwnProperty("max")) {
+                    filterMatch.push(flat.numberOfBaths <= filters.numberOfBaths.max);
+                }
+                if (filters.numberOfBaths.hasOwnProperty("min")) {
+                    filterMatch.push(flat.numberOfBaths >= filters.numberOfBaths.min);
+                }
+            }
+            if (filters.hasOwnProperty("roomSize")) {
+                if (filters.roomSize.hasOwnProperty("max")) {
+                    filterMatch.push(flat.roomSize <= filters.roomSize.max);
+                }
+                if (filters.roomSize.hasOwnProperty("min")) {
+                    filterMatch.push(flat.roomSize >= filters.roomSize.min);
+                }
+            }
+
+            if(!filterMatch.includes(false)) {
+                matches.push(flat);
             }
         }
-        return queryConstraints
+
+        return matches
     }
 }
