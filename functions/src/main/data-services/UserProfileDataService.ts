@@ -535,17 +535,17 @@ export class UserProfileDataService {
     }
 
     async discover(uid: string, quantity: number): Promise<any> {
-        const user = await this.user_repository.getProfileById(uid)
+        const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const db_entries = await this.query(user.filters)
+        const db_entries = await this.query(searchingUser)
 
         if (db_entries) {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!user.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -582,7 +582,8 @@ export class UserProfileDataService {
         }
     }
 
-    private async query(filters: any): Promise<any[]> {
+    private async query(searchingUser: any): Promise<any[]> {
+        const filters = searchingUser.filters
         const flats = await this.flat_repository.getProfiles();
         let matches: any[] = [];
         for (let flat of flats) {
@@ -625,6 +626,18 @@ export class UserProfileDataService {
                 }
                 if (filters.roomSize.hasOwnProperty("min")) {
                     filterMatch.push(flat.roomSize >= filters.roomSize.min);
+                }
+            }
+            if (filters.matchingTimeRange) {
+                if (filters.hasOwnProperty("moveInDate")) {
+                    if (flat.moveOutDate) {
+                        filterMatch.push(new Date(filters.moveInDate) <= flat.moveOutDate.toDate())
+                    }
+                }
+                if (filters.hasOwnProperty("moveOutDate")) {
+                    if (flat.moveInDate) {
+                        filterMatch.push(new Date(filters.moveOutDate) >= flat.moveInDate.toDate())
+                    }
                 }
             }
 

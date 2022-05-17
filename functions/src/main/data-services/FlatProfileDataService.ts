@@ -372,17 +372,17 @@ export class FlatProfileDataService {
     }
 
     async discover(uid: string, quantity: number): Promise<any> {
-        const user = await this.user_repository.getProfileById(uid)
+        const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
                 throw new Error("Own Userprofile not found!")
             })
-        const db_entries: any[] = await this.query(user.filters)
+        const db_entries: any[] = await this.query(searchingUser)
 
         if (db_entries) {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!user.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -410,7 +410,8 @@ export class FlatProfileDataService {
         }
     }
 
-    private async query(filters: any): Promise<any[]> {
+    private async query(searchingUser: any): Promise<any[]> {
+        const filters = searchingUser.filters;
         const users = await this.user_repository.getProfiles();
         let matches: any[] = [];
         for (let user of users) {
@@ -434,6 +435,18 @@ export class FlatProfileDataService {
                     let minDate = new Date();
                     minDate.setFullYear( minDate.getFullYear() - filters.age.min );
                     filterMatch.push(new Date(user.birthday.toDate()) <= minDate);
+                }
+            }
+            if (filters.matchingTimeRange) {
+                if (filters.hasOwnProperty("moveInDate")) {
+                    if (user.moveOutDate) {
+                        filterMatch.push(new Date(filters.moveInDate) <= user.moveOutDate.toDate())
+                    }
+                }
+                if (filters.hasOwnProperty("moveOutDate")) {
+                    if (user.moveInDate) {
+                        filterMatch.push(new Date(filters.moveOutDate) >= user.moveInDate.toDate())
+                    }
                 }
             }
 
