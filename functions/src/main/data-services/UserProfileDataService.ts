@@ -346,7 +346,7 @@ export class UserProfileDataService {
     private async sendLikeNotifications(recipients: string[], liking_user: UserProfile, liked_user: UserProfile): Promise<void> {
         // Prepare Message and if isMatch add liked user to recipients list
         let message: MessageData = {
-            title: 'Rommeight',
+            title: 'Roomeight',
             body: `Hey! Your roomeight ${liking_user.first_name} liked ${liked_user.first_name}`,
             data: {
                 type: NotificationType.NEW_LIKE
@@ -359,14 +359,14 @@ export class UserProfileDataService {
     private async sendMatchNotifications(user_recipients: string[], flat_recipients: string[], flat_name: string, user_name: string): Promise<void> {
         // Prepare Message and if isMatch add liked user to recipients list
         let user_message: MessageData = {
-            title: 'Rommeight',
+            title: 'Roomeight',
             body: `It's a match! You matched with the flat ${flat_name}`,
             data: {
                 type: NotificationType.NEW_MATCH
             }
         }
         let flat_message: MessageData = {
-            title: 'Rommeight',
+            title: 'Roomeight',
             body: `It's a match! Your flat matched with ${user_name}`,
             data: {
                 type: NotificationType.NEW_MATCH

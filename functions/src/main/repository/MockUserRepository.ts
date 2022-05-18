@@ -54,7 +54,12 @@ export class ValidMockUserRepository implements UserRepository {
                 moveOutDate:  new Timestamp(0, 0),
                 matches: [],
                 email: 'test@test.com',
-                filters: {},
+                filters: {
+                    age: {
+                        min: 0,
+                        max: 100
+                    }
+                },
                 isComplete: false
             });
         }
@@ -86,7 +91,58 @@ export class ValidMockUserRepository implements UserRepository {
     }
 
     getProfiles(): Promise<any> {
-        throw new Error("Method not implemented.");
+        return Promise.resolve([
+            {
+                firstName: 'Mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556677',
+                flatId: '',
+                tags: [],
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                biography: '',
+                profileId: '123',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: [],
+                email: 'test@test.com',
+                filters: {},
+                isComplete: false
+            },
+            {
+                firstName: 'Another mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556678',
+                flatId: '',
+                tags: [],
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                biography: '',
+                profileId: '456',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Another mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: [],
+                email: 'test@test.com',
+                filters: {},
+                isComplete: false
+            }
+        ]);
     }
 
     getProfileByEmail(email: string): Promise<any> {

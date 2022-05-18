@@ -383,6 +383,9 @@ export class FlatProfileDataService {
             .catch((e) => {
                 throw new Error("Could not fetch own Userprofile due to: " + e.message)
             })
+        if (!searchingUser) {
+            throw new Error(`User Profile with id ${uid} not found`)
+        }
         const db_entries: any[] = await this.query(searchingUser)
 
         if (db_entries) {
