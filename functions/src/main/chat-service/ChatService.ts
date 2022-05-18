@@ -4,7 +4,7 @@ import { ExpoPushClient } from "../clients/ExpoPushClient";
 import { ChatRepository } from "../repository/ChatRepository";
 import { UserRepository } from "../repository/UserRepository";
 
-export class chatService {
+export class ChatService {
   private chat_repository: ChatRepository;
   private user_repository: UserRepository;
   private expoPushClient: ExpoPushClient;

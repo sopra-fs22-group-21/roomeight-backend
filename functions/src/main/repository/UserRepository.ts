@@ -9,8 +9,8 @@ export class UserRepository implements ProfileRepository {
     collection_name: string;
 
 
-    constructor(app: App) {
-        this.database = admin.firestore(app);
+    constructor(initialized_app: App) {
+        this.database = admin.firestore(initialized_app);
         this.collection_name = "user-profiles"
     }
 

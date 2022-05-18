@@ -381,7 +381,7 @@ export class FlatProfileDataService {
     async discover(uid: string, quantity: number): Promise<any> {
         const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
-                throw new Error("Own Userprofile not found!")
+                throw new Error("Could not fetch own Userprofile due to: " + e.message)
             })
         const db_entries: any[] = await this.query(searchingUser)
 
@@ -403,11 +403,11 @@ export class FlatProfileDataService {
             functions.logger.debug("user was converted", {structuredData: true});
             // Resolve References and clean up outdated References
             const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
-            for (let i in resolved) {
-                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+            for (let index in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[index].matches)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
-                        resolved[i].matches = resolution.result;
+                        reference_converter.cleanUpReferencesList(resolved[index].profileId, "matches", resolved[index].matches, resolution.unresolvedReferences);
+                        resolved[index].matches = resolution.result;
                     });
             }
             return resolved;
@@ -423,7 +423,7 @@ export class FlatProfileDataService {
         let matches: any[] = [];
         for (let user of users) {
             let filterMatch = [];
-            filterMatch.push(user.isSearchingRoom == true);
+            filterMatch.push(user.isSearchingRoom);
             if (filters.hasOwnProperty("tags")) {
                 for(let tag of filters.tags) {
                     filterMatch.push(user.tags.includes(tag))

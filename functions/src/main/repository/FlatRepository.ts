@@ -11,8 +11,8 @@ export class FlatRepository implements ProfileRepository {
     collection_name: string;
 
 
-    constructor(app: App) {
-        this.database = getFirestore(app);
+    constructor(initialized_app: App) {
+        this.database = getFirestore(initialized_app);
         this.collection_name = "flat-profiles"
     }
 

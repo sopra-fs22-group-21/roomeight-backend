@@ -537,7 +537,7 @@ export class UserProfileDataService {
     async discover(uid: string, quantity: number): Promise<any> {
         const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
-                throw new Error("Own Userprofile not found!")
+                throw new Error("Could not fetch own Userprofile due to: " + e.message)
             })
         const db_entries = await this.query(searchingUser)
 
@@ -558,21 +558,21 @@ export class UserProfileDataService {
 
             // Resolve References and clean up outdated References
             const reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
-            for (let i in resolved) {
-                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+            for (let index in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[index].matches)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
-                        resolved[i].matches = resolution.result;
+                        reference_converter.cleanUpReferencesList(resolved[index].profileId, "matches", resolved[index].matches, resolution.unresolvedReferences);
+                        resolved[index].matches = resolution.result;
                     });
-                await reference_converter.resolveProfileReferenceList(resolved[i].roomMates)
+                await reference_converter.resolveProfileReferenceList(resolved[index].roomMates)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "roomMates", resolved[i].roomMates, resolution.unresolvedReferences);
-                        resolved[i].roomMates = resolution.result;
+                        reference_converter.cleanUpReferencesList(resolved[index].profileId, "roomMates", resolved[index].roomMates, resolution.unresolvedReferences);
+                        resolved[index].roomMates = resolution.result;
                     });
                 // Likes
-                await reference_converter.resolveFlatLikes(resolved[i].likes)
+                await reference_converter.resolveFlatLikes(resolved[index].likes)
                     .then((resolution) => {
-                        resolved[i].likes = resolution.result;
+                        resolved[index].likes = resolution.result;
                     });
             }
             return resolved;

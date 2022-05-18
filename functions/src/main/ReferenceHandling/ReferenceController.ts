@@ -120,8 +120,6 @@ export class ReferenceController {
         return new ReferenceResolution(result, outdated_elements);
     }
 
-    // Todo Cleanup unresolved flat likes
-
     /**
      * This method can be used to delete outdated references after the resolving
      * @Input profile_id: Profile Id of the profile which references should be cleaned
