@@ -1082,9 +1082,9 @@ describe("FlatProfileDataService Discover operations Test", () => {
 
         //Expected Output
         const expected_response =[{
-            profileId: '123',
-            firstName: 'Mock first_name',
-            lastName: 'Mock last_name',
+            profileId: '456',
+            firstName: 'Another mock first_name',
+            lastName: 'Another mock last_name',
             description: '',
             biography: '',
             tags: [],
@@ -1094,7 +1094,7 @@ describe("FlatProfileDataService Discover operations Test", () => {
             onlineStatus: 'ONLINE',
             birthday: "1970-01-01T00:00:00.000Z",
             email: 'test@test.com',
-            phoneNumber: '0795556677',
+            phoneNumber: '0795556678',
             gender: 'NOT SET',
             isSearchingRoom: true,
             isAdvertisingRoom: false,
@@ -1130,30 +1130,7 @@ describe("FlatProfileDataService Discover operations Test", () => {
         const amount = 3
 
         //Expected Output
-        const expected_response =[{
-            profileId: '123',
-            firstName: 'Mock first_name',
-            lastName: 'Mock last_name',
-            description: '',
-            biography: '',
-            tags: [],
-            pictureReferences: [],
-            matches: {},
-            creationDate: "1970-01-01T00:00:00.000Z",
-            onlineStatus: 'ONLINE',
-            birthday: "1970-01-01T00:00:00.000Z",
-            email: 'test@test.com',
-            phoneNumber: '0795556677',
-            gender: 'NOT SET',
-            isSearchingRoom: true,
-            isAdvertisingRoom: false,
-            moveInDate: "1970-01-01T00:00:00.000Z",
-            moveOutDate:  "1970-01-01T00:00:00.000Z",
-            flatId: '',
-            isComplete: false,
-            filters: {},
-            likes: []
-        },
+        const expected_response =[
         {
             profileId: '456',
             firstName: 'Another mock first_name',

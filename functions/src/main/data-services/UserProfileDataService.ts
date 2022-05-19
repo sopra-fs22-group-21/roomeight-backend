@@ -545,7 +545,7 @@ export class UserProfileDataService {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && !searchingUser.matches.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
