@@ -589,7 +589,9 @@ export class UserProfileDataService {
         for (let flat of flats) {
             let filterMatch = [];
             if (filters.hasOwnProperty("permanent")) {
-                filterMatch.push(flat.permanent == filters.permanent);
+                if (filters.permanent != null) {
+                    filterMatch.push(flat.permanent == filters.permanent);
+                }
             }
             if (filters.hasOwnProperty("tags")) {
                 for(let tag of filters.tags) {
@@ -629,14 +631,14 @@ export class UserProfileDataService {
                 }
             }
             if (filters.matchingTimeRange) {
-                if (filters.hasOwnProperty("moveInDate")) {
+                if (searchingUser.moveInDate) {
                     if (flat.moveOutDate) {
-                        filterMatch.push(new Date(filters.moveInDate) <= flat.moveOutDate.toDate())
+                        filterMatch.push(searchingUser.moveInDate.toDate() <= flat.moveOutDate.toDate())
                     }
                 }
-                if (filters.hasOwnProperty("moveOutDate")) {
+                if (searchingUser.moveOutDate) {
                     if (flat.moveInDate) {
-                        filterMatch.push(new Date(filters.moveOutDate) >= flat.moveInDate.toDate())
+                        filterMatch.push(searchingUser.moveOutDate.toDate() >= flat.moveInDate.toDate())
                     }
                 }
             }

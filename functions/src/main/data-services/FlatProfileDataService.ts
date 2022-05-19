@@ -422,6 +422,7 @@ export class FlatProfileDataService {
 
     private async query(searchingUser: any): Promise<any[]> {
         const filters = searchingUser.filters;
+        const ownFlat = await this.flat_repository.getProfileById(searchingUser.flatId);
         const users = await this.user_repository.getProfiles();
         let matches: any[] = [];
         for (let user of users) {
@@ -448,14 +449,14 @@ export class FlatProfileDataService {
                 }
             }
             if (filters.matchingTimeRange) {
-                if (filters.hasOwnProperty("moveInDate")) {
+                if (ownFlat.moveInDate) {
                     if (user.moveOutDate) {
-                        filterMatch.push(new Date(filters.moveInDate) <= user.moveOutDate.toDate())
+                        filterMatch.push(ownFlat.moveInDate.toDate() <= user.moveOutDate.toDate())
                     }
                 }
-                if (filters.hasOwnProperty("moveOutDate")) {
+                if (ownFlat.moveOutDate) {
                     if (user.moveInDate) {
-                        filterMatch.push(new Date(filters.moveOutDate) >= user.moveInDate.toDate())
+                        filterMatch.push(ownFlat.moveOutDate.toDate() >= user.moveInDate.toDate())
                     }
                 }
             }
