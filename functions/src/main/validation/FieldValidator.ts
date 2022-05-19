@@ -219,6 +219,16 @@ export class FieldValidator {
                                         report.setErrors("Invalid filter matchingTimeRange: has to be true or false (boolean)");
                                     }
                                     break;
+                                case "moveInDate":
+                                    if (!this.validateFilterDate(filters[element])) {
+                                        report.setErrors("Invalid Filter moveInDate, Expected Format: 1999-06-22");
+                                    }
+                                    break;
+                                case "moveOutDate":
+                                    if (!this.validateFilterDate(filters[element])) {
+                                        report.setErrors("Invalid Filter moveOutDate, Expected Format: 1999-06-22");
+                                    }
+                                    break;
                                 case "numberOfRoomMates":
                                     if (filters[element].hasOwnProperty("min")){
                                         if(!this.validateNumber(filters[element]["min"])) {
@@ -342,5 +352,11 @@ export class FieldValidator {
 
     private static validateCoordinates(coordinates: any): boolean {
         return typeof coordinates.latitude == "number" && typeof coordinates.longitude == "number";
+    }
+    private static validateFilterDate(date: any): boolean {
+        if (typeof date != "string") {
+            return false;
+        }
+        return (!isNaN(Date.parse(date)));
     }
 }
