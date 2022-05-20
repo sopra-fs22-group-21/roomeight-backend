@@ -442,16 +442,23 @@ export class FlatProfileDataService {
             if (filters.hasOwnProperty("gender")) {
                 filterMatch.push(user.gender == filters.gender)
             }
+            if (filters.hasOwnProperty("permanent")) {
+                if (filters.permanent == true) {
+                    filterMatch.push(user.moveOutDate == null);
+                } else if (filters.permanent == false) {
+                    filterMatch.push(user.moveOutDate != null);
+                }
+            }
             if (filters.hasOwnProperty("age")) {
                 if (filters.age.hasOwnProperty("max")) {
                     let maxDate = new Date();
-                    maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
-                    filterMatch.push(new Date(user.birthday.toDate()) >= maxDate);
+                    maxDate.setFullYear( maxDate.getFullYear() - (filters.age.max + 1));
+                    filterMatch.push(user.birthday.toDate() >= maxDate);
                 }
                 if (filters.age.hasOwnProperty("min")) {
                     let minDate = new Date();
                     minDate.setFullYear( minDate.getFullYear() - filters.age.min );
-                    filterMatch.push(new Date(user.birthday.toDate()) <= minDate);
+                    filterMatch.push(user.birthday.toDate() <= minDate);
                 }
             }
             if (filters.matchingTimeRange) {
