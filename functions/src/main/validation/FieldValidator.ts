@@ -211,7 +211,7 @@ export class FieldValidator {
                                     break;
                                 case "permanent":
                                     if (!(this.validateBoolean(filters[element]))) {
-                                        report.setErrors("Invalid filter permanent: has to be true or false (boolean)");
+                                        report.setErrors("Invalid filter permanent: has to be true, false (boolean) or null");
                                     }
                                     break;
                                 case "matchingTimeRange":
@@ -333,7 +333,7 @@ export class FieldValidator {
     }
 
     private static validateBoolean(bool: any): boolean {
-        return typeof bool == "boolean";
+        return typeof bool == "boolean" || bool == null;
     }
 
     private static validateNumber(nr: any): boolean {

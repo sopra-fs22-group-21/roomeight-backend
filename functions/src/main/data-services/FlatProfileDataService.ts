@@ -386,13 +386,20 @@ export class FlatProfileDataService {
         if (!searchingUser) {
             throw new Error(`User Profile with id ${uid} not found`)
         }
-        const db_entries: any[] = await this.query(searchingUser)
+        const ownFlat = await this.flat_repository.getProfileById(searchingUser.flatId)
+            .catch((e) => {
+            throw new Error("Could not fetch own Flatprofile due to: " + e.message)
+        })
+        if (!ownFlat) {
+            throw new Error(`Flat Profile with id ${searchingUser.flatId} not found`)
+        }
+        const db_entries: any[] = await this.query(searchingUser, ownFlat);
 
         if (db_entries) {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && !ownFlat.matches.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -420,9 +427,8 @@ export class FlatProfileDataService {
         }
     }
 
-    private async query(searchingUser: any): Promise<any[]> {
+    private async query(searchingUser: any, ownFlat: any): Promise<any[]> {
         const filters = searchingUser.filters;
-        const ownFlat = await this.flat_repository.getProfileById(searchingUser.flatId);
         const users = await this.user_repository.getProfiles();
         let matches: any[] = [];
         for (let user of users) {
@@ -436,16 +442,23 @@ export class FlatProfileDataService {
             if (filters.hasOwnProperty("gender")) {
                 filterMatch.push(user.gender == filters.gender)
             }
+            if (filters.hasOwnProperty("permanent")) {
+                if (filters.permanent == true) {
+                    filterMatch.push(user.moveOutDate == null);
+                } else if (filters.permanent == false) {
+                    filterMatch.push(user.moveOutDate != null);
+                }
+            }
             if (filters.hasOwnProperty("age")) {
                 if (filters.age.hasOwnProperty("max")) {
                     let maxDate = new Date();
-                    maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
-                    filterMatch.push(new Date(user.birthday.toDate()) >= maxDate);
+                    maxDate.setFullYear( maxDate.getFullYear() - (filters.age.max + 1));
+                    filterMatch.push(user.birthday.toDate() >= maxDate);
                 }
                 if (filters.age.hasOwnProperty("min")) {
                     let minDate = new Date();
                     minDate.setFullYear( minDate.getFullYear() - filters.age.min );
-                    filterMatch.push(new Date(user.birthday.toDate()) <= minDate);
+                    filterMatch.push(user.birthday.toDate() <= minDate);
                 }
             }
             if (filters.matchingTimeRange) {
