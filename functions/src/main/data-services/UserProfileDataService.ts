@@ -281,7 +281,7 @@ export class UserProfileDataService {
         if (is_match) {
             await this.sendMatchNotifications(liked_user.devicePushTokens, flat_recipients, user_flat.name, liked_user.first_name);
         } else if(liked_user.likes.includes(user_flat.profileId)) {
-            await this.sendLikeNotifications(flat_recipients, user, liked_user);
+            await this.sendNotificationOnUserLike(flat_recipients, user, liked_user);
         }
 
         return {
@@ -343,11 +343,24 @@ export class UserProfileDataService {
         return recipients;
     }
 
-    private async sendLikeNotifications(recipients: string[], liking_user: UserProfile, liked_user: UserProfile): Promise<void> {
+    private async sendNotificationOnUserLike(recipients: string[], liking_user: UserProfile, liked_user: UserProfile): Promise<void> {
         // Prepare Message and if isMatch add liked user to recipients list
         let message: MessageData = {
             title: 'Roomeight',
             body: `Hey! Your roomeight ${liking_user.first_name} liked ${liked_user.first_name}`,
+            data: {
+                type: NotificationType.NEW_LIKE
+            }
+        }
+        // Send message
+        await this.expoPushClient.pushToClients(recipients, message);
+    }
+
+    private async sendNotificationOnFlatLike(recipients: string[], liking_user: UserProfile): Promise<void> {
+        // Prepare Message and if isMatch add liked user to recipients list
+        let message: MessageData = {
+            title: 'Roomeight',
+            body: `Hey! The user ${liking_user.first_name} seems to like your flat`,
             data: {
                 type: NotificationType.NEW_LIKE
             }
@@ -396,13 +409,14 @@ export class UserProfileDataService {
 
         let is_match = false;
         let nr_of_roommates = like.roomMates.length;
-
+        const flat_recipients = await this.getRoommatesPushTokens(like, user);
         // Check if user is searching room
         if (user.isSearchingRoom) {
             // Check if flat liked the profile
             for (let i in like.likes) {
                 if (like.likes[i].likedUser == user.profileId) {
-                    if (like.likes[i].likes.length >= (nr_of_roommates/2)) {
+                    this.sendNotificationOnFlatLike(flat_recipients, user);
+                    if (like.likes[i].likes.length >= (nr_of_roommates*this.flat_match_ratio)) {
                         is_match = true;
                     }
                     break;
@@ -436,7 +450,6 @@ export class UserProfileDataService {
                     viewed: profile_viewed
                 }
                 // Send Notifications on match
-                const flat_recipients = await this.getRoommatesPushTokens(like, user);
                 await this.sendMatchNotifications(user.devicePushTokens, flat_recipients, like.name, user.first_name);
 
             } else {

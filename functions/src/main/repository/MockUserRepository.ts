@@ -60,7 +60,8 @@ export class ValidMockUserRepository implements UserRepository {
                         max: 100
                     }
                 },
-                isComplete: false
+                isComplete: false,
+                devicePushTokens: ["expo"]
             });
         }
         return Promise.resolve({
@@ -86,7 +87,8 @@ export class ValidMockUserRepository implements UserRepository {
                 matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                 email: 'test@test.com',
                 filters: {},
-                isComplete: false
+                isComplete: false,
+                devicePushTokens: ["expo"]
         });
     }
 
@@ -115,7 +117,8 @@ export class ValidMockUserRepository implements UserRepository {
                 matches: [],
                 email: 'test@test.com',
                 filters: {},
-                isComplete: false
+                isComplete: false,
+                devicePushTokens: ["expo"]
             },
             {
                 firstName: 'Another mock first_name',
@@ -140,7 +143,8 @@ export class ValidMockUserRepository implements UserRepository {
                 matches: [],
                 email: 'test@test.com',
                 filters: {},
-                isComplete: false
+                isComplete: false,
+                devicePushTokens: ["expo"]
             }
         ]);
     }
@@ -170,7 +174,8 @@ export class ValidMockUserRepository implements UserRepository {
                 matches: [],
                 email: 'test@test.com',
                 filters: {},
-                isComplete: false
+                isComplete: false,
+                devicePushTokens: ["expo"]
             });
         }
         return Promise.resolve({
@@ -196,12 +201,13 @@ export class ValidMockUserRepository implements UserRepository {
             matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
             email: 'test@test.com',
             filters: {},
-            isComplete: false
+            isComplete: false,
+            devicePushTokens: ["expo"]
         });
     }
 
     discover(queryConstraints: any[]): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
 }
@@ -239,11 +245,11 @@ export class InvalidMockUserRepository implements UserRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
     discover(queryConstraints: any[]): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
 }
