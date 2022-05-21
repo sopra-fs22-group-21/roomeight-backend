@@ -132,7 +132,7 @@ export class ReferenceController {
         let update: any = {}
         update[field] = updated_reference_list;
         return this.repositoryToClean.updateProfile(update, profile_id)
-            .then(() => {return "Successfully removed outdated references"})
+            .then(() => {console.log("outdated_references");console.log(outdated_references);return "Successfully removed outdated references"})
             .catch((e) => {
                 return "Could not update References of profile " + profile_id + " due to: " + e.message;
             });

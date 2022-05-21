@@ -629,8 +629,7 @@ describe("FlatProfileDataService Patch Profile Test", () => {
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
                 expect(FlatValidator.validatePatchFlat).toBeCalledTimes(1);
                 expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(2);
-                // Two of the three times of the updateProfile calls come from the reference resolver
-                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(3);
+                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(1);
             }
         )
     });

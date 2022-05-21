@@ -220,7 +220,7 @@ export class InvalidMockUserRepository implements UserRepository {
     }
 
     getProfiles(): Promise<any> {
-        throw new Error("Method not implemented.");
+        throw new Error("Not implemented");
     }
 
     addProfile(user_to_add: UserProfile): Promise<string> {
