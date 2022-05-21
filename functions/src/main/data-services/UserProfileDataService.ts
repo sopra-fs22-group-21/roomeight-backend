@@ -277,11 +277,14 @@ export class UserProfileDataService {
             });
 
         // Send Notifications if user also liked flat (also if it is not a match due to too few likes from roommates)
-        const flat_recipients = await this.getRoommatesPushTokens(user_flat, user);
+        const flat_recipients = await this.getRoommatesPushTokens(user_flat, "");
         if (is_match) {
             await this.sendMatchNotifications(liked_user.devicePushTokens, flat_recipients, user_flat.name, liked_user.first_name);
         } else if(liked_user.likes.includes(user_flat.profileId)) {
-            await this.sendLikeNotifications(flat_recipients, user, liked_user);
+            await this.sendNotificationOnUserLike(flat_recipients, user, liked_user, !is_liked);
+            if (!is_liked) {
+
+            }
         }
 
         return {
@@ -330,11 +333,11 @@ export class UserProfileDataService {
         return false;
     }
 
-    private async getRoommatesPushTokens(user_flat: FlatProfile, user: UserProfile) {
+    private async getRoommatesPushTokens(user_flat: FlatProfile, user_id: string) {
         let roommate;
         let recipients: string[] = [];
         for (let roommate_id of user_flat.roomMates) {
-            if (roommate_id !== user.profileId) {
+            if (roommate_id !== user_id) {
                 const response = await this.user_repository.getProfileById(roommate_id);
                 roommate = UserProfileConverter.convertDBEntryToProfile(response);
                 recipients.push(...roommate.devicePushTokens)
@@ -343,13 +346,39 @@ export class UserProfileDataService {
         return recipients;
     }
 
-    private async sendLikeNotifications(recipients: string[], liking_user: UserProfile, liked_user: UserProfile): Promise<void> {
-        // Prepare Message and if isMatch add liked user to recipients list
-        let message: MessageData = {
-            title: 'Rommeight',
+    private async sendNotificationOnUserLike(recipients: string[], liking_user: UserProfile, liked_user: UserProfile, isNewLike: boolean): Promise<void> {
+        // Prepare Message
+        let mates_message: MessageData = {
+            title: 'Roomeight',
             body: `Hey! Your roomeight ${liking_user.first_name} liked ${liked_user.first_name}`,
             data: {
                 type: NotificationType.NEW_LIKE
+            }
+        }
+        // Send message
+        await this.expoPushClient.pushToClients(recipients, mates_message);
+
+        // On new match in progress
+        if (isNewLike) {
+            let user_message: MessageData = {
+                title: 'Roomeight',
+                body: `Hey! You created a new Match in Progress!`,
+                data: {
+                    type: NotificationType.NEW_MATCH_IN_PROGRESS
+                }
+            }
+            // Send message
+            await this.expoPushClient.pushToClients(liking_user.devicePushTokens, user_message);
+        }
+    }
+
+    private async sendNotificationOnFlatLike(recipients: string[], liking_user_name: string): Promise<void> {
+        // Prepare Message and if isMatch add liked user to recipients list
+        let message: MessageData = {
+            title: 'Roomeight',
+            body: `Hey! The user ${liking_user_name} seems to like your flat`,
+            data: {
+                type: NotificationType.NEW_MATCH_IN_PROGRESS
             }
         }
         // Send message
@@ -359,14 +388,14 @@ export class UserProfileDataService {
     private async sendMatchNotifications(user_recipients: string[], flat_recipients: string[], flat_name: string, user_name: string): Promise<void> {
         // Prepare Message and if isMatch add liked user to recipients list
         let user_message: MessageData = {
-            title: 'Rommeight',
+            title: 'Roomeight',
             body: `It's a match! You matched with the flat ${flat_name}`,
             data: {
                 type: NotificationType.NEW_MATCH
             }
         }
         let flat_message: MessageData = {
-            title: 'Rommeight',
+            title: 'Roomeight',
             body: `It's a match! Your flat matched with ${user_name}`,
             data: {
                 type: NotificationType.NEW_MATCH
@@ -396,13 +425,14 @@ export class UserProfileDataService {
 
         let is_match = false;
         let nr_of_roommates = like.roomMates.length;
-
+        const flat_recipients = await this.getRoommatesPushTokens(like, user.profileId);
         // Check if user is searching room
         if (user.isSearchingRoom) {
             // Check if flat liked the profile
             for (let i in like.likes) {
                 if (like.likes[i].likedUser == user.profileId) {
-                    if (like.likes[i].likes.length >= (nr_of_roommates/2)) {
+                    await this.sendNotificationOnFlatLike(flat_recipients, user.first_name);
+                    if (like.likes[i].likes.length >= (nr_of_roommates*this.flat_match_ratio)) {
                         is_match = true;
                     }
                     break;
@@ -436,7 +466,6 @@ export class UserProfileDataService {
                     viewed: profile_viewed
                 }
                 // Send Notifications on match
-                const flat_recipients = await this.getRoommatesPushTokens(like, user);
                 await this.sendMatchNotifications(user.devicePushTokens, flat_recipients, like.name, user.first_name);
 
             } else {
@@ -537,7 +566,7 @@ export class UserProfileDataService {
     async discover(uid: string, quantity: number): Promise<any> {
         const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
-                throw new Error("Own Userprofile not found!")
+                throw new Error("Could not fetch own Userprofile due to: " + e.message)
             })
         const db_entries = await this.query(searchingUser)
 
@@ -545,7 +574,7 @@ export class UserProfileDataService {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && !searchingUser.matches.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -558,21 +587,21 @@ export class UserProfileDataService {
 
             // Resolve References and clean up outdated References
             const reference_converter = new ReferenceController(this.user_repository, this.flat_repository);
-            for (let i in resolved) {
-                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+            for (let index in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[index].matches)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
-                        resolved[i].matches = resolution.result;
+                        reference_converter.cleanUpReferencesList(resolved[index].profileId, "matches", resolved[index].matches, resolution.unresolvedReferences);
+                        resolved[index].matches = resolution.result;
                     });
-                await reference_converter.resolveProfileReferenceList(resolved[i].roomMates)
+                await reference_converter.resolveProfileReferenceList(resolved[index].roomMates)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "roomMates", resolved[i].roomMates, resolution.unresolvedReferences);
-                        resolved[i].roomMates = resolution.result;
+                        reference_converter.cleanUpReferencesList(resolved[index].profileId, "roomMates", resolved[index].roomMates, resolution.unresolvedReferences);
+                        resolved[index].roomMates = resolution.result;
                     });
                 // Likes
-                await reference_converter.resolveFlatLikes(resolved[i].likes)
+                await reference_converter.resolveFlatLikes(resolved[index].likes)
                     .then((resolution) => {
-                        resolved[i].likes = resolution.result;
+                        resolved[index].likes = resolution.result;
                     });
             }
             return resolved;
@@ -589,7 +618,9 @@ export class UserProfileDataService {
         for (let flat of flats) {
             let filterMatch = [];
             if (filters.hasOwnProperty("permanent")) {
-                filterMatch.push(flat.permanent == filters.permanent);
+                if (filters.permanent != null) {
+                    filterMatch.push(flat.permanent == filters.permanent);
+                }
             }
             if (filters.hasOwnProperty("tags")) {
                 for(let tag of filters.tags) {
@@ -629,14 +660,14 @@ export class UserProfileDataService {
                 }
             }
             if (filters.matchingTimeRange) {
-                if (filters.hasOwnProperty("moveInDate")) {
+                if (searchingUser.moveInDate) {
                     if (flat.moveOutDate) {
-                        filterMatch.push(new Date(filters.moveInDate) <= flat.moveOutDate.toDate())
+                        filterMatch.push(searchingUser.moveInDate.toDate() <= flat.moveOutDate.toDate())
                     }
                 }
-                if (filters.hasOwnProperty("moveOutDate")) {
+                if (searchingUser.moveOutDate) {
                     if (flat.moveInDate) {
-                        filterMatch.push(new Date(filters.moveOutDate) >= flat.moveInDate.toDate())
+                        filterMatch.push(searchingUser.moveOutDate.toDate() >= flat.moveInDate.toDate())
                     }
                 }
             }

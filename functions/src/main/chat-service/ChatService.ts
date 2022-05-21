@@ -7,7 +7,7 @@ import { ChatRepository } from "../repository/ChatRepository";
 import { FlatRepository } from "../repository/FlatRepository";
 import { UserRepository } from "../repository/UserRepository";
 
-export class chatService {
+export class ChatService {
   private chat_repository: ChatRepository;
   private user_repository: UserRepository;
   private flat_repository: FlatRepository;

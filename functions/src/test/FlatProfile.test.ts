@@ -13,32 +13,62 @@ describe('Flat profile test', () => {
     });
 
     test('1 Test getJson of profile', () => {
-        let expected = "{" +
-            "\"profileId\":\"testId\"," +
-            "\"name\":\"test\"," +
-            "\"description\":\"test\"," +
-            "\"biography\":\"test\"," +
-            "\"tags\":[]," +
-            "\"pictureReferences\":[]," +
-            "\"likes\":[]," +
-            "\"creationDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"onlineStatus\":\"ONLINE\"," +
-            "\"moveInDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"moveOutDate\":\"1970-01-01T00:00:00.000Z\"," +
-            "\"address\":\"test teststrasse 3, 8032 zuerich\"," +
-            "\"rent\":500," +
-            "\"permanent\":false," +
-            "\"numberOfRoommates\":5," +
-            "\"roomSize\":18," +
-            "\"numberOfBaths\":1," +
-            "\"roomMates\":[]," +
-            "\"matches\":[]," +
-            "\"addressCoordinates\":{" +
-            "\"longitude\":12.34," +
-            "\"latitude\":56.78" +
-            "}" +
-            "}"
+        let expected = {
+            profileId: "testId",
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: [],
+            pictureReferences: [],
+            likes: [],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: "ONLINE",
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate: "1970-01-01T00:00:00.000Z",
+            address: "test teststrasse 3, 8032 zuerich",
+            rent: 500,
+            permanent: false,
+            numberOfRoommates: 5,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: [],
+            matches: [],
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }
 
-        expect(JSON.stringify(flatProfile.toJson())).toEqual(expected);
+        expect(JSON.stringify(flatProfile.toJson())).toEqual(JSON.stringify(expected));
+    });
+
+    test('2 Test Database Entry format of profile', () => {
+        let expected = {
+            profileId: "testId",
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: [],
+            pictureReferences: [],
+            likes: [],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: "ONLINE",
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate: "1970-01-01T00:00:00.000Z",
+            address: "test teststrasse 3, 8032 zuerich",
+            rent: 500,
+            permanent: false,
+            numberOfRoommates: 5,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: [],
+            matches: [],
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }
+
+        expect(JSON.stringify(flatProfile.toDbEntry())).toEqual(JSON.stringify(expected));
     })
 })

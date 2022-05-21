@@ -37,7 +37,7 @@ export class ValidMockUserRepository implements UserRepository {
                 moveInDate: new Timestamp(0, 0),
                 likes: [],
                 phoneNumber: '0795556677',
-                flatId: '123',
+                flatId: 'flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb',
                 tags: [],
                 isSearchingRoom: false,
                 isAdvertisingRoom: true,
@@ -54,14 +54,22 @@ export class ValidMockUserRepository implements UserRepository {
                 moveOutDate:  new Timestamp(0, 0),
                 matches: [],
                 email: 'test@test.com',
-                filters: {},
-                isComplete: false
+                filters: {
+                    age: {
+                        min: 0,
+                        max: 100
+                    },
+                    permanent: false,
+                    matchingTimeRange: true
+                },
+                isComplete: false,
+                devicePushTokens: ["expo"]
             });
-        }
-        return Promise.resolve({
+        } else if (profile_id == "123") {
+            return Promise.resolve({
                 firstName: 'Mock first_name',
                 moveInDate: new Timestamp(0, 0),
-                likes: [],
+                likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                 phoneNumber: '0795556677',
                 flatId: '',
                 tags: [],
@@ -81,12 +89,95 @@ export class ValidMockUserRepository implements UserRepository {
                 matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                 email: 'test@test.com',
                 filters: {},
-                isComplete: false
-        });
+                isComplete: false,
+                devicePushTokens: ["expo"]
+            });
+        } else {
+            return Promise.resolve({
+                firstName: 'Mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556677',
+                flatId: '',
+                tags: [],
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                biography: '',
+                profileId: '456',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                email: 'test456@test.com',
+                filters: {},
+                isComplete: false,
+                devicePushTokens: ["expo"]
+            });
+        }
+
     }
 
     getProfiles(): Promise<any> {
-        throw new Error("Method not implemented.");
+        return Promise.resolve([
+            {
+                firstName: 'Mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556677',
+                flatId: '',
+                tags: [],
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                biography: '',
+                profileId: '123',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: [],
+                email: 'test@test.com',
+                filters: {},
+                isComplete: false,
+                devicePushTokens: ["expo"]
+            },
+            {
+                firstName: 'Another mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556678',
+                flatId: '',
+                tags: [],
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                biography: '',
+                profileId: '456',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Another mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: [],
+                email: 'test@test.com',
+                filters: {},
+                isComplete: false,
+                devicePushTokens: ["expo"]
+            }
+        ]);
     }
 
     getProfileByEmail(email: string): Promise<any> {
@@ -114,7 +205,8 @@ export class ValidMockUserRepository implements UserRepository {
                 matches: [],
                 email: 'test@test.com',
                 filters: {},
-                isComplete: false
+                isComplete: false,
+                devicePushTokens: ["expo"]
             });
         }
         return Promise.resolve({
@@ -140,12 +232,13 @@ export class ValidMockUserRepository implements UserRepository {
             matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
             email: 'test@test.com',
             filters: {},
-            isComplete: false
+            isComplete: false,
+            devicePushTokens: ["expo"]
         });
     }
 
     discover(queryConstraints: any[]): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
 }
@@ -183,11 +276,11 @@ export class InvalidMockUserRepository implements UserRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
     discover(queryConstraints: any[]): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
 }

@@ -31,7 +31,7 @@ describe("ReferenceController Test", () => {
                 flatId: '',
                 isComplete: false,
                 filters: {},
-                likes: []
+                likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
             }
         }
         const reference_list = ["123"]
@@ -108,7 +108,7 @@ describe("ReferenceController Test", () => {
                 flatId: '',
                 isComplete: false,
                 filters: {},
-                likes: []
+                likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
             }
         }
         const mock_user_repo = new ValidMockUserRepository();

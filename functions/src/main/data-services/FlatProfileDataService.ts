@@ -381,15 +381,25 @@ export class FlatProfileDataService {
     async discover(uid: string, quantity: number): Promise<any> {
         const searchingUser = await this.user_repository.getProfileById(uid)
             .catch((e) => {
-                throw new Error("Own Userprofile not found!")
+                throw new Error("Could not fetch own Userprofile due to: " + e.message)
             })
-        const db_entries: any[] = await this.query(searchingUser)
+        if (!searchingUser) {
+            throw new Error(`User Profile with id ${uid} not found`)
+        }
+        const ownFlat = await this.flat_repository.getProfileById(searchingUser.flatId)
+            .catch((e) => {
+            throw new Error("Could not fetch own Flatprofile due to: " + e.message)
+        })
+        if (!ownFlat) {
+            throw new Error(`Flat Profile with id ${searchingUser.flatId} not found`)
+        }
+        const db_entries: any[] = await this.query(searchingUser, ownFlat);
 
         if (db_entries) {
             let results: any[] = [];
             let i = 0;
             for (let entry of db_entries) {
-                if (!searchingUser.viewed.includes(entry.profileId) && i < quantity) {
+                if (!searchingUser.viewed.includes(entry.profileId) && !ownFlat.matches.includes(entry.profileId) && i < quantity) {
                     results.push(entry);
                     i++;
                 }
@@ -403,11 +413,11 @@ export class FlatProfileDataService {
             functions.logger.debug("user was converted", {structuredData: true});
             // Resolve References and clean up outdated References
             const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
-            for (let i in resolved) {
-                await reference_converter.resolveProfileReferenceList(resolved[i].matches)
+            for (let index in resolved) {
+                await reference_converter.resolveProfileReferenceList(resolved[index].matches)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(resolved[i].profileId, "matches", resolved[i].matches, resolution.unresolvedReferences);
-                        resolved[i].matches = resolution.result;
+                        reference_converter.cleanUpReferencesList(resolved[index].profileId, "matches", resolved[index].matches, resolution.unresolvedReferences);
+                        resolved[index].matches = resolution.result;
                     });
             }
             return resolved;
@@ -417,13 +427,13 @@ export class FlatProfileDataService {
         }
     }
 
-    private async query(searchingUser: any): Promise<any[]> {
+    private async query(searchingUser: any, ownFlat: any): Promise<any[]> {
         const filters = searchingUser.filters;
         const users = await this.user_repository.getProfiles();
         let matches: any[] = [];
         for (let user of users) {
             let filterMatch = [];
-            filterMatch.push(user.isSearchingRoom == true);
+            filterMatch.push(user.isSearchingRoom);
             if (filters.hasOwnProperty("tags")) {
                 for(let tag of filters.tags) {
                     filterMatch.push(user.tags.includes(tag))
@@ -432,27 +442,34 @@ export class FlatProfileDataService {
             if (filters.hasOwnProperty("gender")) {
                 filterMatch.push(user.gender == filters.gender)
             }
+            if (filters.hasOwnProperty("permanent")) {
+                if (filters.permanent == true) {
+                    filterMatch.push(user.moveOutDate == null);
+                } else if (filters.permanent == false) {
+                    filterMatch.push(user.moveOutDate != null);
+                }
+            }
             if (filters.hasOwnProperty("age")) {
                 if (filters.age.hasOwnProperty("max")) {
                     let maxDate = new Date();
-                    maxDate.setFullYear( maxDate.getFullYear() - filters.age.max );
-                    filterMatch.push(new Date(user.birthday.toDate()) >= maxDate);
+                    maxDate.setFullYear( maxDate.getFullYear() - (filters.age.max + 1));
+                    filterMatch.push(user.birthday.toDate() >= maxDate);
                 }
                 if (filters.age.hasOwnProperty("min")) {
                     let minDate = new Date();
                     minDate.setFullYear( minDate.getFullYear() - filters.age.min );
-                    filterMatch.push(new Date(user.birthday.toDate()) <= minDate);
+                    filterMatch.push(user.birthday.toDate() <= minDate);
                 }
             }
             if (filters.matchingTimeRange) {
-                if (filters.hasOwnProperty("moveInDate")) {
+                if (ownFlat.moveInDate) {
                     if (user.moveOutDate) {
-                        filterMatch.push(new Date(filters.moveInDate) <= user.moveOutDate.toDate())
+                        filterMatch.push(ownFlat.moveInDate.toDate() <= user.moveOutDate.toDate())
                     }
                 }
-                if (filters.hasOwnProperty("moveOutDate")) {
+                if (ownFlat.moveOutDate) {
                     if (user.moveInDate) {
-                        filterMatch.push(new Date(filters.moveOutDate) >= user.moveInDate.toDate())
+                        filterMatch.push(ownFlat.moveOutDate.toDate() >= user.moveInDate.toDate())
                     }
                 }
             }

@@ -36,7 +36,7 @@ export class ValidMockFlatRepository implements FlatRepository {
             roomMates: ["123-advertising"],
             likes: [],
             matches: ["123"],
-            flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
             creationDate: new Timestamp(0, 0),
             addressCoordinates: {
                 longitude: 12.34,
@@ -66,9 +66,14 @@ export class ValidMockFlatRepository implements FlatRepository {
             roomSize: 18,
             numberOfBaths: 1,
             roomMates: ["123-advertising"],
-            likes: [],
-            matches: ["123"],
-            flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            likes: [
+                {
+                    likes: ["123-advertising"],
+                    likedUser: "456"
+                }
+            ],
+            matches: [],
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
             creationDate: new Timestamp(0, 0),
             addressCoordinates: {
                 longitude: 12.34,
@@ -124,10 +129,10 @@ export class InvalidMockFlatRepository implements FlatRepository {
     }
 
     getProfileByEmail(email: string): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 
     discover(queryConstraints: any[]): Promise<any> {
-        return Promise.resolve(undefined);
+        throw new Error("Not implemented")
     }
 }

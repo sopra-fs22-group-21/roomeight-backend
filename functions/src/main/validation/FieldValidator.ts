@@ -130,7 +130,7 @@ export class FieldValidator {
                     }
                     break;
                 case "isComplete":
-                    if (!(typeof user_json_body[key] == "boolean")) {
+                    if (typeof user_json_body[key] != "boolean") {
                         report.setErrors("Invalid isComplete, has to be true or false (boolean)");
                     }
                     break;
@@ -211,7 +211,7 @@ export class FieldValidator {
                                     break;
                                 case "permanent":
                                     if (!(this.validateBoolean(filters[element]))) {
-                                        report.setErrors("Invalid filter permanent: has to be true or false (boolean)");
+                                        report.setErrors("Invalid filter permanent: has to be true, false (boolean) or null");
                                     }
                                     break;
                                 case "matchingTimeRange":
@@ -267,14 +267,14 @@ export class FieldValidator {
     }
 
     private static validateDate(date: any): boolean {
-        if (!(typeof date == "string")) {
+        if (typeof date != "string") {
             return false;
         }
         return (!isNaN(Date.parse(date)) || date === "");
     }
 
     private static validateBirthday(birthday: any): boolean {
-        if (!(typeof birthday == "string")) {
+        if (typeof birthday != "string") {
             return false;
         }
         return (!isNaN(Date.parse(birthday)));
@@ -285,14 +285,14 @@ export class FieldValidator {
     }
 
     private static validateTag(tag: any): boolean {
-        if (!(typeof tag == "string")) {
+        if (typeof tag != "string") {
             return false;
         }
         return Object.values(Tag).includes(tag as Tag);
     }
 
     private static validateStringArray(str_array: any): boolean {
-        if(!(Object.prototype.toString.call(str_array) === '[object Array]')) {
+        if(Object.prototype.toString.call(str_array) !== '[object Array]') {
             return false;
         }
         let bool = true;
@@ -317,7 +317,7 @@ export class FieldValidator {
     }
 
     private static validatePhone(phone: any): boolean {
-        if (!(typeof phone == "string")) {
+        if (typeof phone != "string") {
             return false;
         }
         const regex = new RegExp('^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$');
@@ -325,7 +325,7 @@ export class FieldValidator {
     }
 
     private static validateEmail(mail: any): boolean {
-        if (!(typeof mail == "string")) {
+        if (typeof mail != "string") {
             return false;
         }
         let regex = new RegExp('[a-z0-9]{1,1000}@[a-z]{1,1000}\.[a-z]{2,3}');
@@ -333,7 +333,7 @@ export class FieldValidator {
     }
 
     private static validateBoolean(bool: any): boolean {
-        return typeof bool == "boolean";
+        return typeof bool == "boolean" || bool == null;
     }
 
     private static validateNumber(nr: any): boolean {

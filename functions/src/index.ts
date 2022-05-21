@@ -2,20 +2,22 @@ import * as express from "express";
 import { getAuth } from "firebase-admin/auth";
 import * as functions from "firebase-functions";
 import { config } from "../firebase_config";
-import { chatService } from "./main/chat-service/chatService";
-import { Assigner } from "./main/data-services/Assigner";
-import { FlatProfileDataService } from "./main/data-services/FlatProfileDataService";
 import { UserProfileDataService } from "./main/data-services/UserProfileDataService";
-import { ChatRepository } from "./main/repository/ChatRepository";
-import { FlatRepository } from "./main/repository/FlatRepository";
 import { UserRepository } from "./main/repository/UserRepository";
 import sanitizeHtml = require("sanitize-html");
+import {ChatService} from "./main/chat-service/ChatService";
+import {ChatRepository} from "./main/repository/ChatRepository";
+import {FlatRepository} from "./main/repository/FlatRepository";
+import {FlatProfileDataService} from "./main/data-services/FlatProfileDataService";
+import {Assigner} from "./main/data-services/Assigner";
+
+
 
 // Start writing Firebase Functions
 // https://firebase.google.com/docs/functions/typescript
 
 // The Firebase Admin SDK to access Firestore.
-const admin = require("firebase-admin");
+const admin = require('firebase-admin');
 const app = admin.initializeApp(config);
 
 // Required instances
@@ -31,15 +33,11 @@ const flatRepo = new FlatRepository(app);
 const chatRepo = new ChatRepository(app);
 
 // Data Service Initialization
-const userProfileDataService = new UserProfileDataService(
-  userRepo,
-  flatRepo,
-  app
-);
+const userProfileDataService = new UserProfileDataService(userRepo, flatRepo, app);
 const flatProfileDataService = new FlatProfileDataService(flatRepo, userRepo);
 const assigner = new Assigner(userRepo);
 
-const chatservice = new chatService(userRepo, chatRepo, flatRepo);
+const chatservice = new ChatService(userRepo, chatRepo, flatRepo);
 
 // Export functions and set allowed origins
 exports.userprofiles = functions

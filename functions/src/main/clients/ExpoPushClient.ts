@@ -16,7 +16,7 @@ export class ExpoPushClient {
               throw new Error("invalid Push Tokens");
             }
         }
-    };
+    }
 
     private async sendChunks(chunks: ExpoPushMessage[][]){
         let tickets:ExpoPushTicket[] = [];
