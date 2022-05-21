@@ -1,24 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\bara1\Documents\Uni Code Repos\SoPra_2022\roomeight-backend\functions\src\test\UserDataservice.test.ts">
-    <testCase name="UserProfileDataService Post Profile Test 1 Test Valid Add UserProfile Request" duration="81"/>
-    <testCase name="UserProfileDataService Post Profile Test 2 Test Validator Error Add UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Post Profile Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Post Profile Test 4 Test Cannot access Repo Add UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Patch Profile Test 5 Test Valid Patch  UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Patch Profile Test 6 Test Validator Error Patch UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Patch Profile Test 7 Test Cannot access Repo Patch UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Delete Profile Test 8 Test Valid Delete UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Delete Profile Test 9 Test Cannot access Auth Delete UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Delete Profile Test 10 Test Cannot access Repo Delete UserProfile Request" duration="0"/>
-    <testCase name="UserProfileDataService Get Profiles Test 11 Test Valid GetById Request" duration="0"/>
-    <testCase name="UserProfileDataService Get Profiles Test 12 Test Invalid GetById Request" duration="0"/>
-    <testCase name="UserProfileDataService Get Profiles Test 13 Test Valid Get Request" duration="0"/>
-    <testCase name="UserProfileDataService Like Profile Test 14 Test valid LikeUser Request" duration="0"/>
-    <testCase name="UserProfileDataService Like Profile Test 15 Test valid LikeFlat Request" duration="0"/>
-    <testCase name="UserProfileDataService Like Profile Test 16 Test valid dislike Request" duration="0"/>
-    <testCase name="UserProfileDataService Like Profile Test 16 Test valid Add Device Request" duration="0"/>
-    <testCase name="UserProfileDataService Like Profile Test 16 Test Add Device Request - Token already exists" duration="0"/>
-    <testCase name="UserProfileDataService Like Profile Test 16 Test valid Delete Device Request" duration="0"/>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/ChatService.test.ts">
+    <testCase name="ChatService - chat operations 1 Test invalid did not match request" duration="5">
+      <failure message="TypeError: chatService is not a constructor"><![CDATA[TypeError: chatService is not a constructor
+    at Object.<anonymous> (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/ChatService.test.ts:98:23)
+    at Promise.then.completed (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusHook (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:181:40)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at _runTest (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:148:5)
+    at _runTestsForDescribeBlock (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:25:3)]]></failure>
+    </testCase>
+    <testCase name="ChatService - chat operations 1 Test invalid already has chat request" duration="1">
+      <failure message="TypeError: chatService is not a constructor"><![CDATA[TypeError: chatService is not a constructor
+    at Object.<anonymous> (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/ChatService.test.ts:98:23)
+    at Promise.then.completed (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:391:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/utils.js:316:10)
+    at _callCircusHook (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:181:40)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)
+    at _runTest (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:148:5)
+    at _runTestsForDescribeBlock (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:66:9)
+    at _runTestsForDescribeBlock (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:60:9)
+    at run (/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/node_modules/jest-circus/build/run.js:25:3)]]></failure>
+    </testCase>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/UserDataservice.test.ts">
+    <testCase name="UserProfileDataService Post Profile Test 1 Test Valid Add UserProfile Request" duration="230"/>
+    <testCase name="UserProfileDataService Post Profile Test 2 Test Validator Error Add UserProfile Request" duration="3"/>
+    <testCase name="UserProfileDataService Post Profile Test 3 Test UserAlreadyExists Error Add UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Post Profile Test 4 Test Cannot access Repo Add UserProfile Request" duration="166"/>
+    <testCase name="UserProfileDataService Patch Profile Test 5 Test Valid Patch  UserProfile Request" duration="15"/>
+    <testCase name="UserProfileDataService Patch Profile Test 6 Test Validator Error Patch UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Patch Profile Test 7 Test Cannot access Repo Patch UserProfile Request" duration="2"/>
+    <testCase name="UserProfileDataService Delete Profile Test 8 Test Valid Delete UserProfile Request" duration="9"/>
+    <testCase name="UserProfileDataService Delete Profile Test 9 Test Cannot access Auth Delete UserProfile Request" duration="4"/>
+    <testCase name="UserProfileDataService Delete Profile Test 10 Test Cannot access Repo Delete UserProfile Request" duration="9"/>
+    <testCase name="UserProfileDataService Get Profiles Test 11 Test Valid GetById Request" duration="4"/>
+    <testCase name="UserProfileDataService Get Profiles Test 12 Test Invalid GetById Request" duration="18">
+      <failure message="Error: expect(received).toEqual(expected) // deep equality"><![CDATA[Error: expect(received).toEqual(expected) // deep equality
+
+Expected: "User Profile not found!"
+Received: "Expected Not found exception"
+    at /Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/UserDataservice.test.ts:536:35
+    at processTicksAndRejections (node:internal/process/task_queues:96:5)]]></failure>
+    </testCase>
+    <testCase name="UserProfileDataService Get Profiles Test 13 Test Valid Get Request" duration="2"/>
+    <testCase name="UserProfileDataService Like Profile Test 14 Test valid LikeUser Request" duration="5"/>
+    <testCase name="UserProfileDataService Like Profile Test 15 Test valid LikeFlat Request" duration="55"/>
+    <testCase name="UserProfileDataService Like Profile Test 16 Test valid dislike Request" duration="2"/>
+    <testCase name="UserProfileDataService Like Profile Test 16 Test valid Add Device Request" duration="3"/>
+    <testCase name="UserProfileDataService Like Profile Test 16 Test Add Device Request - Token already exists" duration="1"/>
+    <testCase name="UserProfileDataService Like Profile Test 16 Test valid Delete Device Request" duration="3"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/FlatDataservice.test.ts">
+    <testCase name="FlatProfileDataService Post Profile Test 1 Test Valid Add FlatProfile Request" duration="396"/>
+    <testCase name="FlatProfileDataService Post Profile Test 2 Test Invalid Input Add FlatProfile Request" duration="14"/>
+    <testCase name="FlatProfileDataService Post Profile Test 3 Test Invalid Add FlatProfile Request - Already in flat" duration="1"/>
+    <testCase name="FlatProfileDataService Delete Profile Test 4 Test Valid Delete Flat Request" duration="4"/>
+    <testCase name="FlatProfileDataService Delete Profile Test 5 Test Invalid Delete Flat Request - Flat not found" duration="11"/>
+    <testCase name="FlatProfileDataService Delete Profile Test 6 Test Invalid Delete Flat Request - User not part of flat" duration="1"/>
+    <testCase name="FlatProfileDataService Get Profile Test 7 Test Valid GetById Request" duration="3"/>
+    <testCase name="FlatProfileDataService Get Profile Test 8 Test Valid GetProfilesFromRepo Request" duration="15"/>
+    <testCase name="FlatProfileDataService Get Profile Test 9 Test Invalid GetById Request - Flat not found" duration="1"/>
+    <testCase name="FlatProfileDataService Patch Profile Test 10 Test Valid Patch Request" duration="22"/>
+    <testCase name="FlatProfileDataService Patch Profile Test 11 Test Invalid Patch Request - Validation Errors" duration="2"/>
+    <testCase name="FlatProfileDataService Patch Profile Test 12 Test Invalid Update Flat Request - Flat not found" duration="2"/>
+    <testCase name="FlatProfileDataService Patch Profile Test 13 Test Invalid Update Flat Request - User not in flat" duration="2"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 14 Test Valid add user to flat" duration="33"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 15 Test Invalid add user to flat - User not found" duration="4"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 15 Test Invalid add user to flat - New mate already part of a flat" duration="1"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 15 Test Invalid add user to flat - User not found" duration="1"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 16 Test Invalid add user to flat - Cannot find flat" duration="2"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 17 Test Valid delete roommate from flat" duration="35"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 18 Test Invalid remove user from flat - Cannot find flat" duration="10"/>
+    <testCase name="FlatProfileDataService FlatMate Operations Test 19 Test Invalid remove user from flat - User not found" duration="1"/>
+    <testCase name="FlatProfileDataService Discover operations Test 20 Test Valid discover flats - 1 profile requested" duration="11"/>
+    <testCase name="FlatProfileDataService Discover operations Test 21 Test Valid discover flats - more profiles requested than available" duration="67"/>
+    <testCase name="FlatProfileDataService Discover operations Test 22 Test Invalid discover flats - profile not found" duration="6"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/UserValidator.test.ts">
+    <testCase name="Validate PostUser 1 Test valid input for all fields" duration="13"/>
+    <testCase name="Validate PostUser 2 Test valid input for mandatory fields" duration="1"/>
+    <testCase name="Validate PostUser 3 Test invalid input fields" duration="1"/>
+    <testCase name="Validate PostUser 4 Test invalid input with missing fields" duration="1"/>
+    <testCase name="Validate PostUser 5 Test invalid input with unexpected fields" duration="42"/>
+    <testCase name="Validate PostUser 6 Test invalid date range" duration="0"/>
+    <testCase name="Validate PostUser 7 Test json with null value" duration="1"/>
+    <testCase name="Validate PostUser 8 Test invalid input birthday today" duration="1"/>
+    <testCase name="Validate PatchUser 9 Test valid input for all fields" duration="1"/>
+    <testCase name="Validate PatchUser 19 Test invalid input fields" duration="1"/>
+    <testCase name="Validate PatchUser 11 Test invalid input with unexpected fields" duration="1"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/FlatValidator.test.ts">
+    <testCase name="Validate PostFlat test valid input for all fields" duration="22"/>
+    <testCase name="Validate PostFlat test valid input for mandatory fields" duration="0"/>
+    <testCase name="Validate PostFlat test invalid input fields" duration="1"/>
+    <testCase name="Validate PostFlat test invalid input with missing fields" duration="3"/>
+    <testCase name="Validate PostFlat test invalid input with unexpected fields" duration="2"/>
+    <testCase name="Validate PostFlat test invalid date range" duration="16"/>
+    <testCase name="Validate PostFlat test json with null value" duration="10"/>
+    <testCase name="Validate PatchUser 1 Test valid input for all fields" duration="0"/>
+    <testCase name="Validate PatchUser 2 Test invalid input fields" duration="1"/>
+    <testCase name="Validate PatchUser 3 Test invalid input with unexpected fields" duration="0"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/FlatProfileConverter.test.ts">
+    <testCase name="ValidatorReport test 1 Test report should match the errormessage" duration="5"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/ReferenceHandling.test.ts">
+    <testCase name="ReferenceController Test 1 Test Resolving of Reference List containing single element" duration="58"/>
+    <testCase name="ReferenceController Test 2 Test Resolving of Reference List containing single element -&gt; element not found" duration="1"/>
+    <testCase name="ReferenceController Test 3 Test Clean Up outdated References" duration="3"/>
+    <testCase name="ReferenceController Test 4 Test Clean Up outdated References -&gt; Update not possible" duration="0"/>
+    <testCase name="ReferenceController Test 5 Test Resolving of Single Reference" duration="2"/>
+    <testCase name="ReferenceController Test 6 Test Resolving of single Reference -&gt; element not found" duration="22"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/ValidationReport.test.ts">
+    <testCase name="ValidatorReport test 1 Test new report should not contain errors" duration="2"/>
+    <testCase name="ValidatorReport test 2 Test report should match the errormessage" duration="1"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/UserProfileConverter.test.ts">
+    <testCase name="ValidatorReport test report should match the errormessage" duration="3"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/FlatProfile.test.ts">
+    <testCase name="Flat profile test 1 Test getJson of profile" duration="3"/>
+    <testCase name="Flat profile test 2 Test Database Entry format of profile" duration="1"/>
+  </file>
+  <file path="/Users/JordiKueffer/Documents/Github_repos/roomeight-backend/functions/src/test/UserProfile.test.ts">
+    <testCase name="ValidatorReport test 1 Test new report should not contain errors" duration="3"/>
   </file>
 </testExecutions>
