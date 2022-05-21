@@ -82,6 +82,31 @@ export class ValidMockUserRepository implements UserRepository {
             defaultProfile.profileId = '123'
             defaultProfile.email = 'test@test.com'
         }
+        if(profile_id === '123-discover'){
+            defaultProfile.profileId = '123-discover'
+            defaultProfile.email = 'test@test.com'
+            defaultProfile.matches = []
+            defaultProfile.filters = {
+                permanent: false,
+                rent: {
+                    min: 0,
+                    max: 10000
+                },
+                numberOfRoommates: {
+                    min: 0,
+                    max: 10000
+                },
+                numberOfBaths: {
+                    min: 0,
+                    max: 10000
+                },
+                roomSize: {
+                    min: 0,
+                    max: 10000
+                }
+            }
+        }
+
         return Promise.resolve(defaultProfile)
     }
 

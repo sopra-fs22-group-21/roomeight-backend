@@ -961,3 +961,322 @@ describe("UserProfileDataService Devices Requests Test", () => {
     });
 
 });
+
+describe("UserProfileDataService Discover operations Test", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
+    test('17 Test Valid discover user - 1 profile requested', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfiles');
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
+
+        //Inputs
+        const uid = "123";
+        const amount = 1
+
+        //Expected Output
+        const expected_response = [{
+            profileId: "flt$00000000000000000",
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            likes: [],
+            creationDate: new Date(0),
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            address: "test",
+            rent: 500,
+            permanent: false,
+            numberOfRoommates: 1,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+                "789-advertising": {
+                    profileId: "456",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test456@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
+            matches: {
+                "123": {
+                    profileId: '123',
+                    firstName: 'Mock first_name',
+                    lastName: 'Mock last_name',
+                    description: '',
+                    biography: '',
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: 'ONLINE',
+                    birthday: new Date(0),
+                    email: 'test@test.com',
+                    phoneNumber: '0795556677',
+                    gender: 'NOT SET',
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: '',
+                    isComplete: false,
+                    filters: {},
+                    likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                }
+            },
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }]
+
+        return ds.discover(uid, amount).then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(3);
+                expect(ValidMockFlatRepository.prototype.getProfiles).toBeCalledTimes(1);
+            });
+    });
+
+    test('18 Test Valid discover user - more profiles requested than available', () => {
+        // Prepare spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfiles');
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
+
+        //Inputs
+        const uid = "123-discover";
+        const amount = 3
+
+        //Expected Output
+        const expected_response =[{
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            name: 'test',
+            description: 'test',
+            biography: 'test',
+            tags: [ 'test' ],
+            pictureReferences: [ 'test' ],
+            likes: [],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: undefined,
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate: "1970-01-01T00:00:00.000Z",
+            address: 'test',
+            rent: 500,
+            permanent: false,
+            numberOfRoommates: 1,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+                "123-advertising": {
+                    profileId: "123-advertising",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: [],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: false,
+                    isAdvertisingRoom: true,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+                    isComplete: false,
+                    filters: {
+                        age: {
+                            min: 0,
+                            max: 100
+                        },
+                        permanent: false,
+                        matchingTimeRange: true
+                    },
+                    likes: []
+                }
+            },
+            matches: {
+                "123": {
+                    profileId: '123',
+                    firstName: 'Mock first_name',
+                    lastName: 'Mock last_name',
+                    description: '',
+                    biography: '',
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: 'ONLINE',
+                    birthday: new Date(0),
+                    email: 'test@test.com',
+                    phoneNumber: '0795556677',
+                    gender: 'NOT SET',
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: '',
+                    isComplete: false,
+                    filters: {},
+                    likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
+                }
+            },
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        },
+        {
+            profileId: "flt$00000000000000000",
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            likes: [],
+            creationDate: new Date(0),
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            address: "test",
+            rent: 500,
+            permanent: false,
+            numberOfRoommates: 1,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+                "789-advertising": {
+                    profileId: "456",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test456@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "",
+                    isComplete: false,
+                    filters: {},
+                    likes: []
+                }
+            },
+            matches: {
+                "123": {
+                    profileId: '123',
+                    firstName: 'Mock first_name',
+                    lastName: 'Mock last_name',
+                    description: '',
+                    biography: '',
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: 'ONLINE',
+                    birthday: new Date(0),
+                    email: 'test@test.com',
+                    phoneNumber: '0795556677',
+                    gender: 'NOT SET',
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: '',
+                    isComplete: false,
+                    filters: {},
+                    likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                }
+            },
+            addressCoordinates: {
+                longitude: 12.34,
+                    latitude: 56.78
+            }
+        }]
+
+        return ds.discover(uid, amount).then(
+            (response) => {
+                console.log(response);
+                expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(5);
+                expect(ValidMockFlatRepository.prototype.getProfiles).toBeCalledTimes(1);
+            });
+    });
+
+    test('19 Test Invalid discover user - profile not found', () => {
+        // Prepare spies
+        jest.spyOn(InvalidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfiles');
+
+        // Used Instances
+        const user_repo = new InvalidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
+
+        //Inputs
+        const uid = "12345";
+        const amount = 3
+
+        // Expected Output
+        const expected_error_msg = "User Profile with id 12345 not found"
+
+
+        return ds.discover(uid, amount)
+            .then((response) => {
+                console.log(response);
+                throw new TypeError("Expected a profile not found error");
+            })
+            .catch(
+                (error) => {
+                    expect(error.message).toEqual(expected_error_msg);
+                    expect(InvalidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.getProfiles).toBeCalledTimes(0);
+                }
+            );
+    });
+});

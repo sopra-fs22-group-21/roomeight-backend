@@ -392,6 +392,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
             address: "test",
             rent: 500,
             permanent: false,
+            numberOfRoommates: 1,
             roomSize: 18,
             numberOfBaths: 1,
             roomMates: {
@@ -457,7 +458,81 @@ describe("FlatProfileDataService Get Profile Test", () => {
                 longitude: 12.34,
                 latitude: 56.78
             }
-        }]
+        },
+        {
+            profileId: "flt$00000000000000000",
+            name: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            likes: [],
+            creationDate: new Date(0),
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            address: "test",
+            rent: 500,
+            permanent: false,
+            numberOfRoommates: 1,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: {
+            "789-advertising": {
+                profileId: "456",
+                    firstName: "Mock first_name",
+                    lastName: "Mock last_name",
+                    description: "",
+                    biography: "",
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: "ONLINE",
+                    birthday: new Date(0),
+                    email: "test456@test.com",
+                    phoneNumber: "0795556677",
+                    gender: "NOT SET",
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: "",
+                    isComplete: false,
+                    filters: {},
+                likes: []
+            }
+        },
+        matches: {
+            "123": {
+                profileId: '123',
+                    firstName: 'Mock first_name',
+                    lastName: 'Mock last_name',
+                    description: '',
+                    biography: '',
+                    tags: [],
+                    pictureReferences: [],
+                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                    creationDate: new Date(0),
+                    onlineStatus: 'ONLINE',
+                    birthday: new Date(0),
+                    email: 'test@test.com',
+                    phoneNumber: '0795556677',
+                    gender: 'NOT SET',
+                    isSearchingRoom: true,
+                    isAdvertisingRoom: false,
+                    moveInDate: new Date(0),
+                    moveOutDate: new Date(0),
+                    flatId: '',
+                    isComplete: false,
+                    filters: {},
+                likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+            }
+        },
+        addressCoordinates: {
+            longitude: 12.34,
+                latitude: 56.78
+        }
+    }]
 
         // Used Instances
         const user_repo = new ValidMockUserRepository();
@@ -542,7 +617,7 @@ describe("FlatProfileDataService Patch Profile Test", () => {
             name: 'test',
             description: 'test',
             biography: 'test',
-            tags: [ 'test' ],
+            tags: ['test'],
             pictureReferences: [ 'test' ],
             likes: [{
                 likes: ["123-advertising"],
@@ -1121,7 +1196,7 @@ describe("FlatProfileDataService Discover operations Test", () => {
             flatId: '',
             isComplete: false,
             filters: {},
-            likes: [],
+            likes: []
         }]
 
         return ds.discover(uid, amount).then(
@@ -1170,7 +1245,7 @@ describe("FlatProfileDataService Discover operations Test", () => {
             flatId: '',
             isComplete: false,
             filters: {},
-            likes: [],
+            likes: []
         },
         {
             profileId: '456',

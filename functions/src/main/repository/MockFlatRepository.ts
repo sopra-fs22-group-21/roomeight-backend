@@ -33,10 +33,35 @@ export class ValidMockFlatRepository implements FlatRepository {
             permanent: false,
             roomSize: 18,
             numberOfBaths: 1,
+            numberOfRoommates: 1,
             roomMates: ["123-advertising"],
             likes: [],
             matches: ["123"],
             profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            creationDate: new Timestamp(0, 0),
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        },
+        {
+            name: "test",
+            address: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            moveInDate: new Timestamp(0, 0),
+            moveOutDate: new Timestamp(0, 0),
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            numberOfRoommates: 1,
+            roomMates: ["789-advertising"],
+            likes: [],
+            matches: ["123"],
+            profileId: "flt$00000000000000000",
             creationDate: new Timestamp(0, 0),
             addressCoordinates: {
                 longitude: 12.34,
@@ -133,6 +158,54 @@ export class InvalidMockFlatRepository implements FlatRepository {
     }
 
     discover(queryConstraints: any[]): Promise<any> {
-        throw new Error("Not implemented")
+        console.log("Entered Mock Discover");
+        return Promise.resolve([{
+            name: "test",
+            address: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            moveInDate: new Timestamp(0, 0),
+            moveOutDate: new Timestamp(0, 0),
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: ["123-advertising"],
+            numberOfRoommates: 1,
+            likes: [],
+            matches: [],
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            creationDate: new Timestamp(0, 0),
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        },
+        {
+            name: "test",
+            address: "test",
+            description: "test",
+            biography: "test",
+            tags: ["test"],
+            pictureReferences: ["test"],
+            moveInDate: new Timestamp(0, 0),
+            moveOutDate: new Timestamp(0, 0),
+            rent: 500,
+            permanent: false,
+            roomSize: 18,
+            numberOfBaths: 1,
+            roomMates: ["789-advertising"],
+            numberOfRoommates: 1,
+            likes: [],
+            matches: [],
+            profileId: "flt$00000000000000000",
+            creationDate: new Timestamp(0, 0),
+            addressCoordinates: {
+                longitude: 12.34,
+                latitude: 56.78
+            }
+        }]);
     }
 }
