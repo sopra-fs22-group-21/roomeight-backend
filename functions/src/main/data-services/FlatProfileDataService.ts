@@ -152,13 +152,17 @@ export class FlatProfileDataService {
             // Matches
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
-                    reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
+                    if (resolution.unresolvedReferences.length > 0) {
+                        reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
+                    }
                     dto.matches = resolution.result;
                 });
             // Roommates
             await reference_converter.resolveProfileReferenceList(dto.roomMates)
                 .then((resolution) => {
-                    reference_converter.cleanUpReferencesList(profile_id, "roomMates", dto.roomMates, resolution.unresolvedReferences);
+                    if (resolution.unresolvedReferences.length > 0) {
+                        reference_converter.cleanUpReferencesList(profile_id, "roomMates", dto.roomMates, resolution.unresolvedReferences);
+                    }
                     dto.roomMates = resolution.result;
                 });
             // Likes
@@ -188,12 +192,16 @@ export class FlatProfileDataService {
             for (let i in result) {
                 await reference_converter.resolveProfileReferenceList(result[i].matches)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(result[i].profileId, "matches", result[i].matches, resolution.unresolvedReferences);
+                        if (resolution.unresolvedReferences.length > 0) {
+                            reference_converter.cleanUpReferencesList(result[i].profileId, "matches", result[i].matches, resolution.unresolvedReferences);
+                        }
                         result[i].matches = resolution.result;
                     });
                 await reference_converter.resolveProfileReferenceList(result[i].roomMates)
                     .then((resolution) => {
-                        reference_converter.cleanUpReferencesList(result[i].profileId, "roomMates", result[i].roomMates, resolution.unresolvedReferences);
+                        if (resolution.unresolvedReferences.length > 0) {
+                            reference_converter.cleanUpReferencesList(result[i].profileId, "roomMates", result[i].roomMates, resolution.unresolvedReferences);
+                        }
                         result[i].roomMates = resolution.result;
                     });
                 // Likes

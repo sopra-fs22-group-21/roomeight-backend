@@ -98,7 +98,6 @@ export class UserProfileDataService {
             if (update_fields.hasOwnProperty("birthday")) {
                 update_fields.birthday = new Date(update_fields.birthday);
             }
-            functions.logger.info(update_fields);
             await this.user_repository.updateProfile(update_fields, profile_id)
                 .catch((error) => {
                         throw new Error('Error: something went wrong and User was not updated: ' + error.message);
@@ -174,7 +173,9 @@ export class UserProfileDataService {
             const reference_converter = new ReferenceController(this.flat_repository, this.user_repository);
             await reference_converter.resolveProfileReferenceList(dto.matches)
                 .then((resolution) => {
-                    reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
+                    if (resolution.unresolvedReferences.length > 0) {
+                        reference_converter.cleanUpReferencesList(profile_id, "matches", dto.matches, resolution.unresolvedReferences);
+                    }
                     dto.matches = resolution.result;
                 });
             return dto;

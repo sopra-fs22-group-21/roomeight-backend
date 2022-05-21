@@ -124,6 +124,10 @@ class StubInputs {
 
 describe("UserProfileDataService Post Profile Test", () => {
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('1 Test Valid Add UserProfile Request', () => {
         // Setup Spies
         jest.spyOn(UserValidator, 'validatePostUser');
@@ -176,6 +180,10 @@ describe("UserProfileDataService Post Profile Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePostUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'addProfile');
+
         // Input setup
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
@@ -200,11 +208,18 @@ describe("UserProfileDataService Post Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error.message).toEqual(expected_response);
+                    expect(createUserWithEmailAndPassword).toBeCalledTimes(0);
+                    expect(UserValidator.validatePostUser).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.addProfile).toBeCalledTimes(0);
                 }
             )
     });
 
     test('3 Test UserAlreadyExists Error Add UserProfile Request', () => {
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePostUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'addProfile');
+
         // Expected output
         const expected_response = "Firebase: Error (auth/email-already-in-use)."
 
@@ -223,6 +238,9 @@ describe("UserProfileDataService Post Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error).toEqual(expected_response);
+                    expect(createUserWithEmailAndPassword).toBeCalledTimes(1);
+                    expect(UserValidator.validatePostUser).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.addProfile).toBeCalledTimes(0);
                 }
             )
     });
@@ -230,6 +248,10 @@ describe("UserProfileDataService Post Profile Test", () => {
     jest.clearAllMocks();
 
     test('4 Test Cannot access Repo Add UserProfile Request', async () => {
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePostUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'addProfile');
+
         // Expected output
         const expected_response = "Could not post user due to: Could not post User"
 
@@ -248,6 +270,9 @@ describe("UserProfileDataService Post Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error).toEqual(new Error(expected_response));
+                    expect(createUserWithEmailAndPassword).toBeCalledTimes(1);
+                    expect(UserValidator.validatePostUser).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.addProfile).toBeCalledTimes(0);
                 }
             )
     });
@@ -255,8 +280,16 @@ describe("UserProfileDataService Post Profile Test", () => {
 
 
 describe("UserProfileDataService Patch Profile Test", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
     test('5 Test Valid Patch  UserProfile Request', () => {
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePatchUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+
         // Expected output
         const expected_response = {
             profileId: "123",
@@ -321,6 +354,9 @@ describe("UserProfileDataService Patch Profile Test", () => {
             (response) => {
                 console.log(response);
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(UserValidator.validatePatchUser).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
             }
         );
     });
@@ -329,6 +365,11 @@ describe("UserProfileDataService Patch Profile Test", () => {
         // This test should only examine the correct returning of an error message in case of a validation error
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
+
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePatchUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
 
         // Expected output
         const expected_response = "Errors:\nInvalid phoneNumber\n" +
@@ -353,11 +394,19 @@ describe("UserProfileDataService Patch Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error.message).toEqual(expected_response);
+                    expect(UserValidator.validatePatchUser).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(0);
                 }
             )
     });
 
     test('7 Test Cannot access Repo Patch UserProfile Request', async () => {
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePatchUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+
         // Expected output
         const expected_response = "Error: something went wrong and User was not updated: Could not update User"
 
@@ -376,6 +425,9 @@ describe("UserProfileDataService Patch Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error).toEqual(new Error(expected_response));
+                    expect(UserValidator.validatePatchUser).toBeCalledTimes(1);
+                    expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(0);
                 }
             )
     });
@@ -383,7 +435,17 @@ describe("UserProfileDataService Patch Profile Test", () => {
 
 describe("UserProfileDataService Delete Profile Test", () => {
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('8 Test Valid Delete UserProfile Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'deleteProfile');
+
         // Expected output
         const expected_response = "Successfully deleted user 123"
 
@@ -396,11 +458,21 @@ describe("UserProfileDataService Delete Profile Test", () => {
             (response) => {
                 console.log(response);
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.deleteProfile).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
             }
         );
     });
 
     test('9 Test Cannot access Auth Delete UserProfile Request', async () => {
+        // Setup Spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'deleteProfile');
+
         // Expected output
         const expected_response = "Could not delete auth User"
 
@@ -419,11 +491,21 @@ describe("UserProfileDataService Delete Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error).toEqual(new Error(expected_response));
+                    expect(ValidMockUserRepository.prototype.deleteProfile).toBeCalledTimes(0);
+                    expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(1);
+                    expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
                 }
             )
     });
 
     test('10 Test Cannot access Repo Delete UserProfile Request', async () => {
+        // Setup Spies
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(InvalidMockUserRepository.prototype, 'deleteProfile');
+
         // Expected output
         const expected_response = "User Profile not found!"
 
@@ -442,6 +524,10 @@ describe("UserProfileDataService Delete Profile Test", () => {
             .catch(
                 (error) => {
                     expect(error).toEqual(new Error(expected_response));
+                    expect(InvalidMockUserRepository.prototype.deleteProfile).toBeCalledTimes(0);
+                    expect(InvalidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                    expect(InvalidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(0);
+                    expect(InvalidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(0);
                 }
             )
     });
@@ -450,7 +536,14 @@ describe("UserProfileDataService Delete Profile Test", () => {
 
 describe("UserProfileDataService Get Profiles Test", () => {
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('11 Test Valid GetById Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+
         // Expected output
         const expected_response = {
             profileId: '123',
@@ -515,29 +608,38 @@ describe("UserProfileDataService Get Profiles Test", () => {
             .then((response) => {
                 console.log(response);
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+
             });
     });
 
     test('12 Test Invalid GetById Request', () => {
+        // Setup Spies
+        jest.spyOn(InvalidMockUserRepository.prototype, 'getProfileById');
+
         // Expected output
         const expected_response = "User Profile not found!"
 
         // Used Instances
-        const user_repo = new ValidMockUserRepository();
+        const user_repo = new InvalidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
         const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.getProfileByIdFromRepo("123")
             .then((response) => {
                     console.log(response);
-                    throw new Error("Expected Not found exception")
+                    throw new Error("Expected Not-found-exception")
                 })
             .catch((e) => {
                 expect(e.message).toEqual(expected_response);
+                expect(InvalidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
             })
     });
 
     test('13 Test Valid Get Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfiles');
+
         // Expected output
         const expected_response = [{
                 profileId: '123',
@@ -597,6 +699,7 @@ describe("UserProfileDataService Get Profiles Test", () => {
             .then((response) => {
                 console.log(response);
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.getProfiles).toBeCalledTimes(1);
             });
     });
 });
@@ -604,7 +707,17 @@ describe("UserProfileDataService Get Profiles Test", () => {
 
 describe("UserProfileDataService Like Profile Test", () => {
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     test('14 Test valid LikeUser Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockFlatRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockFlatRepository.prototype, 'updateProfile');
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
         // Expected output
         const expected_response = {
             isMatch: true,
@@ -673,6 +786,10 @@ describe("UserProfileDataService Like Profile Test", () => {
         return ds.likeUser("123-advertising", "123")
             .then((response) => {
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(2);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(4);
+                expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(1);
             });
     });
 
@@ -748,6 +865,10 @@ describe("UserProfileDataService Like Profile Test", () => {
     });
 
     test('16 Test valid dislike Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
         // Expected output
         const expected_response = "Successfully updated user 123"
 
@@ -760,12 +881,18 @@ describe("UserProfileDataService Like Profile Test", () => {
             .then((response) => {
                 console.log(response)
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
             });
     });
 
 });
 
-describe("UserProfileDataService Like Profile Test", () => {
+describe("UserProfileDataService Devices Requests Test", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
     test('16 Test valid Add Device Request', () => {
         // Expected output
