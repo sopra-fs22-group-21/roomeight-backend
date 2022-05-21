@@ -30,97 +30,59 @@ export class ValidMockUserRepository implements UserRepository {
     }
 
     getProfileById(profile_id:string): Promise<any> {
-        console.log("Entered Mock updateUserProfile");
-        if (profile_id == "123-advertising") {
-            return Promise.resolve({
-                firstName: 'Mock first_name',
-                moveInDate: new Timestamp(0, 0),
-                likes: [],
-                phoneNumber: '0795556677',
-                flatId: 'flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb',
-                tags: [],
-                isSearchingRoom: false,
-                isAdvertisingRoom: true,
-                biography: '',
-                profileId: '123-advertising',
-                gender: 'NOT SET',
-                pictureReferences: [],
-                birthday:  new Timestamp(0, 0),
-                description: '',
-                lastName: 'Mock last_name',
-                onlineStatus: 'ONLINE',
-                viewed: [],
-                creationDate:  new Timestamp(0, 0),
-                moveOutDate:  new Timestamp(0, 0),
-                matches: [],
-                email: 'test@test.com',
-                filters: {
-                    age: {
-                        min: 0,
-                        max: 100
-                    },
-                    permanent: false,
-                    matchingTimeRange: true
-                },
-                isComplete: false,
-                devicePushTokens: ["expo"]
-            });
-        } else if (profile_id == "123") {
-            return Promise.resolve({
-                firstName: 'Mock first_name',
-                moveInDate: new Timestamp(0, 0),
-                likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
-                phoneNumber: '0795556677',
-                flatId: '',
-                tags: [],
-                isSearchingRoom: true,
-                isAdvertisingRoom: false,
-                biography: '',
-                profileId: '123',
-                gender: 'NOT SET',
-                pictureReferences: [],
-                birthday:  new Timestamp(0, 0),
-                description: '',
-                lastName: 'Mock last_name',
-                onlineStatus: 'ONLINE',
-                viewed: [],
-                creationDate:  new Timestamp(0, 0),
-                moveOutDate:  new Timestamp(0, 0),
-                matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
-                email: 'test@test.com',
-                filters: {},
-                isComplete: false,
-                devicePushTokens: ["expo"]
-            });
-        } else {
-            return Promise.resolve({
-                firstName: 'Mock first_name',
-                moveInDate: new Timestamp(0, 0),
-                likes: [],
-                phoneNumber: '0795556677',
-                flatId: '',
-                tags: [],
-                isSearchingRoom: true,
-                isAdvertisingRoom: false,
-                biography: '',
-                profileId: '456',
-                gender: 'NOT SET',
-                pictureReferences: [],
-                birthday:  new Timestamp(0, 0),
-                description: '',
-                lastName: 'Mock last_name',
-                onlineStatus: 'ONLINE',
-                viewed: [],
-                creationDate:  new Timestamp(0, 0),
-                moveOutDate:  new Timestamp(0, 0),
-                matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
-                email: 'test456@test.com',
-                filters: {},
-                isComplete: false,
-                devicePushTokens: ["expo"]
-            });
+        console.log("Entered Mock getProfileById");
+        const defaultProfile: any = {
+            firstName: 'Mock first_name',
+            moveInDate: new Timestamp(0, 0),
+            likes: [],
+            phoneNumber: '0795556677',
+            flatId: '',
+            tags: [],
+            isSearchingRoom: true,
+            isAdvertisingRoom: false,
+            biography: '',
+            profileId: '456',
+            gender: 'NOT SET',
+            pictureReferences: [],
+            birthday:  new Timestamp(0, 0),
+            description: '',
+            lastName: 'Mock last_name',
+            onlineStatus: 'ONLINE',
+            viewed: [],
+            creationDate:  new Timestamp(0, 0),
+            moveOutDate:  new Timestamp(0, 0),
+            matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+            email: 'test456@test.com',
+            filters: {},
+            isComplete: false,
+            devicePushTokens: ["expo"]
         }
 
+        if(profile_id.includes('didMatch')){
+            defaultProfile['matches'] = [...defaultProfile.matches, 'flt$match']
+        }
+        if(profile_id === "123-advertising"){
+            defaultProfile.isAdvertisingRoom = true
+            defaultProfile.isSearchingRoom = false
+            defaultProfile.profileId = '123-advertising'
+            defaultProfile.flatId = 'flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb'
+            defaultProfile.matches = []
+            defaultProfile.filters = {
+                age: {
+                    min: 0,
+                    max: 100
+                },
+                permanent: false,
+                matchingTimeRange: true
+            }
+            defaultProfile.email = "test@test.com"
+        }
+        if(profile_id === '123'){
+            defaultProfile.likes.push("flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb")
+            defaultProfile.profileId = '123'
+            defaultProfile.email = 'test@test.com'
+        }
+        return Promise.resolve(defaultProfile)
     }
 
     getProfiles(): Promise<any> {
