@@ -895,6 +895,10 @@ describe("UserProfileDataService Devices Requests Test", () => {
     });
 
     test('16 Test valid Add Device Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
         // Expected output
         const expected_response = "Successfully added token to device push token list!"
 
@@ -907,10 +911,16 @@ describe("UserProfileDataService Devices Requests Test", () => {
             .then((response) => {
                 console.log(response)
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
             });
     });
 
     test('16 Test Add Device Request - Token already exists', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
         // Expected output
         const expected_response = "Token exists in current push token list"
 
@@ -923,10 +933,16 @@ describe("UserProfileDataService Devices Requests Test", () => {
             .then((response) => {
                 console.log(response)
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(0);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
             });
     });
 
     test('16 Test valid Delete Device Request', () => {
+        // Setup Spies
+        jest.spyOn(ValidMockUserRepository.prototype, 'getProfileById');
+        jest.spyOn(ValidMockUserRepository.prototype, 'updateProfile');
+
         // Expected output
         const expected_response = "Successfully deleted token from push token list"
 
@@ -939,6 +955,8 @@ describe("UserProfileDataService Devices Requests Test", () => {
             .then((response) => {
                 console.log(response)
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
             });
     });
 
