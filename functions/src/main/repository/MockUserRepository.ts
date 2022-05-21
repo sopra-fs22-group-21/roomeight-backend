@@ -37,7 +37,7 @@ export class ValidMockUserRepository implements UserRepository {
                 moveInDate: new Timestamp(0, 0),
                 likes: [],
                 phoneNumber: '0795556677',
-                flatId: '123',
+                flatId: 'flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb',
                 tags: [],
                 isSearchingRoom: false,
                 isAdvertisingRoom: true,
@@ -63,11 +63,11 @@ export class ValidMockUserRepository implements UserRepository {
                 isComplete: false,
                 devicePushTokens: ["expo"]
             });
-        }
-        return Promise.resolve({
+        } else if (profile_id == "123") {
+            return Promise.resolve({
                 firstName: 'Mock first_name',
                 moveInDate: new Timestamp(0, 0),
-                likes: [],
+                likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
                 phoneNumber: '0795556677',
                 flatId: '',
                 tags: [],
@@ -89,7 +89,36 @@ export class ValidMockUserRepository implements UserRepository {
                 filters: {},
                 isComplete: false,
                 devicePushTokens: ["expo"]
-        });
+            });
+        } else {
+            return Promise.resolve({
+                firstName: 'Mock first_name',
+                moveInDate: new Timestamp(0, 0),
+                likes: [],
+                phoneNumber: '0795556677',
+                flatId: '',
+                tags: [],
+                isSearchingRoom: true,
+                isAdvertisingRoom: false,
+                biography: '',
+                profileId: '456',
+                gender: 'NOT SET',
+                pictureReferences: [],
+                birthday:  new Timestamp(0, 0),
+                description: '',
+                lastName: 'Mock last_name',
+                onlineStatus: 'ONLINE',
+                viewed: [],
+                creationDate:  new Timestamp(0, 0),
+                moveOutDate:  new Timestamp(0, 0),
+                matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                email: 'test456@test.com',
+                filters: {},
+                isComplete: false,
+                devicePushTokens: ["expo"]
+            });
+        }
+
     }
 
     getProfiles(): Promise<any> {

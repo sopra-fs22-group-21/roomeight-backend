@@ -78,7 +78,7 @@ describe("FlatProfileDataService Post Profile Test", () => {
                     flatId: "",
                     isComplete: false,
                     filters: {},
-                    likes: []
+                    likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
                 }
             },
             matches: {},
@@ -278,18 +278,49 @@ describe("FlatProfileDataService Get Profile Test", () => {
     test('7 Test Valid GetById Request', () => {
         // Expected Output
         const expected_response = {
-            name: "test",
-            description: "test",
-            biography: "test",
-            tags: ["test"],
-            pictureReferences: ["test"],
-            likes: [],
-            creationDate: new Date(0),
-            moveInDate: new Date(0),
-            moveOutDate: new Date(0),
-            address: "test",
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            name: 'test',
+            description: 'test',
+            biography: 'test',
+            tags: [ 'test' ],
+            pictureReferences: [ 'test' ],
+            likes: [{
+                    likes: ["123-advertising"],
+                    likedUser: {
+                        "456": {
+                            profileId: "456",
+                            firstName: "Mock first_name",
+                            lastName: "Mock last_name",
+                            description: "",
+                            biography: "",
+                            tags: [],
+                            pictureReferences: [],
+                            matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                            creationDate: new Date(0),
+                            onlineStatus: "ONLINE",
+                            birthday: new Date(0),
+                            email: "test456@test.com",
+                            phoneNumber: "0795556677",
+                            gender: "NOT SET",
+                            isSearchingRoom: true,
+                            isAdvertisingRoom: false,
+                            moveInDate: new Date(0),
+                            moveOutDate: new Date(0),
+                            flatId: "",
+                            isComplete: false,
+                            filters: {},
+                            likes: []
+                        }
+                    }
+                }],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: undefined,
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate: "1970-01-01T00:00:00.000Z",
+            address: 'test',
             rent: 500,
             permanent: false,
+            numberOfRoommates: undefined,
             roomSize: 18,
             numberOfBaths: 1,
             roomMates: {
@@ -312,7 +343,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
                     isAdvertisingRoom: true,
                     moveInDate: new Date(0),
                     moveOutDate: new Date(0),
-                    flatId: "123",
+                    flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
                     isComplete: false,
                     filters: {
                         age: {
@@ -323,32 +354,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
                     likes: []
                 }
             },
-            matches: {
-                "123": {
-                    profileId: "123",
-                    firstName: "Mock first_name",
-                    lastName: "Mock last_name",
-                    description: "",
-                    biography: "",
-                    tags: [],
-                    pictureReferences: [],
-                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
-                    creationDate: new Date(0),
-                    onlineStatus: "ONLINE",
-                    birthday: new Date(0),
-                    email: "test@test.com",
-                    phoneNumber: "0795556677",
-                    gender: "NOT SET",
-                    isSearchingRoom: true,
-                    isAdvertisingRoom: false,
-                    moveInDate: new Date(0),
-                    moveOutDate: new Date(0),
-                    flatId: "",
-                    isComplete: false,
-                    filters: {},
-                    likes: []
-                }
-            },
+            matches: {},
             addressCoordinates: {
                 longitude: 12.34,
                 latitude: 56.78
@@ -371,6 +377,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
     test('8 Test Valid GetProfilesFromRepo Request', () => {
         // Expected Output
         const expected_response = [{
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
             name: "test",
             description: "test",
             biography: "test",
@@ -405,7 +412,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
                     isAdvertisingRoom: true,
                     moveInDate: new Date(0),
                     moveOutDate: new Date(0),
-                    flatId: "123",
+                    flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
                     isComplete: false,
                     filters: {
                         age: {
@@ -439,7 +446,7 @@ describe("FlatProfileDataService Get Profile Test", () => {
                     flatId: "",
                     isComplete: false,
                     filters: {},
-                    likes: []
+                    likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
                 }
             },
             addressCoordinates: {
@@ -527,18 +534,49 @@ describe("FlatProfileDataService Patch Profile Test", () => {
 
         // Expected Output
         const expected_response = {
-            name: "test",
-            description: "test",
-            biography: "test",
-            tags: ["test"],
-            pictureReferences: ["test"],
-            likes: [],
-            creationDate: new Date(0),
-            moveInDate: new Date(0),
-            moveOutDate: new Date(0),
-            address: "test",
+            profileId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
+            name: 'test',
+            description: 'test',
+            biography: 'test',
+            tags: [ 'test' ],
+            pictureReferences: [ 'test' ],
+            likes: [{
+                likes: ["123-advertising"],
+                likedUser: {
+                    "456": {
+                        profileId: "456",
+                        firstName: "Mock first_name",
+                        lastName: "Mock last_name",
+                        description: "",
+                        biography: "",
+                        tags: [],
+                        pictureReferences: [],
+                        matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
+                        creationDate: new Date(0),
+                        onlineStatus: "ONLINE",
+                        birthday: new Date(0),
+                        email: "test456@test.com",
+                        phoneNumber: "0795556677",
+                        gender: "NOT SET",
+                        isSearchingRoom: true,
+                        isAdvertisingRoom: false,
+                        moveInDate: new Date(0),
+                        moveOutDate: new Date(0),
+                        flatId: "",
+                        isComplete: false,
+                        filters: {},
+                        likes: []
+                    }
+                }
+            }],
+            creationDate: "1970-01-01T00:00:00.000Z",
+            onlineStatus: undefined,
+            moveInDate: "1970-01-01T00:00:00.000Z",
+            moveOutDate: "1970-01-01T00:00:00.000Z",
+            address: 'test',
             rent: 500,
             permanent: false,
+            numberOfRoommates: undefined,
             roomSize: 18,
             numberOfBaths: 1,
             roomMates: {
@@ -561,7 +599,7 @@ describe("FlatProfileDataService Patch Profile Test", () => {
                     isAdvertisingRoom: true,
                     moveInDate: new Date(0),
                     moveOutDate: new Date(0),
-                    flatId: "123",
+                    flatId: "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb",
                     isComplete: false,
                     filters: {
                         age: {
@@ -572,32 +610,7 @@ describe("FlatProfileDataService Patch Profile Test", () => {
                     likes: []
                 }
             },
-            matches: {
-                "123": {
-                    profileId: "123",
-                    firstName: "Mock first_name",
-                    lastName: "Mock last_name",
-                    description: "",
-                    biography: "",
-                    tags: [],
-                    pictureReferences: [],
-                    matches: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"],
-                    creationDate: new Date(0),
-                    onlineStatus: "ONLINE",
-                    birthday: new Date(0),
-                    email: "test@test.com",
-                    phoneNumber: "0795556677",
-                    gender: "NOT SET",
-                    isSearchingRoom: true,
-                    isAdvertisingRoom: false,
-                    moveInDate: new Date(0),
-                    moveOutDate: new Date(0),
-                    flatId: "",
-                    isComplete: false,
-                    filters: {},
-                    likes: []
-                }
-            },
+            matches: {},
             addressCoordinates: {
                 longitude: 12.34,
                 latitude: 56.78
@@ -934,7 +947,7 @@ describe("FlatProfileDataService FlatMate Operations Test", () => {
         const mate_email = "test@test.com";
 
         // Expected Output
-        const expected_error_msg = "Could not find flat 123 where user should be added"
+        const expected_error_msg = "Could not find flat flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb where user should be added"
 
         return ds.addUserToFlat(uid, mate_email).then(
             (response) => {
@@ -1002,7 +1015,7 @@ describe("FlatProfileDataService FlatMate Operations Test", () => {
         const uid = "123-advertising";
 
         // Expected Output
-        const expected_error_msg = "Could not find flat 123 where user should be removed"
+        const expected_error_msg = "Could not find flat flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb where user should be removed"
 
         return ds.deleteUserFromFlat(uid).then(
             (response) => {
@@ -1082,28 +1095,28 @@ describe("FlatProfileDataService Discover operations Test", () => {
 
         //Expected Output
         const expected_response =[{
-            profileId: '456',
-            firstName: 'Another mock first_name',
-            lastName: 'Another mock last_name',
+            profileId: '123',
+            firstName: 'Mock first_name',
+            lastName: 'Mock last_name',
             description: '',
             biography: '',
             tags: [],
             pictureReferences: [],
             matches: {},
-            creationDate: "1970-01-01T00:00:00.000Z",
+            creationDate: new Date(0),
             onlineStatus: 'ONLINE',
-            birthday: "1970-01-01T00:00:00.000Z",
+            birthday: new Date(0),
             email: 'test@test.com',
-            phoneNumber: '0795556678',
+            phoneNumber: '0795556677',
             gender: 'NOT SET',
             isSearchingRoom: true,
             isAdvertisingRoom: false,
-            moveInDate: "1970-01-01T00:00:00.000Z",
-            moveOutDate:  "1970-01-01T00:00:00.000Z",
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
             flatId: '',
             isComplete: false,
             filters: {},
-            likes: []
+            likes: [],
         }]
 
         return ds.discover(uid, amount).then(
@@ -1130,7 +1143,30 @@ describe("FlatProfileDataService Discover operations Test", () => {
         const amount = 3
 
         //Expected Output
-        const expected_response =[
+        const expected_response =[{
+            profileId: '123',
+            firstName: 'Mock first_name',
+            lastName: 'Mock last_name',
+            description: '',
+            biography: '',
+            tags: [],
+            pictureReferences: [],
+            matches: {},
+            creationDate: new Date(0),
+            onlineStatus: 'ONLINE',
+            birthday: new Date(0),
+            email: 'test@test.com',
+            phoneNumber: '0795556677',
+            gender: 'NOT SET',
+            isSearchingRoom: true,
+            isAdvertisingRoom: false,
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
+            flatId: '',
+            isComplete: false,
+            filters: {},
+            likes: [],
+        },
         {
             profileId: '456',
             firstName: 'Another mock first_name',
@@ -1140,16 +1176,16 @@ describe("FlatProfileDataService Discover operations Test", () => {
             tags: [],
             pictureReferences: [],
             matches: {},
-            creationDate: "1970-01-01T00:00:00.000Z",
+            creationDate: new Date(0),
             onlineStatus: 'ONLINE',
-            birthday: "1970-01-01T00:00:00.000Z",
+            birthday: new Date(0),
             email: 'test@test.com',
             phoneNumber: '0795556678',
             gender: 'NOT SET',
             isSearchingRoom: true,
             isAdvertisingRoom: false,
-            moveInDate: "1970-01-01T00:00:00.000Z",
-            moveOutDate:  "1970-01-01T00:00:00.000Z",
+            moveInDate: new Date(0),
+            moveOutDate: new Date(0),
             flatId: '',
             isComplete: false,
             filters: {},
