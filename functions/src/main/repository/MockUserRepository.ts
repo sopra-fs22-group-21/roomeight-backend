@@ -58,7 +58,9 @@ export class ValidMockUserRepository implements UserRepository {
                     age: {
                         min: 0,
                         max: 100
-                    }
+                    },
+                    permanent: false,
+                    matchingTimeRange: true
                 },
                 isComplete: false,
                 devicePushTokens: ["expo"]

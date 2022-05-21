@@ -1,6 +1,8 @@
 import {UserProfileDataService} from "../main/data-services/UserProfileDataService";
 import {InvalidMockUserRepository, ValidMockUserRepository} from "../main/repository/MockUserRepository";
 import {InvalidMockFlatRepository, ValidMockFlatRepository} from "../main/repository/MockFlatRepository";
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {UserValidator} from "../main/validation/UserValidator";
 
 
 // Declaring mocks
@@ -122,10 +124,12 @@ class StubInputs {
 
 describe("UserProfileDataService Post Profile Test", () => {
 
-    // Post User Profile Tests
-
     test('1 Test Valid Add UserProfile Request', () => {
+        // Setup Spies
+        jest.spyOn(UserValidator, 'validatePostUser');
+        jest.spyOn(ValidMockUserRepository.prototype, 'addProfile');
 
+        // Expected output
         const expected_response = {
             profileId: "123",
             firstName: "test",
@@ -151,6 +155,7 @@ describe("UserProfileDataService Post Profile Test", () => {
             likes: []
         }
 
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
         const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
@@ -159,6 +164,9 @@ describe("UserProfileDataService Post Profile Test", () => {
             (response) => {
                 console.log(response);
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
+                expect(createUserWithEmailAndPassword).toBeCalledTimes(1);
+                expect(UserValidator.validatePostUser).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.addProfile).toBeCalledTimes(1);
             }
         );
     });
@@ -168,15 +176,19 @@ describe("UserProfileDataService Post Profile Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
-        const expected_response = "Errors:\nInvalid email\n" +
-            "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
-            "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate,isComplete"
+        // Input setup
         let invalid_input = StubInputs.getValidUserPostBody();
         invalid_input.email = "invalid_email"
 
+        // Expected Output
+        const expected_response = "Errors:\nInvalid email\n" +
+            "Mandatory fields are: firstName,lastName,birthday,email,phoneNumber,password\n" +
+            "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate,isComplete"
+
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.addUserProfile(invalid_input)
             .then(
@@ -193,11 +205,13 @@ describe("UserProfileDataService Post Profile Test", () => {
     });
 
     test('3 Test UserAlreadyExists Error Add UserProfile Request', () => {
+        // Expected output
         const expected_response = "Firebase: Error (auth/email-already-in-use)."
 
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -216,11 +230,13 @@ describe("UserProfileDataService Post Profile Test", () => {
     jest.clearAllMocks();
 
     test('4 Test Cannot access Repo Add UserProfile Request', async () => {
+        // Expected output
         const expected_response = "Could not post user due to: Could not post User"
 
+        // Used Instances
         const user_repo = new InvalidMockUserRepository();
         const flat_repo = new InvalidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.addUserProfile(StubInputs.getValidUserPostBody())
             .then(
@@ -240,9 +256,8 @@ describe("UserProfileDataService Post Profile Test", () => {
 
 describe("UserProfileDataService Patch Profile Test", () => {
 
-    // Patch Tests
-
     test('5 Test Valid Patch  UserProfile Request', () => {
+        // Expected output
         const expected_response = {
             profileId: "123",
             firstName: 'Mock first_name',
@@ -297,9 +312,10 @@ describe("UserProfileDataService Patch Profile Test", () => {
             likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
         }
 
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123").then(
             (response) => {
@@ -314,6 +330,7 @@ describe("UserProfileDataService Patch Profile Test", () => {
         // -> This is why only a single invalid input is tested
         // -> To examine the correct behaviour of the validator there exists a separate test file
 
+        // Expected output
         const expected_response = "Errors:\nInvalid phoneNumber\n" +
             "Mandatory fields are: \n" +
             "Optional fields are: description,biography,tags,pictureReferences,gender,moveInDate,moveOutDate," +
@@ -321,9 +338,10 @@ describe("UserProfileDataService Patch Profile Test", () => {
         let invalid_input = StubInputs.getValidUpdateBody();
         invalid_input.phoneNumber = "0"
 
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.updateUser(invalid_input, "123")
             .then(
@@ -340,11 +358,13 @@ describe("UserProfileDataService Patch Profile Test", () => {
     });
 
     test('7 Test Cannot access Repo Patch UserProfile Request', async () => {
+        // Expected output
         const expected_response = "Error: something went wrong and User was not updated: Could not update User"
 
+        // Used Instances
         const user_repo = new InvalidMockUserRepository();
         const flat_repo = new InvalidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.updateUser(StubInputs.getValidUpdateBody(), "123")
             .then(
@@ -362,14 +382,15 @@ describe("UserProfileDataService Patch Profile Test", () => {
 });
 
 describe("UserProfileDataService Delete Profile Test", () => {
-    // Delete Tests
 
     test('8 Test Valid Delete UserProfile Request', () => {
+        // Expected output
         const expected_response = "Successfully deleted user 123"
 
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.deleteUser("123").then(
             (response) => {
@@ -380,10 +401,13 @@ describe("UserProfileDataService Delete Profile Test", () => {
     });
 
     test('9 Test Cannot access Auth Delete UserProfile Request', async () => {
+        // Expected output
         const expected_response = "Could not delete auth User"
+
+        // Used Instances
         const user_repo = new ValidMockUserRepository();
         const flat_repo = new ValidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.deleteUser("123")
             .then(
@@ -400,11 +424,13 @@ describe("UserProfileDataService Delete Profile Test", () => {
     });
 
     test('10 Test Cannot access Repo Delete UserProfile Request', async () => {
+        // Expected output
         const expected_response = "User Profile not found!"
 
+        // Used Instances
         const user_repo = new InvalidMockUserRepository();
         const flat_repo = new InvalidMockFlatRepository();
-        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.deleteUser("123")
             .then(
@@ -424,9 +450,8 @@ describe("UserProfileDataService Delete Profile Test", () => {
 
 describe("UserProfileDataService Get Profiles Test", () => {
 
-    // GetById Tests
-
     test('11 Test Valid GetById Request', () => {
+        // Expected output
         const expected_response = {
             profileId: '123',
             firstName: 'Mock first_name',
@@ -480,7 +505,11 @@ describe("UserProfileDataService Get Profiles Test", () => {
             filters: {},
             likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
         };
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.getProfileByIdFromRepo("123")
             .then((response) => {
@@ -490,8 +519,13 @@ describe("UserProfileDataService Get Profiles Test", () => {
     });
 
     test('12 Test Invalid GetById Request', () => {
+        // Expected output
         const expected_response = "User Profile not found!"
-        const ds = new UserProfileDataService(new InvalidMockUserRepository(), new InvalidMockFlatRepository(), jest.fn());
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.getProfileByIdFromRepo("123")
             .then((response) => {
@@ -504,8 +538,8 @@ describe("UserProfileDataService Get Profiles Test", () => {
     });
 
     test('13 Test Valid Get Request', () => {
-        const expected_response = [
-            {
+        // Expected output
+        const expected_response = [{
                 profileId: '123',
                 firstName: 'Mock first_name',
                 lastName: 'Mock last_name',
@@ -552,10 +586,12 @@ describe("UserProfileDataService Get Profiles Test", () => {
                 isComplete: false,
                 filters: {},
                 likes: []
-            }
-        ];
+            }];
 
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.getProfilesFromRepo()
             .then((response) => {
@@ -569,7 +605,7 @@ describe("UserProfileDataService Get Profiles Test", () => {
 describe("UserProfileDataService Like Profile Test", () => {
 
     test('14 Test valid LikeUser Request', () => {
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Expected output
         const expected_response = {
             isMatch: true,
             updatedFlatProfile: {
@@ -626,8 +662,13 @@ describe("UserProfileDataService Like Profile Test", () => {
                     longitude: 12.34,
                     latitude: 56.78
                 }
+            }
         }
-    }
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.likeUser("123-advertising", "123")
             .then((response) => {
@@ -636,7 +677,7 @@ describe("UserProfileDataService Like Profile Test", () => {
     });
 
     test('15 Test valid LikeFlat Request', () => {
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Expected output
         const expected_response = {
             isMatch: true,
             updatedUserProfile: {
@@ -691,8 +732,13 @@ describe("UserProfileDataService Like Profile Test", () => {
                 isComplete: false,
                 filters: {},
                 likes: ["flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb"]
+            }
         }
-    }
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.likeFlat("456", "flt$0afc1a97-2cff-4ba3-9d27-c5cad8295acb")
             .then((response) => {
@@ -702,8 +748,13 @@ describe("UserProfileDataService Like Profile Test", () => {
     });
 
     test('16 Test valid dislike Request', () => {
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Expected output
         const expected_response = "Successfully updated user 123"
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn());
 
         return ds.dislike("123", "456")
             .then((response) => {
@@ -717,8 +768,13 @@ describe("UserProfileDataService Like Profile Test", () => {
 describe("UserProfileDataService Like Profile Test", () => {
 
     test('16 Test valid Add Device Request', () => {
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Expected output
         const expected_response = "Successfully added token to device push token list!"
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.addDevice("123", "new_expo")
             .then((response) => {
@@ -728,8 +784,13 @@ describe("UserProfileDataService Like Profile Test", () => {
     });
 
     test('16 Test Add Device Request - Token already exists', () => {
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Expected output
         const expected_response = "Token exists in current push token list"
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.addDevice("123", "expo")
             .then((response) => {
@@ -739,8 +800,13 @@ describe("UserProfileDataService Like Profile Test", () => {
     });
 
     test('16 Test valid Delete Device Request', () => {
-        const ds = new UserProfileDataService(new ValidMockUserRepository(), new ValidMockFlatRepository(), jest.fn());
+        // Expected output
         const expected_response = "Successfully deleted token from push token list"
+
+        // Used Instances
+        const user_repo = new ValidMockUserRepository();
+        const flat_repo = new ValidMockFlatRepository();
+        const ds = new UserProfileDataService(user_repo, flat_repo, jest.fn())
 
         return ds.deleteDevice("123", "expo")
             .then((response) => {

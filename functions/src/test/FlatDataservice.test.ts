@@ -349,7 +349,9 @@ describe("FlatProfileDataService Get Profile Test", () => {
                         age: {
                             min: 0,
                             max: 100
-                        }
+                        },
+                        permanent: false,
+                        matchingTimeRange: true
                     },
                     likes: []
                 }
@@ -418,7 +420,9 @@ describe("FlatProfileDataService Get Profile Test", () => {
                         age: {
                             min: 0,
                             max: 100
-                        }
+                        },
+                        permanent: false,
+                        matchingTimeRange: true
                     },
                     likes: []
                 }
@@ -605,7 +609,9 @@ describe("FlatProfileDataService Patch Profile Test", () => {
                         age: {
                             min: 0,
                             max: 100
-                        }
+                        },
+                        permanent: false,
+                        matchingTimeRange: true
                     },
                     likes: []
                 }
