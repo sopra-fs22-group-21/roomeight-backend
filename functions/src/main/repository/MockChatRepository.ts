@@ -1,6 +1,8 @@
 import {ChatInfo, MessageData, Updates} from "../../assets/Types";
+import {ChatRepository} from "./ChatRepository";
 
-export class ValidMockChatRepository {
+// @ts-ignore
+export class ValidMockChatRepository implements ChatRepository {
     private database: any;
     private chats_ref: any;
     private memberships_ref: any;
@@ -39,8 +41,39 @@ export class ValidMockChatRepository {
 
     async getChatInfo(chatId: string): Promise<ChatInfo> {
         console.log('entered Mock getChatInfo')
+        if(chatId === 'initiatorIsUser'){
+            return Promise.resolve({
+                _id: chatId,
+                createdAt: 1,
+                members: {
+                    initiator: true
+                },
+                flatId: 'test',
+                userId: 'initiator',
+                title: {
+                    forFlat: 'test',
+                    forUser: 'test'
+                }
+            })
+        }else if(chatId === 'initiatorIsFlat'){
+            return Promise.resolve({
+                _id: chatId,
+                createdAt: 1,
+                members: {
+                    initiator: 'online',
+                    other: 'online',
+                    user: 'online'
+                },
+                flatId: 'test',
+                userId: 'user',
+                title: {
+                    forFlat: 'test',
+                    forUser: 'test'
+                }
+            })
+        }
         return Promise.resolve({
-            _id: 'chatId',
+            _id: chatId,
             createdAt: 1,
             members: {
                 id1: true
@@ -57,8 +90,15 @@ export class ValidMockChatRepository {
 
     async getMembers(chatId: string): Promise<string[]> {
         console.log('entered Mock getMembers')
+        if(chatId === 'onMessageCreateTest'){
+            return Promise.resolve([
+                'user1',
+                'user2',
+                'requestUser'
+            ])
+        }
         return Promise.resolve([
-            'user1',
+            'hasChat',
             'user2'
         ])
     }

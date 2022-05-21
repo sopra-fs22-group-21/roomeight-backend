@@ -160,7 +160,7 @@ export class ChatService {
   async deleteChat(chatId: string, user_id: string) {
     const members = await this.chat_repository.getMembers(chatId);
     if (members.includes(user_id)) {
-      this.chat_repository.updateChatInfo(chatId, null);
+      await this.chat_repository.updateChatInfo(chatId, null);
     } else {
       throw new Error(
         "User is not a member of this chat - cannot delete the chat"
@@ -183,9 +183,6 @@ export class ChatService {
     snapshot: functions.Change<functions.database.DataSnapshot>,
     context: functions.EventContext
   ) {
-    if (snapshot.before === snapshot.after) {
-      return;
-    }
     const userStatus = snapshot.after.val();
     const chatId = context.params.chatId;
     const userId = context.params.userId;
