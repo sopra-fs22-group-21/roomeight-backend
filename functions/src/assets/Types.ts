@@ -29,4 +29,5 @@ export type ChatInfo = {
     forFlat: string;
     forUser: string;
   };
+  presence: any;
 };
