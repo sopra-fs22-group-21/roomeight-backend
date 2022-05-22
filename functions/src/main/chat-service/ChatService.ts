@@ -129,7 +129,7 @@ export class ChatService {
       userProfile = await this.user_repository.getProfileById(profileId);
     }
 
-    const members: string[] = [...flatProfile.roomMates, user_id];
+    const members: string[] = [...flatProfile.roomMates, userProfile.profileId];
     const chatInfo: ChatInfo = {
       _id: chatId,
       title: {
