@@ -8,15 +8,20 @@ import {FlatValidator} from "../validation/FlatValidator";
 import {ProfileRepository} from "../repository/ProfileRepository";
 import {ReferenceController} from "../ReferenceHandling/ReferenceController";
 import {UserProfileConverter} from "../converters/UserProfileConverter";
+import { ExpoPushClient } from "../clients/ExpoPushClient";
+import { MessageData } from "../../assets/Types";
+import { NotificationType } from "../data-model/NotificationType";
 
 export class FlatProfileDataService {
 
     private readonly flat_repository: FlatRepository;
     private readonly user_repository: ProfileRepository;
+    private expoPushClient: ExpoPushClient;
 
     constructor(flat_repo: FlatRepository, user_repo: ProfileRepository) {
         this.flat_repository = flat_repo;
         this.user_repository = user_repo;
+        this.expoPushClient = new ExpoPushClient();
         initializeApp(config);
     }
 
@@ -332,6 +337,7 @@ export class FlatProfileDataService {
 
         return this.user_repository.updateProfile(update_roomMate, mate.profileId)
             .then(() => {
+                this.sendNotificationOnJoinFlat(user_uid, mate.profileId, mate.firstName, flat.roomMates, flat.name);
                 return `Successfully added user with mail ${mate_email} to flat ${flat.name}`
             })
             .catch((error) => {
@@ -379,11 +385,62 @@ export class FlatProfileDataService {
         }
         return this.user_repository.updateProfile(update_fields, user_uid)
             .then(() => {
+                this.sendNotificationOnLeaveFlat(roomMates, user.firstName)
                 return `Successfully removed user with ${user_uid} from flat ${flat.name}`
             })
             .catch((error) => {
                 throw new Error('Error: something went wrong and the roomMate was not updated: ' + error.message);
             })
+    }
+
+    private async getPushTokens(users: string[]):Promise<string[]> {
+        let roommate;
+        let recipients: string[] = [];
+        for (let roommate_id of users) {
+            const response = await this.user_repository.getProfileById(roommate_id);
+            roommate = UserProfileConverter.convertDBEntryToProfile(response);
+            recipients.push(...roommate.devicePushTokens);
+        }
+        return recipients;
+    }
+
+    private async sendNotificationOnLeaveFlat(users: string[], senderName: string): Promise<void> {
+        const recipients = await this.getPushTokens(users);
+        // Prepare Message
+        let mates_message: MessageData = {
+            title: 'Roomeight',
+            body: `Hey, ${senderName} left your flat!`,
+            data: {
+                type: NotificationType.ROOMMATE_LEFT_FLAT,
+            }
+        }
+        // Send message
+        await this.expoPushClient.pushToClients(recipients, mates_message);
+    }
+    
+    private async sendNotificationOnJoinFlat(senderId:string, newMateId:string, newMateName:string, roomMates:string[], flatName:string): Promise<void> {
+        const index = roomMates.indexOf(senderId);
+        const oldRoomMates = roomMates.splice(index, 1)
+        const oldRoomMatesPushTokens = await this.getPushTokens(oldRoomMates);
+        const newMatePushToken = await this.getPushTokens([newMateId]);
+        // Prepare Message
+        let new_mate_message: MessageData = {
+            title: 'Roomeight',
+            body: `Hey, you have been added to ${flatName}!`,
+            data: {
+                type: NotificationType.ROOMMATE_JOINED_FLAT,
+            }
+        }
+        // Send message
+        let old_mates_message: MessageData = {
+            title: 'Roomeight',
+            body: `Hey, ${newMateName} has been added to your flat!`,
+            data: {
+                type: NotificationType.ROOMMATE_JOINED_FLAT,
+            }
+        }
+        await this.expoPushClient.pushToClients(newMatePushToken, new_mate_message);
+        await this.expoPushClient.pushToClients(oldRoomMatesPushTokens, old_mates_message);
     }
 
     async discover(uid: string, quantity: number): Promise<any> {

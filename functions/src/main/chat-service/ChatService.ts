@@ -94,6 +94,7 @@ export class ChatService {
    */
   async createChat(profileId: any, user_id: string) {
     const requestProfile = await this.user_repository.getProfileById(user_id);
+    if(!requestProfile){throw new Error("User does not exist!")}
     const chatId = "chat-" + uuidv4();
     let flatProfile;
     let userProfile;
@@ -113,6 +114,7 @@ export class ChatService {
       //searching user creates chat with flat
       initiatorType = "user";
       flatProfile = await this.flat_repository.getProfileById(profileId);
+      if(!flatProfile){throw new Error(`Flat ${profileId} does not exist!`)}
       userProfile = requestProfile;
       if (!requestProfile.matches.includes(profileId)) {
         throw new Error(

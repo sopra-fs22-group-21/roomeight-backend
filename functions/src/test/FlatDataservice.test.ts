@@ -12,6 +12,9 @@ jest.mock('uuid', () => {
     }
 });
 
+// Mock Expo Push Client
+jest.mock('../main/clients/ExpoPushClient');
+
 // Unit Tests
 
 describe("FlatProfileDataService Post Profile Test", () => {
@@ -889,7 +892,7 @@ describe("FlatProfileDataService FlatMate Operations Test", () => {
                 expect(JSON.stringify(response)).toEqual(JSON.stringify(expected_response));
                 expect(ValidMockFlatRepository.prototype.getProfileById).toBeCalledTimes(2);
                 expect(ValidMockFlatRepository.prototype.updateProfile).toBeCalledTimes(2);
-                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(1);
+                expect(ValidMockUserRepository.prototype.getProfileById).toBeCalledTimes(3);
                 expect(ValidMockUserRepository.prototype.updateProfile).toBeCalledTimes(1);
             });
 
