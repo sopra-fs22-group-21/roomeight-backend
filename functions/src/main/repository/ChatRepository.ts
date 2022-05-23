@@ -71,10 +71,14 @@ export class ChatRepository {
    * @param chatId the newly created chat
    * @param members the members that should be added
    */
-  async addMemberships(chatId: string, profileId: string, members: string[]) {
+  async addMemberships(chatId: string, userId: string, flatId: string, members: string[]) {
     const data: Updates = {};
     for (let member of members) {
-      data[`${member}/${chatId}`] = profileId;
+      if(member === userId){
+        data[`${member}/${chatId}`] = flatId;
+      }else{
+        data[`${member}/${chatId}`] = userId;
+      }
     }
     functions.logger.info("membership update: ", data);
     return this.memberships_ref.update(data);

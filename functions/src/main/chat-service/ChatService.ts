@@ -100,6 +100,8 @@ export class ChatService {
     const existingChatPartners = await this.chat_repository.getMembershipValues(
       user_id
     );
+    let initiatorType: string;
+
     if (
       existingChatPartners !== null &&
       existingChatPartners.includes(profileId)
@@ -109,6 +111,7 @@ export class ChatService {
 
     if (profileId.startsWith("flt$")) {
       //searching user creates chat with flat
+      initiatorType = "user";
       flatProfile = await this.flat_repository.getProfileById(profileId);
       userProfile = requestProfile;
       if (!requestProfile.matches.includes(profileId)) {
@@ -118,6 +121,7 @@ export class ChatService {
       }
     } else {
       //flat creates chat with searching user
+      initiatorType = "flat";
       flatProfile = await this.flat_repository.getProfileById(
         requestProfile.flatId
       );
@@ -129,7 +133,7 @@ export class ChatService {
       userProfile = await this.user_repository.getProfileById(profileId);
     }
 
-    const members: string[] = [...flatProfile.roomMates, user_id];
+    const members: string[] = [...flatProfile.roomMates, userProfile.profileId];
     const chatInfo: ChatInfo = {
       _id: chatId,
       title: {
@@ -140,9 +144,22 @@ export class ChatService {
       flatId: flatProfile.profileId,
       userId: userProfile.profileId,
       members: {},
+      presence: {
+        [initiatorType]: {
+          status: "online",
+          lastChanged: admin.database.ServerValue.TIMESTAMP,
+        },
+      },
     };
     members.forEach((mateId) => (chatInfo["members"][mateId] = true));
-    await this.chat_repository.addMemberships(chatId, profileId, members);
+    chatInfo.members[user_id] = "online";
+    functions.logger.info("ChatInfo: " + chatInfo);
+    await this.chat_repository.addMemberships(
+      chatId,
+      userProfile.profileId,
+      flatProfile.profileId,
+      members
+    );
     await this.chat_repository.updateChatInfo(chatId, chatInfo);
 
     const firstMessage: MessageData = {
