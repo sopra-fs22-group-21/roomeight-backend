@@ -420,8 +420,8 @@ export class FlatProfileDataService {
     
     private async sendNotificationOnJoinFlat(senderId:string, newMateId:string, newMateName:string, roomMates:string[], flatName:string): Promise<void> {
         const index = roomMates.indexOf(senderId);
-        const oldRoomMates = roomMates.splice(index, 1)
-        const oldRoomMatesPushTokens = await this.getPushTokens(oldRoomMates);
+        roomMates.splice(index, 1);
+        const oldRoomMatesPushTokens = await this.getPushTokens(roomMates);
         const newMatePushToken = await this.getPushTokens([newMateId]);
         // Prepare Message
         let new_mate_message: MessageData = {
