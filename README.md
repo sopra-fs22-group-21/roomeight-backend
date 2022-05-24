@@ -14,7 +14,7 @@
     <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/sopra-fs22-group-21/roomeight-backend">
     <img alt="apero" src="https://img.shields.io/badge/%F0%9F%98%89-ap%C3%A9ro-brightgreen">
     <img alt="GitHub" src="https://img.shields.io/github/license/sopra-fs22-group-21/roomeight-frontend">
-
+    <img alt="Sonarcloud" src="https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-21_roomeight-backend&metric=alert_status">
 
 </p>
 
