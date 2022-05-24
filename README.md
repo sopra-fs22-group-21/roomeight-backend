@@ -4,17 +4,17 @@
   </a>
 </p>
 <p align="center">
-    <a href="https://github.com/sopra-fs22-group-21/roomeight">Docs</a> <a>| </a><a href="https://www.instagram.com/roomeight.ch/">Instagram</a><a> | </a><a href="https://github.com/sopra-fs22-group-21/roomeight-backend">Backend</a>
+    <a href="https://github.com/sopra-fs22-group-21/roomeight">Docs</a> <a>| </a><a href="https://www.instagram.com/roomeight.ch/">Instagram</a><a> | </a><a href="https://github.com/sopra-fs22-group-21/roomeight-frontend">Frontend</a>
 </p>
 <p align="center">
-    <img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/sopra-fs22-group-21/roomeight-frontend">
-    <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/sopra-fs22-group-21/roomeight-frontend">
-    <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/sopra-fs22-group-21/roomeight-frontend?color=">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/sopra-fs22-group-21/roomeight-frontend">
-    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/sopra-fs22-group-21/roomeight-frontend">
+    <img alt="GitHub release (latest SemVer)" src="https://img.shields.io/github/v/release/sopra-fs22-group-21/roomeight-backend">
+    <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/sopra-fs22-group-21/roomeight-backend">
+    <img alt="GitHub closed issues" src="https://img.shields.io/github/issues-closed-raw/sopra-fs22-group-21/roomeight-backend?color=">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/sopra-fs22-group-21/roomeight-backend">
+    <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/sopra-fs22-group-21/roomeight-backend">
     <img alt="apero" src="https://img.shields.io/badge/%F0%9F%98%89-ap%C3%A9ro-brightgreen">
-    <img alt="Sonarcloud" src="https://github.com/sopra-fs22-group-21/roomeight-frontend/actions/workflows/sonarcloud_analysis.yml/badge.svg?branch=main">
-    <img alt="GitHub" src="https://img.shields.io/github/license/sopra-fs22-group-21/roomeight-frontend">
+    <img alt="Sonarcloud" src="https://github.com/sopra-fs22-group-21/roomeight-backend/actions/workflows/sonarcloud_analysis.yml/badge.svg?branch=main">
+    <img alt="GitHub" src="https://img.shields.io/github/license/sopra-fs22-group-21/roomeight-backend">
 
 
 </p>
