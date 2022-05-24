@@ -13,8 +13,7 @@
     <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/sopra-fs22-group-21/roomeight-backend">
     <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/sopra-fs22-group-21/roomeight-backend">
     <img alt="apero" src="https://img.shields.io/badge/%F0%9F%98%89-ap%C3%A9ro-brightgreen">
-    <img alt="Sonarcloud" src="https://github.com/sopra-fs22-group-21/roomeight-backend/actions/workflows/sonarcloud_analysis.yml/badge.svg?branch=main">
-    <img alt="GitHub" src="https://img.shields.io/github/license/sopra-fs22-group-21/roomeight-backend">
+    <img alt="GitHub" src="https://img.shields.io/github/license/sopra-fs22-group-21/roomeight-frontend">
 
 
 </p>
