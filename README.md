@@ -39,6 +39,7 @@ After cloning the repo execute `firebase login` and follow the browser instructi
 run the following command in the terminal (while being in the 'functions' folder):  
 `npm i @types/uuid`   
 `npm i expo-server-sdk`
+`npm ci`
 ### build and run the project locally
 run the following command in the terminal: `npm run build && firebase emulators:start`
 ###run the tests
